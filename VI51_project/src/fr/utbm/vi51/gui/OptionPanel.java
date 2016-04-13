@@ -32,14 +32,17 @@ public class OptionPanel extends JPanel{
 		
 		
 		//set Action Button
-		halfTurnAllButton = new JButton("Tout le monde, demi tour!");
-		digAllButton = new JButton("Tout le monde, creusez!");
-		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming?");
+		halfTurnAllButton = new JButton("Tout le monde, demi tour! ");
+		digAllButton = new JButton("Tout le monde, creusez !");
+		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
 		
 		this.add(lemmingDatas.getTableHeader());
 		this.add(lemmingDatas);
+		this.add(Box.createVerticalStrut(50));
 		this.add(halfTurnAllButton);
+		this.add(Box.createVerticalStrut(50));
 		this.add(digAllButton);
+		this.add(Box.createVerticalStrut(50));
 		this.add(spawnAnotherLemmingButton);
 		
 	}
