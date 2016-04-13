@@ -1,7 +1,5 @@
 package fr.utbm.vi51.gui;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
