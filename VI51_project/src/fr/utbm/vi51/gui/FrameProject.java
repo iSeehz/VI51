@@ -27,8 +27,11 @@ public class FrameProject extends JFrame {
 		
 		// set the Frame 
 		this.setTitle("Lemming Game");
-		this.setSize(500,400);
+		this.setSize(1000,800);
 		this.setLocation(10,200);
+		
+		//set the OptionPanel
+		split.setResizeWeight(1.0);
 		
 		//add scroll to avoid object unreachable in the frame
 		this.getContentPane().add(scroll, BorderLayout.CENTER);
