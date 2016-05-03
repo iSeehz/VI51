@@ -1,0 +1,39 @@
+package fr.utbm.vi51.model;
+
+public abstract class EnviromnentObject {
+
+	private int x;
+	private int y;
+	private TypeObject type;
+	public EnviromnentObject(int x, int y, TypeObject type) {
+		// TODO Auto-generated constructor stub
+		this.x = x;
+		this.y = y;
+		this.type = type;
+	}
+
+	public TypeObject getType() {
+		return type;
+	}
+
+	public void setType(TypeObject type) {
+		this.type = type;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+		
+}

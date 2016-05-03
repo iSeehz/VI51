@@ -1,0 +1,11 @@
+package fr.utbm.vi51.model;
+
+public class Cell extends EnviromnentObject{
+
+	private TypeObject type;
+	
+	public Cell(x,y) {
+		// TODO Auto-generated constructor stub
+	}
+	
+}

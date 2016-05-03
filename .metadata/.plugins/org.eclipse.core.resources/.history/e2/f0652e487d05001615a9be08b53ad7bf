@@ -1,0 +1,9 @@
+package fr.utbm.vi51.gui;
+
+import javax.swing.JPanel;
+
+public class gridPanel extends JPanel{
+	public gridPanel() {
+		// TODO Auto-generated constructor stub
+	}
+}

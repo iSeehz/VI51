@@ -1,0 +1,16 @@
+package fr.utbm.vi51.gui;
+
+import javax.swing.JPanel;
+
+public class gridPanel extends JPanel{
+	/**
+	 * the panel contains the grid
+	 */
+	private static final long serialVersionUID = -4072497686393047571L;
+
+	public gridPanel() {
+		// TODO Auto-generated constructor stub
+		
+		
+	}
+}

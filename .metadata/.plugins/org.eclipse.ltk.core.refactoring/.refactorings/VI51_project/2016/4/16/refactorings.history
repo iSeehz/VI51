@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;fr.utbm.vi51.gui.gridPanel&apos; to &apos;GridPanel&apos;&#x0A;- Original project: &apos;VI51_project&apos;&#x0A;- Original element: &apos;fr.utbm.vi51.gui.gridPanel&apos;&#x0A;- Renamed element: &apos;fr.utbm.vi51.gui.GridPanel&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;gridPanel&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;fr.utbm.vi51.gui{gridPanel.java[gridPanel" matchStrategy="1" name="GridPanel" qualified="false" references="true" similarDeclarations="false" stamp="1460995205436" textual="false" version="1.0"/>
+</session>

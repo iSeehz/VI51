@@ -16,6 +16,7 @@ public class FrameProject extends JFrame {
 	private MainPanel mainPanel;
 	private OptionPanel optionPanel;
 	public FrameProject() {
+		
 		//initialize object
 		mainPanel = new MainPanel();
 		optionPanel = new OptionPanel();

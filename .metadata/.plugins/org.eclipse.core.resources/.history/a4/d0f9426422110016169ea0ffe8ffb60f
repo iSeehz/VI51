@@ -1,0 +1,53 @@
+package fr.utbm.vi51.parser;
+
+import java.io.FileReader;
+import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import fr.utbm.vi51.model.Cell;
+
+public class JSONReadFromFile {
+	
+	private int heigth;
+	private int width;
+	private int content[][];
+	
+	public JSONReadFromFile() {
+		
+		JSONParser parser = new JSONParser();
+		
+		try {
+			
+			Object obj = parser.parse(new FileReader(
+	                "/home/tiboty/Dropbox/VI51/Projet/VI51/VI51_Lemmings_Project_P16/src/main/resources/fr/utbm/vi51/level/"
+	                + "lab_parachute.txt"));
+
+	        JSONObject jsonObject = (JSONObject) obj;
+			
+	        this.heigth = (Integer) jsonObject.get("Heigth");
+	        this.width = (Integer) jsonObject.get("Width");
+	        
+	        JSONArray JSONcontent = (JSONArray) jsonObject.get("Content");
+	        
+	        System.out.println(heigth);
+	        System.out.println(width);
+	        System.out.println(JSONcontent);
+	        
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public List<List<Cell>> convertingContentForGame(){
+		
+		
+		return null;
+		
+	}
+
+}

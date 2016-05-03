@@ -1,0 +1,14 @@
+package fr.utbm.vi51.model;
+
+public class LemmingBody extends EnviromnentObject{
+
+	private int fovX;
+	private int fovY;
+	
+	public LemmingBody(int x, int y) {
+		// TODO Auto-generated constructor stub
+		super(x,y);
+		
+		fov = 
+	}
+}

@@ -1,0 +1,9 @@
+package fr.utbm.vi51.model;
+
+public class LemmingBody extends EnviromnentObject{
+
+	public LemmingBody(int x, int y) {
+		super(x,y)
+		// TODO Auto-generated constructor stub
+	}
+}
