@@ -37,8 +37,12 @@ public class JSONReadAndConvertingFromFile {
 		
 		try {
 			
+			String localPath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+			String path = localPath.substring(0, localPath.lastIndexOf("target"));
+			
+			
 			Object obj = parser.parse(new FileReader(
-	                "/home/tiboty/Dropbox/VI51/Projet/VI51/VI51_Lemmings_Project_P16/src/main/resources/fr/utbm/vi51/level/"
+	                path + "src/main/resources/fr/utbm/vi51/level/"
 	                + "lab_parachute.txt"));
 
 	        JSONObject jsonObject = (JSONObject) obj;
@@ -55,10 +59,10 @@ public class JSONReadAndConvertingFromFile {
             
             convertingContentForGame();
 	        
-//	        System.out.println(height);
-//	        System.out.println(width);
-//	        System.out.println(content);
-//	        System.out.println(contentForGame);       
+	        System.out.println(height);
+	        System.out.println(width);
+	        System.out.println(content);
+	        System.out.println(contentForGame);       
 	        
 		} catch (Exception e) {
 			

@@ -1,3 +1,5 @@
+import java.io.ObjectInputStream.GetField;
+
 import javax.swing.JFrame;
 
 import fr.utbm.vi51.gui.FrameProject;
@@ -10,7 +12,6 @@ public class mainProject {
 		
 		
 		JSONReadAndConvertingFromFile j = new JSONReadAndConvertingFromFile();
-		
 		
 		
 //		FrameProject frame = new FrameProject();
