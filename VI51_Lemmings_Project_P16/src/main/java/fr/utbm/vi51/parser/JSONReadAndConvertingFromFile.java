@@ -30,7 +30,7 @@ public class JSONReadAndConvertingFromFile {
 	private Integer width;
 	private List<List<Long>> content;
 	
-	public JSONReadAndConvertingFromFile() {
+	public JSONReadAndConvertingFromFile(String level) {
 		
 		JSONParser parser = new JSONParser();
 		
@@ -42,7 +42,7 @@ public class JSONReadAndConvertingFromFile {
 			
 			Object obj = parser.parse(new FileReader(
 	                path + "src/main/resources/fr/utbm/vi51/level/"
-	                + "lab_parachute.txt"));
+	                + level));
 
 	        JSONObject jsonObject = (JSONObject) obj;
 	        
@@ -56,9 +56,9 @@ public class JSONReadAndConvertingFromFile {
                 this.content.add(iterator.next() );
             }
                    
-	        System.out.println(height);
-	        System.out.println(width);
-	        System.out.println(content);       
+//	        System.out.println(height);
+//	        System.out.println(width);
+//	        System.out.println(content);       
 	        
 		} catch (Exception e) {
 			

@@ -1,9 +1,12 @@
 package fr.utbm.vi51.gui;
 
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import fr.utbm.vi51.model.Cell;
 
 public class GridPanel extends JPanel{
 	/**
@@ -13,11 +16,11 @@ public class GridPanel extends JPanel{
 	private int width;
 	private int height;
 	private Object grid [][];
-	public GridPanel(int w, int h) {
+	public GridPanel(List<List<Cell>> tab) {
 		// Initialize the grid
-		this.width = w;
-		this.height = h;
-		this.grid = new Object[h][w];
+		this.width = tab.size();
+		this.height = tab.get(0).size();
+		this.grid = new Object[this.height][this.width];
 		
 		this.setLayout(new GridLayout(width,height));
 		for (int i = 0;i<this.height;i++){

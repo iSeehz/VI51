@@ -15,9 +15,9 @@ public class LemmingBody extends EnviromnentObject{
 		
 		this.id = id;
 		//field of View of the body
-		fovUp = 2;
-		fovRight = 2;
-		fovLeft = 2;
+		fovUp = 1;
+		fovRight = 1;
+		fovLeft = 1;
 		fovUnder = 4;
 	}
 

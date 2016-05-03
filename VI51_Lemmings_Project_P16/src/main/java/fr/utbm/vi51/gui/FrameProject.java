@@ -6,19 +6,25 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
+import fr.utbm.vi51.model.EnvironmentModel;
+
 public class FrameProject extends JFrame {
 	
 	/**
 	 * Main Frame project
 	 */
 	private static final long serialVersionUID = -8346526694391516641L;
+	
+	private EnvironmentModel environment;
+	
 	private JSplitPane split;
 	private MainPanel mainPanel;
 	private OptionPanel optionPanel;
-	public FrameProject() {
+	public FrameProject(EnvironmentModel model) {
 		
 		//initialize object
-		mainPanel = new MainPanel();
+		this.environment = model;
+		mainPanel = new MainPanel(model.getGrid());
 		optionPanel = new OptionPanel();
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainPanel, optionPanel);
 		
