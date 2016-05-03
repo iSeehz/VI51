@@ -1,0 +1,11 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^agent
+
+/**
+ * @author tiboty
+ *
+ */
+agent EnvironmentAgent {
+}
