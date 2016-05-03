@@ -37,7 +37,4 @@ public class FrameProject extends JFrame {
 	  	}
 	} );
 	}
-	
-
-
 }
