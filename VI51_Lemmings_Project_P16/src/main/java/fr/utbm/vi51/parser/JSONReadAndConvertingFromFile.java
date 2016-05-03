@@ -29,7 +29,6 @@ public class JSONReadAndConvertingFromFile {
 	private Integer height;
 	private Integer width;
 	private List<List<Long>> content;
-	private List<List<Cell>> contentForGame;
 	
 	public JSONReadAndConvertingFromFile() {
 		
@@ -56,13 +55,10 @@ public class JSONReadAndConvertingFromFile {
             while (iterator.hasNext()) {
                 this.content.add(iterator.next() );
             }
-            
-            convertingContentForGame();
-	        
+                   
 	        System.out.println(height);
 	        System.out.println(width);
-	        System.out.println(content);
-	        System.out.println(contentForGame);       
+	        System.out.println(content);       
 	        
 		} catch (Exception e) {
 			
@@ -72,9 +68,9 @@ public class JSONReadAndConvertingFromFile {
 	}
 	
 	
-	public void convertingContentForGame(){
+	public List<List<Cell>> convertingContentForGame(){
 		
-		this.contentForGame = new ArrayList<>();
+		List<List<Cell>> contentForGame = new ArrayList<>();
 		
 		List<Cell> listCell = new ArrayList<Cell>();
 		
@@ -106,8 +102,9 @@ public class JSONReadAndConvertingFromFile {
 				}
 			}
 			
-			this.contentForGame.add(listCell);
-		}	
+			contentForGame.add(listCell);
+		}
+		return contentForGame;
 	}
 	
 	public Integer getHeigth() {
@@ -119,7 +116,7 @@ public class JSONReadAndConvertingFromFile {
 	}
 
 	public List<List<Cell>> getContentForGame() {
-		return contentForGame;
+		return convertingContentForGame();
 	}
 
 	
