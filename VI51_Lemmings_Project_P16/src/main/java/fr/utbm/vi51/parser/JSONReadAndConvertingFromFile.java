@@ -72,18 +72,18 @@ public class JSONReadAndConvertingFromFile {
 		
 		List<List<Cell>> contentForGame = new ArrayList<>();
 		
-		List<Cell> listCell = new ArrayList<Cell>();
+		
 		
 		for(int i=0;i<this.height;i++){
 			
-			listCell.clear();
+			List<Cell> listCell = new ArrayList<Cell>();
 			
 			for(int j=0;j<this.width;j++){
-								
+//				System.out.println((this.content.get(i).get(j)).intValue());
 				switch((this.content.get(i).get(j)).intValue()){
 				
 					case 0: listCell.add(new Cell(i, j, TypeObject.ENTRY));
-						
+			
 						break;
 						
 					case 1: listCell.add(new Cell(i, j, TypeObject.EMPTY));

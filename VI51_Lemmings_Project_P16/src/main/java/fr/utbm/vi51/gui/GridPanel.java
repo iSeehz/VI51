@@ -19,18 +19,46 @@ public class GridPanel extends JPanel{
 	private JPanel grid [][];
 	public GridPanel(List<List<Cell>> tab) {
 		// Initialize the grid
-		this.width = tab.size();
-		this.height = tab.get(0).size();
+		generate(tab);
+	}
+	
+	public void generate(List<List<Cell>> tab){
+		
+		this.width = tab.get(0).size();
+		this.height = tab.size();
 		this.grid = new JPanel[this.height][this.width];
 		
-		this.setLayout(new GridLayout(width,height));
+		this.setLayout(new GridLayout(this.height,this.width));
+		
+		paint(tab);
+	}
+	
+	public void paint(List<List<Cell>> tab){
+		
 		for (int i = 0;i<this.height;i++){
 			
 			for (int j = 0;j<this.width;j++){
+				Color c = Color.WHITE;
+				
 				grid[i][j] = new JPanel();
-				grid[i][j].setBackground(Color.WHITE);
 				grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				
+				switch(tab.get(i).get(j).getType()){
+				
+				case EMPTY: grid[i][j].setBackground(Color.WHITE);
+					break;
+				case LAND: grid[i][j].setBackground(Color.DARK_GRAY);	
+					break;
+				case ENTRY: grid[i][j].setBackground(Color.MAGENTA);
+					break;
+				case EXIT: grid[i][j].setBackground(Color.GREEN);
+					break;
+				case HALF: grid[i][j].setBackground(Color.GRAY);
+					break;
+				default:
+				}
 				this.add(grid[i][j]);
+				
 			}
 		}
 	}
