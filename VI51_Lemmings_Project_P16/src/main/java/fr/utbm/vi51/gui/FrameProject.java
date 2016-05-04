@@ -72,5 +72,10 @@ public class FrameProject extends JFrame {
 		        System.out.println("Step By Step");
 		    }
 		});
+		
+		
+	}
+	public EnvironmentModel getEnvironment() {
+		return environment;
 	}
 }

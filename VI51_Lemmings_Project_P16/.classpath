@@ -10,7 +10,6 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry exported="true" kind="con" path="io.sarl.eclipse.launching.SARL_SUPPORT"/>
-	<classpathentry kind="lib" path="/home/tiboty/Dropbox/VI51/Projet/VI51/json_simple-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/tiboty/Dropbox/VI51/SARL/janus/io.janusproject.kernel-2.0.3.1-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tiboty/Documents/GitHub/VI51/json_simple-1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

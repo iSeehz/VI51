@@ -1,14 +1,22 @@
 package fr.utbm.vi51.agent;
 
 import fr.utbm.vi51.agent.LemmingAgent;
+import fr.utbm.vi51.event.AreYouAwoken;
+import fr.utbm.vi51.event.CreateLemmingsAgent;
+import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.StopSimulation;
+import fr.utbm.vi51.gui.FrameProject;
+import fr.utbm.vi51.model.EnvironmentModel;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
+import io.sarl.core.AgentTask;
+import io.sarl.core.Behaviors;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Destroy;
 import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
 import io.sarl.core.Logging;
+import io.sarl.core.Schedules;
 import io.sarl.lang.annotation.EarlyExit;
 import io.sarl.lang.annotation.FiredEvent;
 import io.sarl.lang.annotation.ImportedCapacityFeature;
@@ -16,17 +24,21 @@ import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AgentContext;
+import io.sarl.lang.core.Behavior;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.Event;
+import io.sarl.lang.core.EventListener;
 import io.sarl.lang.core.EventSpace;
 import io.sarl.lang.core.Percept;
 import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
 /**
  * @author tiboty
@@ -34,15 +46,57 @@ import javax.inject.Inject;
 @SarlSpecification("0.3")
 @SuppressWarnings("all")
 public class EnvironmentAgent extends Agent {
+  protected AgentTask initAgent;
+  
   protected List<Address> listOfGUID;
+  
+  protected EnvironmentModel environment;
+  
+  protected FrameProject gui;
+  
+  protected int numberOfLemmings;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
-    this.spawn(LemmingAgent.class);
+    ArrayList<Address> _arrayList = new ArrayList<Address>();
+    this.listOfGUID = _arrayList;
+    this.numberOfLemmings = 1;
+    EnvironmentModel _environmentModel = new EnvironmentModel();
+    this.environment = _environmentModel;
+    FrameProject _frameProject = new FrameProject(this.environment);
+    this.gui = _frameProject;
+    CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
+    this.wake(_createLemmingsAgent);
   }
   
   @Percept
-  public void _handle_StopSimulation_1(final StopSimulation occurrence) {
+  public void _handle_CreateLemmingsAgent_1(final CreateLemmingsAgent occurrence) {
+    int i = 0;
+    for (i = 0; (i < this.numberOfLemmings); i++) {
+      this.spawn(LemmingAgent.class);
+    }
+    AgentTask _task = this.task("presentation");
+    this.initAgent = _task;
+    final Procedure1<Agent> _function = (Agent it) -> {
+      AreYouAwoken _areYouAwoken = new AreYouAwoken();
+      this.emit(_areYouAwoken);
+    };
+    this.every(this.initAgent, 1000, _function);
+  }
+  
+  @Percept
+  public void _handle_IamAwoken_2(final IamAwoken occurrence) {
+    Address _source = occurrence.getSource();
+    this.listOfGUID.add(_source);
+    int _size = this.listOfGUID.size();
+    boolean _equals = (_size == this.numberOfLemmings);
+    if (_equals) {
+      this.cancel(this.initAgent);
+    }
+  }
+  
+  @Percept
+  public void _handle_StopSimulation_3(final StopSimulation occurrence) {
     this.killMe();
   }
   
@@ -379,6 +433,127 @@ public class EnvironmentAgent extends Agent {
   @ImportedCapacityFeature(Lifecycle.class)
   protected UUID spawnInContextWithID(final Class<? extends Agent> agentClass, final UUID agentID, final AgentContext context, final Object... params) {
     return getSkill(io.sarl.core.Lifecycle.class).spawnInContextWithID(agentClass, agentID, context, params);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#cancel(io.sarl.core.AgentTask)}.
+   * 
+   * @see io.sarl.core.Schedules#cancel(io.sarl.core.AgentTask)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected boolean cancel(final AgentTask task) {
+    return getSkill(io.sarl.core.Schedules.class).cancel(task);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#cancel(io.sarl.core.AgentTask,boolean)}.
+   * 
+   * @see io.sarl.core.Schedules#cancel(io.sarl.core.AgentTask,boolean)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected boolean cancel(final AgentTask task, final boolean mayInterruptIfRunning) {
+    return getSkill(io.sarl.core.Schedules.class).cancel(task, mayInterruptIfRunning);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#every(long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)}.
+   * 
+   * @see io.sarl.core.Schedules#every(long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected AgentTask every(final long period, final Procedure1<? super Agent> procedure) {
+    return getSkill(io.sarl.core.Schedules.class).every(period, procedure);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#every(io.sarl.core.AgentTask,long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)}.
+   * 
+   * @see io.sarl.core.Schedules#every(io.sarl.core.AgentTask,long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected AgentTask every(final AgentTask task, final long period, final Procedure1<? super Agent> procedure) {
+    return getSkill(io.sarl.core.Schedules.class).every(task, period, procedure);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#in(long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)}.
+   * 
+   * @see io.sarl.core.Schedules#in(long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected AgentTask in(final long delay, final Procedure1<? super Agent> procedure) {
+    return getSkill(io.sarl.core.Schedules.class).in(delay, procedure);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#in(io.sarl.core.AgentTask,long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)}.
+   * 
+   * @see io.sarl.core.Schedules#in(io.sarl.core.AgentTask,long,org.eclipse.xtext.xbase.lib.Procedures$Procedure1<? extends java.lang.Object & super io.sarl.lang.core.Agent>)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected AgentTask in(final AgentTask task, final long delay, final Procedure1<? super Agent> procedure) {
+    return getSkill(io.sarl.core.Schedules.class).in(task, delay, procedure);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Schedules#task(java.lang.String)}.
+   * 
+   * @see io.sarl.core.Schedules#task(java.lang.String)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Schedules.class)
+  protected AgentTask task(final String name) {
+    return getSkill(io.sarl.core.Schedules.class).task(name);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#asEventListener()}.
+   * 
+   * @see io.sarl.core.Behaviors#asEventListener()
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected EventListener asEventListener() {
+    return getSkill(io.sarl.core.Behaviors.class).asEventListener();
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#registerBehavior(io.sarl.lang.core.Behavior)}.
+   * 
+   * @see io.sarl.core.Behaviors#registerBehavior(io.sarl.lang.core.Behavior)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected Behavior registerBehavior(final Behavior attitude) {
+    return getSkill(io.sarl.core.Behaviors.class).registerBehavior(attitude);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#unregisterBehavior(io.sarl.lang.core.Behavior)}.
+   * 
+   * @see io.sarl.core.Behaviors#unregisterBehavior(io.sarl.lang.core.Behavior)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected Behavior unregisterBehavior(final Behavior attitude) {
+    return getSkill(io.sarl.core.Behaviors.class).unregisterBehavior(attitude);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#wake(io.sarl.lang.core.Event)}.
+   * 
+   * @see io.sarl.core.Behaviors#wake(io.sarl.lang.core.Event)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected void wake(final Event evt) {
+    getSkill(io.sarl.core.Behaviors.class).wake(evt);
   }
   
   /**

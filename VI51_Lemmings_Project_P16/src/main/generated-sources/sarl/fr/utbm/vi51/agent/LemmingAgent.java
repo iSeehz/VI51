@@ -1,10 +1,14 @@
 package fr.utbm.vi51.agent;
 
+import fr.utbm.vi51.event.AreYouAwoken;
+import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.StopSimulation;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
+import io.sarl.core.Behaviors;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Destroy;
+import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
 import io.sarl.core.Logging;
 import io.sarl.lang.annotation.EarlyExit;
@@ -14,16 +18,20 @@ import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AgentContext;
+import io.sarl.lang.core.Behavior;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.Event;
+import io.sarl.lang.core.EventListener;
 import io.sarl.lang.core.EventSpace;
 import io.sarl.lang.core.Percept;
 import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
+import io.sarl.util.Scopes;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 /**
  * @author tiboty
@@ -31,8 +39,41 @@ import javax.inject.Inject;
 @SarlSpecification("0.3")
 @SuppressWarnings("all")
 public class LemmingAgent extends Agent {
+  protected Boolean presentation;
+  
   @Percept
-  public void _handle_StopSimulation_0(final StopSimulation occurrence) {
+  public void _handle_Initialize_0(final Initialize occurrence) {
+    this.presentation = Boolean.valueOf(false);
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_AreYouAwoken_1(final AreYouAwoken it, final AreYouAwoken occurrence) {
+    return (!(this.presentation).booleanValue());
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private Boolean _eventhandler_body_AreYouAwoken_1(final AreYouAwoken occurrence) {
+    Boolean _xblockexpression = null;
+    {
+      IamAwoken _iamAwoken = new IamAwoken();
+      Address _source = occurrence.getSource();
+      Scope<Address> _addresses = Scopes.addresses(_source);
+      this.emit(_iamAwoken, _addresses);
+      _xblockexpression = this.presentation = Boolean.valueOf(true);
+    }
+    return _xblockexpression;
+  }
+  
+  @Percept
+  public void _handle_AreYouAwoken_1(final AreYouAwoken occurrence) {
+    if (_eventhandler_guard_AreYouAwoken_1(occurrence, occurrence)) {
+      _eventhandler_body_AreYouAwoken_1(occurrence);
+    }
+  }
+  
+  @Percept
+  public void _handle_StopSimulation_2(final StopSimulation occurrence) {
     this.killMe();
   }
   
@@ -369,6 +410,50 @@ public class LemmingAgent extends Agent {
   @ImportedCapacityFeature(Lifecycle.class)
   protected UUID spawnInContextWithID(final Class<? extends Agent> agentClass, final UUID agentID, final AgentContext context, final Object... params) {
     return getSkill(io.sarl.core.Lifecycle.class).spawnInContextWithID(agentClass, agentID, context, params);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#asEventListener()}.
+   * 
+   * @see io.sarl.core.Behaviors#asEventListener()
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected EventListener asEventListener() {
+    return getSkill(io.sarl.core.Behaviors.class).asEventListener();
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#registerBehavior(io.sarl.lang.core.Behavior)}.
+   * 
+   * @see io.sarl.core.Behaviors#registerBehavior(io.sarl.lang.core.Behavior)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected Behavior registerBehavior(final Behavior attitude) {
+    return getSkill(io.sarl.core.Behaviors.class).registerBehavior(attitude);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#unregisterBehavior(io.sarl.lang.core.Behavior)}.
+   * 
+   * @see io.sarl.core.Behaviors#unregisterBehavior(io.sarl.lang.core.Behavior)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected Behavior unregisterBehavior(final Behavior attitude) {
+    return getSkill(io.sarl.core.Behaviors.class).unregisterBehavior(attitude);
+  }
+  
+  /**
+   * See the capacity {@link io.sarl.core.Behaviors#wake(io.sarl.lang.core.Event)}.
+   * 
+   * @see io.sarl.core.Behaviors#wake(io.sarl.lang.core.Event)
+   */
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @ImportedCapacityFeature(Behaviors.class)
+  protected void wake(final Event evt) {
+    getSkill(io.sarl.core.Behaviors.class).wake(evt);
   }
   
   /**

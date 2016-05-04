@@ -6,16 +6,16 @@ import io.sarl.lang.core.Event;
 import javax.annotation.Generated;
 
 /**
- * @author tiboty
+ * @author Tiboty
  */
 @SarlSpecification("0.3")
 @SuppressWarnings("all")
-public class AreYouAwake extends Event {
+public class CreateLemmingsAgent extends Event {
   /**
    * Construct an event. The source of the event is unknown.
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  public AreYouAwake() {
+  public CreateLemmingsAgent() {
     super();
   }
   
@@ -24,7 +24,7 @@ public class AreYouAwake extends Event {
    * @param source - address of the agent that is emitting this event.
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  public AreYouAwake(final Address source) {
+  public CreateLemmingsAgent(final Address source) {
     super(source);
   }
   
