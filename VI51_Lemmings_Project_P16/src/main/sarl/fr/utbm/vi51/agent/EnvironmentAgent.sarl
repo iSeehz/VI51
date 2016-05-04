@@ -3,9 +3,21 @@
  */
 package fr.utbm.vi51.^agent
 
+import io.sarl.core.Initialize
+import io.sarl.lang.core.Address
+import java.util.List
+
 /**
  * @author tiboty
  *
  */
 agent EnvironmentAgent {
+	
+	var listOfGUID : List<Address>
+	
+	on Initialize{
+		
+		
+	}
+	
 }

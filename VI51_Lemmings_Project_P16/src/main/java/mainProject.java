@@ -9,8 +9,7 @@ public class mainProject {
 		EnvironmentModel m = new EnvironmentModel();
 				
 		FrameProject frame = new FrameProject(m);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		frame.setVisible(true);
+		
 	}
 
 }

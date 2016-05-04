@@ -32,6 +32,9 @@ public class FrameProject extends JFrame {
 		this.setTitle("Lemming Game");
 		this.setSize(1000,800);
 		this.setLocation(10,200);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.pack();
+		this.setVisible(true);
 		
 		//set the OptionPanel
 		split.setResizeWeight(1.0);
