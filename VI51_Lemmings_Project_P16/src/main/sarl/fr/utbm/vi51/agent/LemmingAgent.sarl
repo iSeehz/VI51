@@ -3,9 +3,21 @@
  */
 package fr.utbm.vi51.^agent
 
+import fr.utbm.vi51.^event.StopSimulation
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+
 /**
  * @author tiboty
  *
  */
 agent LemmingAgent {
+	uses DefaultContextInteractions, Logging, Lifecycle
+	
+	
+	on StopSimulation {
+		
+		killMe
+	}
 }

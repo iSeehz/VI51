@@ -3,8 +3,11 @@
  */
 package fr.utbm.vi51.^agent
 
+import fr.utbm.vi51.^event.StopSimulation
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
 import io.sarl.lang.core.Address
 import java.util.List
 
@@ -13,12 +16,17 @@ import java.util.List
  *
  */
 agent EnvironmentAgent {
-	uses DefaultContextInteractions
+	uses DefaultContextInteractions, Logging, Lifecycle
 	var listOfGUID : List<Address>
 	
 	on Initialize{
-		
+
 		spawn(typeof(LemmingAgent))
+		
 	}
 	
+	
+	on StopSimulation {
+		killMe
+	}
 }

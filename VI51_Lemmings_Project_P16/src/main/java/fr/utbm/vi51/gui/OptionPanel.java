@@ -1,10 +1,7 @@
 package fr.utbm.vi51.gui;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -20,7 +17,6 @@ public class OptionPanel extends JPanel{
 	private JButton spawnAnotherLemmingButton;
 	
 	private JComboBox<String> changeLevel;
-	private JButton levelSelected;
 	Object rowData[][] = { { "Lemmings lachés", "", ""},
             { "Lemmings en vie", "", ""},
             { "Lemmings arrivés", "", ""},
@@ -40,7 +36,7 @@ public class OptionPanel extends JPanel{
 		halfTurnAllButton = new JButton("Tout le monde, demi tour! ");
 		digAllButton = new JButton("Tout le monde, creusez !");
 		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
-		levelSelected = new JButton("Valider");
+		
 		//set the level
 		String level[] = {"lab_parachute.txt","level_2","level_3"};
 		changeLevel = new JComboBox<String>(level);
@@ -55,8 +51,7 @@ public class OptionPanel extends JPanel{
 		this.add(spawnAnotherLemmingButton);
 		this.add(Box.createVerticalStrut(50));
 		this.add(changeLevel);
-		this.add(levelSelected);
-		this.add(Box.createVerticalStrut(400));
+		this.add(Box.createVerticalStrut(500));
 		
 	}
 	public Object[][] getRowData() {
