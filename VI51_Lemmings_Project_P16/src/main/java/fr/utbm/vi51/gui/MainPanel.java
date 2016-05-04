@@ -17,6 +17,7 @@ public class MainPanel extends JPanel{
 	private ControlPanel controlPanel;
 	private GridPanel gridPanel;
 	public MainPanel(List<List<Cell>> tab) {
+		
 		// initialize content objects
 		controlPanel = new ControlPanel();
 		gridPanel = new GridPanel(tab);
@@ -26,6 +27,15 @@ public class MainPanel extends JPanel{
 		
 		this.add("North",controlPanel);
 		this.add("Center",gridPanel);
+		
 		this.add("South",new JLabel("time : " + "00:05:20"));
 	}
+	public ControlPanel getControlPanel() {
+		return controlPanel;
+	}
+	public GridPanel getGridPanel() {
+		return gridPanel;
+	}
+	
+	
 }

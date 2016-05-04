@@ -1,5 +1,7 @@
 package fr.utbm.vi51.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -41,9 +43,34 @@ public class FrameProject extends JFrame {
 		//add scroll to avoid object unreachable in the frame
 		this.add(split);
 		addWindowListener(new WindowAdapter() {
-	  	public void windowClosing(WindowEvent e) {
-		   System.exit(0);
-	  	}
-	} );
+		  	public void windowClosing(WindowEvent e) {
+			   System.exit(0);
+		  	}	
+		} );
+		
+		//Listener for the controlPanel
+		this.mainPanel.getControlPanel().getPlayButton().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        System.out.println("Play");
+		    }
+		});
+		
+		this.mainPanel.getControlPanel().getPauseButton().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        System.out.println("Pause");
+		    }
+		});
+		
+		this.mainPanel.getControlPanel().getStepBystepButton().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        System.out.println("Step By Step");
+		    }
+		});
 	}
 }

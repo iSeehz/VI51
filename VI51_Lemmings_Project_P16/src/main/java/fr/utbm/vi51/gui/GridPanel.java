@@ -33,6 +33,7 @@ public class GridPanel extends JPanel{
 		paint(tab);
 	}
 	
+	//put some colors depending the type of the cells
 	public void paint(List<List<Cell>> tab){
 		
 		for (int i = 0;i<this.height;i++){

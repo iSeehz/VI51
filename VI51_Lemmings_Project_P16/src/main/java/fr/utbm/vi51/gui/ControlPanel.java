@@ -14,6 +14,7 @@ public class ControlPanel extends JPanel{
 	private JButton pauseButton;
 	private JButton stepBystepButton;
 	public ControlPanel() {
+		
 		// initialize Buttons
 		playButton = new JButton("Play");
 		pauseButton = new JButton("Pause");
@@ -26,5 +27,15 @@ public class ControlPanel extends JPanel{
 		this.add(stepBystepButton);
 		
 	}
+	public JButton getPlayButton() {
+		return playButton;
+	}
+	public JButton getPauseButton() {
+		return pauseButton;
+	}
+	public JButton getStepBystepButton() {
+		return stepBystepButton;
+	}
+	
 	
 }
