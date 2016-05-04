@@ -63,8 +63,7 @@ agent EnvironmentAgent {
 			initAgent.cancel
 			
 		}
-		
-//		println(this.listOfGUID)
+
 	}
 	
 	on StopSimulation {
