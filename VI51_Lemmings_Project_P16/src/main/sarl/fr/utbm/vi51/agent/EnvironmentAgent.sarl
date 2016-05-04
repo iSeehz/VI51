@@ -3,6 +3,7 @@
  */
 package fr.utbm.vi51.^agent
 
+import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
 import io.sarl.lang.core.Address
 import java.util.List
@@ -12,12 +13,12 @@ import java.util.List
  *
  */
 agent EnvironmentAgent {
-	
+	uses DefaultContextInteractions
 	var listOfGUID : List<Address>
 	
 	on Initialize{
 		
-		
+		spawn(typeof(LemmingAgent))
 	}
 	
 }
