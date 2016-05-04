@@ -54,14 +54,14 @@ public class EnvironmentAgent extends Agent {
   
   protected FrameProject gui;
   
-  protected int numberOfLemmings;
+  protected int numberOfLemmingsMinds;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
     ArrayList<Address> _arrayList = new ArrayList<Address>();
     this.listOfGUID = _arrayList;
-    this.numberOfLemmings = 1;
-    EnvironmentModel _environmentModel = new EnvironmentModel();
+    this.numberOfLemmingsMinds = 1;
+    EnvironmentModel _environmentModel = new EnvironmentModel("lab_parachute.txt", this.numberOfLemmingsMinds);
     this.environment = _environmentModel;
     FrameProject _frameProject = new FrameProject(this.environment);
     this.gui = _frameProject;
@@ -72,7 +72,7 @@ public class EnvironmentAgent extends Agent {
   @Percept
   public void _handle_CreateLemmingsAgent_1(final CreateLemmingsAgent occurrence) {
     int i = 0;
-    for (i = 0; (i < this.numberOfLemmings); i++) {
+    for (i = 0; (i < this.numberOfLemmingsMinds); i++) {
       this.spawn(LemmingAgent.class);
     }
     AgentTask _task = this.task("presentation");
@@ -89,7 +89,7 @@ public class EnvironmentAgent extends Agent {
     Address _source = occurrence.getSource();
     this.listOfGUID.add(_source);
     int _size = this.listOfGUID.size();
-    boolean _equals = (_size == this.numberOfLemmings);
+    boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
       this.cancel(this.initAgent);
     }

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import fr.utbm.vi51.model.Cell;
@@ -41,24 +42,30 @@ public class GridPanel extends JPanel{
 			for (int j = 0;j<this.width;j++){
 				Color c = Color.WHITE;
 				
-				grid[i][j] = new JPanel();
-				grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				this.grid[i][j] = new JPanel();
+				this.grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				
 				switch(tab.get(i).get(j).getType()){
 				
-				case EMPTY: grid[i][j].setBackground(Color.WHITE);
+				case EMPTY: this.grid[i][j].setBackground(Color.WHITE);
 					break;
-				case LAND: grid[i][j].setBackground(Color.DARK_GRAY);	
+				case LAND: this.grid[i][j].setBackground(Color.DARK_GRAY);	
 					break;
-				case ENTRY: grid[i][j].setBackground(Color.MAGENTA);
+				case ENTRY: this.grid[i][j].setBackground(Color.MAGENTA);
 					break;
-				case EXIT: grid[i][j].setBackground(Color.GREEN);
+				case EXIT: this.grid[i][j].setBackground(Color.GREEN);
 					break;
-				case HALF: grid[i][j].setBackground(Color.GRAY);
+				case HALF: this.grid[i][j].setBackground(Color.GRAY);
 					break;
 				default:
 				}
-				this.add(grid[i][j]);
+				
+				if(tab.get(i).get(j).getListOfBodyInCell().size() != 0){
+					
+					this.grid[i][j].add(new JButton());
+				}
+				
+				this.add(this.grid[i][j]);
 				
 			}
 		}

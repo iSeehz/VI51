@@ -30,13 +30,13 @@ agent EnvironmentAgent {
 	var listOfGUID : List<Address>
 	var environment:EnvironmentModel
 	var gui:FrameProject
-	var numberOfLemmings:int
+	var numberOfLemmingsMinds:int
 	
 	on Initialize{
 		
 		this.listOfGUID = new ArrayList<Address>()
-		this.numberOfLemmings = 1
-		this.environment = new EnvironmentModel()
+		this.numberOfLemmingsMinds = 1
+		this.environment = new EnvironmentModel("lab_parachute.txt",this.numberOfLemmingsMinds)
 		this.gui = new FrameProject(environment)
 		
 		wake(new CreateLemmingsAgent)
@@ -45,7 +45,7 @@ agent EnvironmentAgent {
 	on CreateLemmingsAgent{
 		
 		var i:int
-		for (i=0;i<this.numberOfLemmings;i++){
+		for (i=0;i<this.numberOfLemmingsMinds;i++){
 			spawn(typeof(LemmingAgent))
 		}
 		
@@ -59,7 +59,7 @@ agent EnvironmentAgent {
 	on IamAwoken{
 		
 		this.listOfGUID.add(occurrence.source)
-		if(this.listOfGUID.size()==this.numberOfLemmings){
+		if(this.listOfGUID.size()==this.numberOfLemmingsMinds){
 			initAgent.cancel
 			
 		}

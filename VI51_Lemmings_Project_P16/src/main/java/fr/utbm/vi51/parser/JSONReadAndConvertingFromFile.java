@@ -1,5 +1,6 @@
 package fr.utbm.vi51.parser;
 
+import java.awt.Point;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,13 +30,16 @@ public class JSONReadAndConvertingFromFile {
 	private Integer height;
 	private Integer width;
 	private List<List<Long>> content;
-	
+	private Point entryPosition;
+	private Point exitPosition;
 	public JSONReadAndConvertingFromFile(String level) {
 		
 		JSONParser parser = new JSONParser();
 		
 		try {
 			
+			entryPosition = null;
+			exitPosition = null;
 			String localPath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
 			String path = localPath.substring(0, localPath.lastIndexOf("target"));
 			
@@ -83,7 +87,7 @@ public class JSONReadAndConvertingFromFile {
 				switch((this.content.get(i).get(j)).intValue()){
 				
 					case 0: listCell.add(new Cell(i, j, TypeObject.ENTRY));
-			
+							entryPosition = new Point(i,j);
 						break;
 						
 					case 1: listCell.add(new Cell(i, j, TypeObject.EMPTY));
@@ -95,7 +99,7 @@ public class JSONReadAndConvertingFromFile {
 						break;
 						
 					case 3: listCell.add(new Cell(i, j, TypeObject.EXIT));
-						
+							exitPosition = new Point(i,j);
 						break;
 				
 					default:
@@ -117,6 +121,16 @@ public class JSONReadAndConvertingFromFile {
 
 	public List<List<Cell>> getContentForGame() {
 		return convertingContentForGame();
+	}
+
+
+	public Point getEntryPosition() {
+		return entryPosition;
+	}
+
+
+	public Point getExitPosition() {
+		return exitPosition;
 	}
 
 	
