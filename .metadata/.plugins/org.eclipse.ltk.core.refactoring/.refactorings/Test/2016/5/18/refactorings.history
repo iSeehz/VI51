@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 4 elements from project &apos;Test&apos;&#x0D;&#x0A;- Original project: &apos;Test&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     Test/src/main/java/fr.utbm.vi51.agent&#x0D;&#x0A;     EnvironmentAgent.sarl&#x0D;&#x0A;     LemmingAgent.sarl&#x0D;&#x0A;     Test/src/main/java/fr.utbm.vi51.event" description="Delete elements" element1="/src\/main\/java&lt;fr.utbm.vi51.event" element2="/src\/main\/java&lt;fr.utbm.vi51" element3="/src\/main\/java&lt;fr.utbm" element4="/src\/main\/java&lt;fr" element5="/src\/main\/java&lt;fr.utbm.vi51.agent" element6="/src\/main\/java&lt;fr.utbm.vi51" element7="/src\/main\/java&lt;fr.utbm" element8="/src\/main\/java&lt;fr" elements="8" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1462438007820" subPackages="false" version="1.0"/>
+</session>

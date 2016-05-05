@@ -1,9 +1,0 @@
-package fr.utbm.vi51.model;
-
-public class Percept {
-
-	private final Cell cell;
-	public Percept(Cell cell) {
-		
-	}
-}
