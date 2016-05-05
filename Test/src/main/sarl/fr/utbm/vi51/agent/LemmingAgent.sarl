@@ -1,0 +1,39 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^agent
+
+import fr.utbm.vi51.^event.AreYouAwoken
+import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.StopSimulation
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.util.Scopes
+
+/**
+ * @author tiboty
+ *
+ */
+agent LemmingAgent {
+	uses DefaultContextInteractions, Logging, Lifecycle, Behaviors
+	var presentation:Boolean
+	
+	on Initialize{
+		presentation = false
+	}
+	
+	on AreYouAwoken[!presentation]{
+		
+		emit(new IamAwoken, Scopes::addresses(occurrence.source))
+		presentation = true
+	}
+	
+	
+	on StopSimulation {
+		
+		killMe
+	}
+}
