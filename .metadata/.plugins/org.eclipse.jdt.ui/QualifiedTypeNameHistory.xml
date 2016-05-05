@@ -22,4 +22,7 @@
 <fullyQualifiedTypeName name="javax.swing.JButton"/>
 <fullyQualifiedTypeName name="fr.utbm.vi51.gui.GridPanel"/>
 <fullyQualifiedTypeName name="javax.swing.JLabel"/>
+<fullyQualifiedTypeName name="fr.utbm.vi51.launcher.SimulatorLauncher"/>
+<fullyQualifiedTypeName name="fr.utbm.vi51.model.LemmingBody"/>
+<fullyQualifiedTypeName name="java.awt.Graphics"/>
 </qualifiedTypeNameHistroy>

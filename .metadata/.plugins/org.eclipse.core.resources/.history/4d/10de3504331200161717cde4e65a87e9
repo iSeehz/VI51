@@ -1,0 +1,15 @@
+import fr.utbm.vi51.gui.FrameProject;
+import fr.utbm.vi51.launcher.SimulatorLauncher;
+import fr.utbm.vi51.model.EnvironmentModel;
+
+public class mainProject {
+
+	public static void main(String[] args) throws Exception {
+		EnvironmentModel m = new EnvironmentModel();
+		FrameProject frame = new FrameProject(m);
+		SimulatorLauncher.launchSimulation(frame);
+	
+		
+	}
+
+}

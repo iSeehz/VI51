@@ -1,0 +1,36 @@
+package fr.utbm.vi51.model;
+import java.util.List;
+
+import fr.utbm.vi51.gui.FrameProject;
+import fr.utbm.vi51.parser.JSONReadAndConvertingFromFile;
+
+public class EnvironmentModel {
+	
+	private List<List<Cell>> grid;
+	private int numberOfBody;
+	private Cell entry;
+	private Cell exit;
+
+	public EnvironmentModel(String level, int numberOfBody) {
+		
+		this.setGrid(level,numberOfBody);
+		
+		
+		System.out.println(this.entry.getX() + " " + this.entry.getY());
+		System.out.println(this.exit.getX() + " " + this.exit.getY());
+	}
+
+	public List<List<Cell>> getGrid() {
+		return grid;
+	}
+	
+	public void setGrid(String level, int numberOfBody){
+		
+		this.numberOfBody = numberOfBody;
+		JSONReadAndConvertingFromFile js = new JSONReadAndConvertingFromFile(level);
+		this.grid = js.convertingContentForGame();
+		if(js.getEntryPostion() != null) this.entry = this.grid.get((int) js.getEntryPostion().getX()).get((int) js.getEntryPostion().getY());
+		if(js.getExitPostion() != null) this.exit = this.grid.get((int) js.getExitPosition().getX()).get((int) js.getExitPosition().getY());
+	}
+
+}

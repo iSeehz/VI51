@@ -1,0 +1,73 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^agent
+
+import fr.utbm.vi51.^event.AreYouAwoken
+import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.StopSimulation
+import fr.utbm.vi51.gui.FrameProject
+import fr.utbm.vi51.model.EnvironmentModel
+import io.sarl.core.AgentTask
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.core.Schedules
+import io.sarl.lang.core.Address
+import java.util.ArrayList
+import java.util.List
+import fr.utbm.vi51.^event.CreateLemmingsAgent
+
+/**
+ * @author tiboty
+ *
+ */
+agent EnvironmentAgent {
+	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
+	var initAgent : AgentTask
+	var listOfGUID : List<Address>
+	var environment:EnvironmentModel
+	var gui:FrameProject
+	var numberOfLemmings:int
+	
+	on Initialize{
+		
+		this.listOfGUID = new ArrayList<Address>()
+		this.numberOfLemmings = 1
+		this.environment = new EnvironmentModel()
+		this.gui = new FrameProject(environment)
+		
+		wake(new CreateLemmingsAgent)
+	}
+	
+	on CreateLemmingsAgent{
+		
+		var i:int
+		for (i=0;i<this.numberOfLemmings;i++){
+			spawn(typeof(LemmingAgent))
+		}
+		
+		initAgent = task("presentation")
+		
+		initAgent.every(1000) [
+			emit(new AreYouAwoken)
+		]
+	}
+	
+	on IamAwoken{
+		
+		this.listOfGUID.add(occurrence.source)
+		if(this.listOfGUID.size()==this.numberOfLemmings){
+			initAgent.cancel
+			println("yolo")
+		}
+		
+//		println(this.listOfGUID)
+	}
+	
+	on StopSimulation {
+		killMe
+	}
+}

@@ -1,0 +1,47 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^agent
+
+import fr.utbm.vi51.^event.StopSimulation
+import fr.utbm.vi51.gui.FrameProject
+import fr.utbm.vi51.model.EnvironmentModel
+import io.sarl.core.AgentTask
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.lang.core.Address
+import java.util.List
+
+/**
+ * @author tiboty
+ *
+ */
+agent EnvironmentAgent {
+	uses DefaultContextInteractions, Logging, Lifecycle
+	var listOfGUID : List<Address>
+	var environment:EnvironmentModel
+	var gui:FrameProject
+	
+	
+	on Initialize{
+
+		environment = new EnvironmentModel()
+		gui = new FrameProject(environment)
+		
+		spawn(typeof(LemmingAgent))
+		
+		var task : AgentTask
+		task = task("presentation")
+		
+		task.every(1000) [
+			emit(new AreYouAwoken)
+		]
+		
+	}
+	
+	on StopSimulation {
+		killMe
+	}
+}

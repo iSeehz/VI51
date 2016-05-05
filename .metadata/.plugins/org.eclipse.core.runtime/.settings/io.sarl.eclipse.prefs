@@ -1,2 +1,2 @@
 eclipse.preferences.version=1
-io.sarl.eclipse.runtime.PREF_SRE_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><SREs/>
+io.sarl.eclipse.runtime.PREF_SRE_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><SREs defaultSRE\="54f82f84-1f06-4027-ae9e-f016de8e424b"><SRE class\="io.sarl.eclipse.runtime.StandardSREInstall" id\="54f82f84-1f06-4027-ae9e-f016de8e424b" libraryPath\="C\:/Users/Tiboty/Documents/GitHub/VI51/io.janusproject.kernel-2.0.3.1-with-dependencies.jar" platform\="false" standalone\="true"/></SREs>
