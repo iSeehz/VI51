@@ -4,6 +4,7 @@
 package fr.utbm.vi51.^agent
 
 import fr.utbm.vi51.^event.AreYouAwoken
+import fr.utbm.vi51.^event.CreateLemmingsAgent
 import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.StopSimulation
 import fr.utbm.vi51.gui.FrameProject
@@ -11,14 +12,15 @@ import fr.utbm.vi51.model.EnvironmentModel
 import io.sarl.core.AgentTask
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Destroy
 import io.sarl.core.Initialize
 import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.core.Schedules
 import io.sarl.lang.core.Address
+import io.sarl.util.Scopes
 import java.util.ArrayList
 import java.util.List
-import fr.utbm.vi51.^event.CreateLemmingsAgent
 
 /**
  * @author tiboty
@@ -41,7 +43,6 @@ agent EnvironmentAgent {
 		
 		wake(new CreateLemmingsAgent)
 	}
-	
 	on CreateLemmingsAgent{
 		
 		var i:int
@@ -67,6 +68,11 @@ agent EnvironmentAgent {
 	}
 	
 	on StopSimulation {
-		killMe
+		
+		for(adr: listOfGUID){
+			
+			emit(new Destroy, Scopes::addresses(adr))
+		}
+				
 	}
 }

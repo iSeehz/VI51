@@ -5,7 +5,6 @@ package fr.utbm.vi51.^agent
 
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.IamAwoken
-import fr.utbm.vi51.^event.StopSimulation
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
@@ -32,8 +31,4 @@ agent LemmingAgent {
 	}
 	
 	
-	on StopSimulation {
-		
-		killMe
-	}
 }

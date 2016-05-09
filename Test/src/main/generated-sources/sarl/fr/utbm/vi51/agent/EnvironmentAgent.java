@@ -33,6 +33,7 @@ import io.sarl.lang.core.Percept;
 import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
+import io.sarl.util.Scopes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -97,7 +98,11 @@ public class EnvironmentAgent extends Agent {
   
   @Percept
   public void _handle_StopSimulation_3(final StopSimulation occurrence) {
-    this.killMe();
+    for (final Address adr : this.listOfGUID) {
+      Destroy _destroy = new Destroy();
+      Scope<Address> _addresses = Scopes.addresses(adr);
+      this.emit(_destroy, _addresses);
+    }
   }
   
   /**

@@ -2,7 +2,6 @@ package fr.utbm.vi51.agent;
 
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.IamAwoken;
-import fr.utbm.vi51.event.StopSimulation;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.Behaviors;
@@ -70,11 +69,6 @@ public class LemmingAgent extends Agent {
     if (_eventhandler_guard_AreYouAwoken_1(occurrence, occurrence)) {
       _eventhandler_body_AreYouAwoken_1(occurrence);
     }
-  }
-  
-  @Percept
-  public void _handle_StopSimulation_2(final StopSimulation occurrence) {
-    this.killMe();
   }
   
   /**
