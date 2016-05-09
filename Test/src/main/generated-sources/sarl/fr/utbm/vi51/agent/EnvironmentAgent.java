@@ -4,6 +4,9 @@ import fr.utbm.vi51.agent.LemmingAgent;
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.CreateLemmingsAgent;
 import fr.utbm.vi51.event.IamAwoken;
+import fr.utbm.vi51.event.MAJGrid;
+import fr.utbm.vi51.event.MAJTable;
+import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
 import fr.utbm.vi51.gui.FrameProject;
 import fr.utbm.vi51.model.EnvironmentModel;
@@ -103,6 +106,18 @@ public class EnvironmentAgent extends Agent {
       Scope<Address> _addresses = Scopes.addresses(adr);
       this.emit(_destroy, _addresses);
     }
+  }
+  
+  @Percept
+  public void _handle_StartSimulation_4(final StartSimulation occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJTable_5(final MAJTable occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJGrid_6(final MAJGrid occurrence) {
   }
   
   /**

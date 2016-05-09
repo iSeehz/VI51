@@ -6,6 +6,9 @@ package fr.utbm.vi51.^agent
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.CreateLemmingsAgent
 import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.MAJGrid
+import fr.utbm.vi51.^event.MAJTable
+import fr.utbm.vi51.^event.StartSimulation
 import fr.utbm.vi51.^event.StopSimulation
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
@@ -74,5 +77,20 @@ agent EnvironmentAgent {
 			emit(new Destroy, Scopes::addresses(adr))
 		}
 				
+	}
+	
+	on StartSimulation {
+		
+		
+	}
+	
+	
+	on MAJTable {
+		
+	}
+	
+	on MAJGrid {
+		
+		
 	}
 }
