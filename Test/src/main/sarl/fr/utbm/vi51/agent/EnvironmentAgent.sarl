@@ -5,6 +5,7 @@ package fr.utbm.vi51.^agent
 
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.CreateLemmingsAgent
+import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.MAJTable
@@ -66,6 +67,11 @@ agent EnvironmentAgent {
 		if(this.listOfGUID.size()==this.numberOfLemmingsMinds){
 			initAgent.cancel
 			
+			//give index body for each Agent in the entry cell
+			for (adr : listOfGUID){
+				
+				emit(new GiveBody(this.environment.getEntry().getListOfBodyInCell().get(this.listOfGUID.indexOf(adr)).getId()), Scopes::addresses(adr))
+			}
 		}
 
 	}

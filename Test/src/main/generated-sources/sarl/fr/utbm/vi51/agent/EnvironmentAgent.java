@@ -3,13 +3,16 @@ package fr.utbm.vi51.agent;
 import fr.utbm.vi51.agent.LemmingAgent;
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.CreateLemmingsAgent;
+import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
 import fr.utbm.vi51.gui.FrameProject;
+import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
+import fr.utbm.vi51.model.LemmingBody;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.AgentTask;
@@ -96,6 +99,16 @@ public class EnvironmentAgent extends Agent {
     boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
       this.cancel(this.initAgent);
+      for (final Address adr : this.listOfGUID) {
+        Cell _entry = this.environment.getEntry();
+        List<LemmingBody> _listOfBodyInCell = _entry.getListOfBodyInCell();
+        int _indexOf = this.listOfGUID.indexOf(adr);
+        LemmingBody _get = _listOfBodyInCell.get(_indexOf);
+        int _id = _get.getId();
+        GiveBody _giveBody = new GiveBody(_id);
+        Scope<Address> _addresses = Scopes.addresses(adr);
+        this.emit(_giveBody, _addresses);
+      }
     }
   }
   

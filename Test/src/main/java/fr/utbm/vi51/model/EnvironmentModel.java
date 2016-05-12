@@ -35,4 +35,13 @@ public class EnvironmentModel {
 		}
 	}
 
+	public Cell getEntry() {
+		return entry;
+	}
+
+	public Cell getExit() {
+		return exit;
+	}
+
+	
 }

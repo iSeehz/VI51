@@ -1,6 +1,7 @@
 package fr.utbm.vi51.agent;
 
 import fr.utbm.vi51.event.AreYouAwoken;
+import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
@@ -69,6 +70,11 @@ public class LemmingAgent extends Agent {
     if (_eventhandler_guard_AreYouAwoken_1(occurrence, occurrence)) {
       _eventhandler_body_AreYouAwoken_1(occurrence);
     }
+  }
+  
+  @Percept
+  public void _handle_GiveBody_2(final GiveBody occurrence) {
+    this.println(("YOOOOLLLLLOOOO" + Integer.valueOf(occurrence.index)));
   }
   
   /**
