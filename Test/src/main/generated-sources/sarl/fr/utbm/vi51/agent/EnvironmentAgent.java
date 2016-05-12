@@ -9,6 +9,7 @@ import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
+import fr.utbm.vi51.event.WantPerception;
 import fr.utbm.vi51.gui.FrameProject;
 import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
@@ -62,6 +63,8 @@ public class EnvironmentAgent extends Agent {
   protected FrameProject gui;
   
   protected int numberOfLemmingsMinds;
+  
+  protected int numberOfLemmingsBody = 0;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
@@ -122,15 +125,27 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_StartSimulation_4(final StartSimulation occurrence) {
+  public void _handle_WantPerception_4(final WantPerception occurrence) {
+    int _numberOfLemmingsBody = this.numberOfLemmingsBody;
+    this.numberOfLemmingsBody = (_numberOfLemmingsBody + 1);
+    int _size = this.listOfGUID.size();
+    boolean _equals = (_size == this.numberOfLemmingsBody);
+    if (_equals) {
+      StartSimulation _startSimulation = new StartSimulation();
+      this.wake(_startSimulation);
+    }
   }
   
   @Percept
-  public void _handle_MAJTable_5(final MAJTable occurrence) {
+  public void _handle_StartSimulation_5(final StartSimulation occurrence) {
   }
   
   @Percept
-  public void _handle_MAJGrid_6(final MAJGrid occurrence) {
+  public void _handle_MAJTable_6(final MAJTable occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJGrid_7(final MAJGrid occurrence) {
   }
   
   /**

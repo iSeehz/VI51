@@ -3,6 +3,7 @@ package fr.utbm.vi51.agent;
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
+import fr.utbm.vi51.event.WantPerception;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.Behaviors;
@@ -41,6 +42,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 public class LemmingAgent extends Agent {
   protected Boolean presentation;
   
+  protected int index;
+  
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
     this.presentation = Boolean.valueOf(false);
@@ -74,7 +77,11 @@ public class LemmingAgent extends Agent {
   
   @Percept
   public void _handle_GiveBody_2(final GiveBody occurrence) {
-    this.println(("YOOOOLLLLLOOOO" + Integer.valueOf(occurrence.index)));
+    this.index = occurrence.index;
+    WantPerception _wantPerception = new WantPerception();
+    Address _source = occurrence.getSource();
+    Scope<Address> _addresses = Scopes.addresses(_source);
+    this.emit(_wantPerception, _addresses);
   }
   
   /**

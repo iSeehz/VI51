@@ -25,6 +25,7 @@ import io.sarl.lang.core.Address
 import io.sarl.util.Scopes
 import java.util.ArrayList
 import java.util.List
+import fr.utbm.vi51.^event.WantPerception
 
 /**
  * @author tiboty
@@ -37,7 +38,7 @@ agent EnvironmentAgent {
 	var environment:EnvironmentModel
 	var gui:FrameProject
 	var numberOfLemmingsMinds:int
-	
+	var numberOfLemmingsBody:int = 0
 	on Initialize{
 		
 		this.listOfGUID = new ArrayList<Address>()
@@ -83,6 +84,18 @@ agent EnvironmentAgent {
 			emit(new Destroy, Scopes::addresses(adr))
 		}
 				
+	}
+	
+	on WantPerception{
+		
+		this.numberOfLemmingsBody +=1
+		
+		if(this.listOfGUID.size()==this.numberOfLemmingsBody){
+			
+			wake(new StartSimulation)
+
+		}
+		
 	}
 	
 	on StartSimulation {

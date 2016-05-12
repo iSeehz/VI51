@@ -12,6 +12,8 @@ import io.sarl.core.Initialize
 import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
+import com.hazelcast.config.WanAcknowledgeType
+import fr.utbm.vi51.^event.WantPerception
 
 /**
  * @author tiboty
@@ -20,7 +22,7 @@ import io.sarl.util.Scopes
 agent LemmingAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Behaviors
 	var presentation:Boolean
-	
+	var index:int
 	on Initialize{
 		presentation = false
 	}
@@ -32,6 +34,7 @@ agent LemmingAgent {
 	}
 	
 	on GiveBody{
-		println("YOOOOLLLLLOOOO" + occurrence.index)
+		index = occurrence.index
+		emit(new WantPerception, Scopes::addresses(occurrence.source))
 	}
 }

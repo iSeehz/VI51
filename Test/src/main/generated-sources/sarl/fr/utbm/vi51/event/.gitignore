@@ -8,3 +8,5 @@
 /.StartSimulation.java._trace
 /.PerceptionEvent.java._trace
 /.GiveBody.java._trace
+/.Perception.java._trace
+/.WantPerception.java._trace
