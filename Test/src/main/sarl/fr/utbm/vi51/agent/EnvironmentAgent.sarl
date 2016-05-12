@@ -92,6 +92,7 @@ agent EnvironmentAgent {
 		
 		if(this.listOfGUID.size()==this.numberOfLemmingsBody){
 			
+			// all set and ready to go
 			wake(new StartSimulation)
 
 		}
@@ -99,7 +100,6 @@ agent EnvironmentAgent {
 	}
 	
 	on StartSimulation {
-		
 		
 	}
 	
