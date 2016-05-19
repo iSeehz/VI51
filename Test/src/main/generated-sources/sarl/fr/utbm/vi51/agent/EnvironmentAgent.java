@@ -7,6 +7,7 @@ import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
+import fr.utbm.vi51.event.SetAttributeAgentEnvironment;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
 import fr.utbm.vi51.event.WantPerception;
@@ -68,13 +69,8 @@ public class EnvironmentAgent extends Agent {
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
-    ArrayList<Address> _arrayList = new ArrayList<Address>();
-    this.listOfGUID = _arrayList;
-    this.numberOfLemmingsMinds = 1;
-    EnvironmentModel _environmentModel = new EnvironmentModel("lab_parachute.txt", this.numberOfLemmingsMinds);
-    this.environment = _environmentModel;
-    FrameProject _frameProject = new FrameProject(this.environment);
-    this.gui = _frameProject;
+    SetAttributeAgentEnvironment _setAttributeAgentEnvironment = new SetAttributeAgentEnvironment(1, "lab_parachute.txt");
+    this.wake(_setAttributeAgentEnvironment);
     CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
     this.wake(_createLemmingsAgent);
   }
@@ -95,7 +91,18 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_IamAwoken_2(final IamAwoken occurrence) {
+  public void _handle_SetAttributeAgentEnvironment_2(final SetAttributeAgentEnvironment occurrence) {
+    ArrayList<Address> _arrayList = new ArrayList<Address>();
+    this.listOfGUID = _arrayList;
+    this.numberOfLemmingsMinds = occurrence.numberOfLemmings;
+    EnvironmentModel _environmentModel = new EnvironmentModel(occurrence.level, this.numberOfLemmingsMinds);
+    this.environment = _environmentModel;
+    FrameProject _frameProject = new FrameProject(this.environment);
+    this.gui = _frameProject;
+  }
+  
+  @Percept
+  public void _handle_IamAwoken_3(final IamAwoken occurrence) {
     Address _source = occurrence.getSource();
     this.listOfGUID.add(_source);
     int _size = this.listOfGUID.size();
@@ -116,7 +123,7 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_StopSimulation_3(final StopSimulation occurrence) {
+  public void _handle_StopSimulation_4(final StopSimulation occurrence) {
     for (final Address adr : this.listOfGUID) {
       Destroy _destroy = new Destroy();
       Scope<Address> _addresses = Scopes.addresses(adr);
@@ -125,27 +132,26 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_WantPerception_4(final WantPerception occurrence) {
+  public void _handle_WantPerception_5(final WantPerception occurrence) {
     int _numberOfLemmingsBody = this.numberOfLemmingsBody;
     this.numberOfLemmingsBody = (_numberOfLemmingsBody + 1);
     int _size = this.listOfGUID.size();
     boolean _equals = (_size == this.numberOfLemmingsBody);
     if (_equals) {
-      StartSimulation _startSimulation = new StartSimulation();
-      this.wake(_startSimulation);
+      this.println("Ready to go !");
     }
   }
   
   @Percept
-  public void _handle_StartSimulation_5(final StartSimulation occurrence) {
+  public void _handle_StartSimulation_6(final StartSimulation occurrence) {
   }
   
   @Percept
-  public void _handle_MAJTable_6(final MAJTable occurrence) {
+  public void _handle_MAJTable_7(final MAJTable occurrence) {
   }
   
   @Percept
-  public void _handle_MAJGrid_7(final MAJGrid occurrence) {
+  public void _handle_MAJGrid_8(final MAJGrid occurrence) {
   }
   
   /**

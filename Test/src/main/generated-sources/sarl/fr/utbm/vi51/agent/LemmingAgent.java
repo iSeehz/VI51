@@ -84,6 +84,12 @@ public class LemmingAgent extends Agent {
     this.emit(_wantPerception, _addresses);
   }
   
+  @Percept
+  public void _handle_Destroy_3(final Destroy occurrence) {
+    this.println("GoodBye World !");
+    this.killMe();
+  }
+  
   /**
    * See the capacity {@link io.sarl.core.DefaultContextInteractions#emit(io.sarl.lang.core.Event)}.
    * 

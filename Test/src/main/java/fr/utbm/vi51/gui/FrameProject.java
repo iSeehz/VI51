@@ -16,7 +16,7 @@ public class FrameProject extends JFrame {
 	 * Main Frame project
 	 */
 	private static final long serialVersionUID = -8346526694391516641L;
-	
+//	private final TimeManager timeManager;
 	private EnvironmentModel environment;
 	
 	private JSplitPane split;

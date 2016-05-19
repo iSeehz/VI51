@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.utbm.vi51.model.Cell;
+import fr.utbm.vi51.time.Clock;
 
 public class MainPanel extends JPanel{
 	/**
@@ -28,7 +28,7 @@ public class MainPanel extends JPanel{
 		this.add("North",controlPanel);
 		this.add("Center",gridPanel);
 		
-		this.add("South",new JLabel("time : " + "00:05:20"));
+		this.add("South",new Clock());
 	}
 	public ControlPanel getControlPanel() {
 		return controlPanel;
