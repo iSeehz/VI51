@@ -36,7 +36,7 @@ public class GridPanel extends JPanel{
 	
 	//put some colors depending the type of the cells
 	public void paint(List<List<Cell>> tab){
-		
+		this.removeAll();
 		for (int i = 0;i<this.height;i++){
 			
 			for (int j = 0;j<this.width;j++){

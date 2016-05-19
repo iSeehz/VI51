@@ -13,18 +13,20 @@ public class ControlPanel extends JPanel{
 	private JButton playButton;
 	private JButton pauseButton;
 	private JButton stepBystepButton;
+	private JButton stopButton;
 	public ControlPanel() {
 		
 		// initialize Buttons
 		playButton = new JButton("Play");
 		pauseButton = new JButton("Pause");
 		stepBystepButton = new JButton("Coup par coup");
-		
+		stopButton = new JButton("Stop");
 		//set the Panel
 		this.setLayout(new FlowLayout());
 		this.add(playButton);
 		this.add(pauseButton);
 		this.add(stepBystepButton);
+		this.add(stopButton);
 		
 	}
 	public JButton getPlayButton() {
@@ -35,6 +37,9 @@ public class ControlPanel extends JPanel{
 	}
 	public JButton getStepBystepButton() {
 		return stepBystepButton;
+	}
+	public JButton getStopButton() {
+		return stopButton;
 	}
 	
 	

@@ -1,17 +1,24 @@
 package fr.utbm.vi51.agent;
 
+import com.google.common.base.Objects;
 import fr.utbm.vi51.agent.LemmingAgent;
+import fr.utbm.vi51.agent.SimulationState;
+import fr.utbm.vi51.controller.Controller;
 import fr.utbm.vi51.event.AreYouAwoken;
+import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.CreateLemmingsAgent;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
-import fr.utbm.vi51.event.SetAttributeAgentEnvironment;
+import fr.utbm.vi51.event.ResetAgentEnvironment;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
 import fr.utbm.vi51.event.WantPerception;
 import fr.utbm.vi51.gui.FrameProject;
+import fr.utbm.vi51.gui.GridPanel;
+import fr.utbm.vi51.gui.MainPanel;
+import fr.utbm.vi51.gui.OptionPanel;
 import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
 import fr.utbm.vi51.model.LemmingBody;
@@ -47,7 +54,9 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
+import javax.swing.JComboBox;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
+import org.eclipse.xtext.xbase.lib.Pure;
 
 /**
  * @author tiboty
@@ -67,12 +76,18 @@ public class EnvironmentAgent extends Agent {
   
   protected int numberOfLemmingsBody = 0;
   
+  protected SimulationState state;
+  
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
-    SetAttributeAgentEnvironment _setAttributeAgentEnvironment = new SetAttributeAgentEnvironment(1, "lab_parachute.txt");
-    this.wake(_setAttributeAgentEnvironment);
+    ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(1, "lab_parachute.txt");
+    this.wake(_resetAgentEnvironment);
     CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
     this.wake(_createLemmingsAgent);
+    EventSpace _defaultSpace = this.getDefaultSpace();
+    Controller controller = new Controller(_defaultSpace);
+    FrameProject _frameProject = new FrameProject(this.environment, controller);
+    this.gui = _frameProject;
   }
   
   @Percept
@@ -91,14 +106,13 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_SetAttributeAgentEnvironment_2(final SetAttributeAgentEnvironment occurrence) {
+  public void _handle_ResetAgentEnvironment_2(final ResetAgentEnvironment occurrence) {
+    this.state = SimulationState.INIT;
     ArrayList<Address> _arrayList = new ArrayList<Address>();
     this.listOfGUID = _arrayList;
     this.numberOfLemmingsMinds = occurrence.numberOfLemmings;
     EnvironmentModel _environmentModel = new EnvironmentModel(occurrence.level, this.numberOfLemmingsMinds);
     this.environment = _environmentModel;
-    FrameProject _frameProject = new FrameProject(this.environment);
-    this.gui = _frameProject;
   }
   
   @Percept
@@ -122,12 +136,36 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  @Percept
-  public void _handle_StopSimulation_4(final StopSimulation occurrence) {
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_StopSimulation_4(final StopSimulation it, final StopSimulation occurrence) {
+    boolean _or = false;
+    boolean _notEquals = (!Objects.equal(this.state, SimulationState.STOP));
+    if (_notEquals) {
+      _or = true;
+    } else {
+      boolean _equals = Objects.equal(this.state, SimulationState.START);
+      _or = _equals;
+    }
+    return _or;
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private void _eventhandler_body_StopSimulation_4(final StopSimulation occurrence) {
+    this.state = SimulationState.STOP;
+    this.println("fin simulation");
     for (final Address adr : this.listOfGUID) {
       Destroy _destroy = new Destroy();
       Scope<Address> _addresses = Scopes.addresses(adr);
       this.emit(_destroy, _addresses);
+    }
+    this.listOfGUID.clear();
+  }
+  
+  @Percept
+  public void _handle_StopSimulation_4(final StopSimulation occurrence) {
+    if (_eventhandler_guard_StopSimulation_4(occurrence, occurrence)) {
+      _eventhandler_body_StopSimulation_4(occurrence);
     }
   }
   
@@ -142,16 +180,76 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  @Percept
-  public void _handle_StartSimulation_6(final StartSimulation occurrence) {
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_ChangeLevel_6(final ChangeLevel it, final ChangeLevel occurrence) {
+    boolean _or = false;
+    boolean _equals = Objects.equal(this.state, SimulationState.STOP);
+    if (_equals) {
+      _or = true;
+    } else {
+      boolean _equals_1 = Objects.equal(this.state, SimulationState.INIT);
+      _or = _equals_1;
+    }
+    return _or;
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private void _eventhandler_body_ChangeLevel_6(final ChangeLevel occurrence) {
+    EnvironmentModel _environment = this.gui.getEnvironment();
+    _environment.setGrid(occurrence.level, this.numberOfLemmingsMinds);
+    MainPanel _mainPanel = this.gui.getMainPanel();
+    GridPanel _gridPanel = _mainPanel.getGridPanel();
+    EnvironmentModel _environment_1 = this.gui.getEnvironment();
+    List<List<Cell>> _grid = _environment_1.getGrid();
+    _gridPanel.generate(_grid);
   }
   
   @Percept
-  public void _handle_MAJTable_7(final MAJTable occurrence) {
+  public void _handle_ChangeLevel_6(final ChangeLevel occurrence) {
+    if (_eventhandler_guard_ChangeLevel_6(occurrence, occurrence)) {
+      _eventhandler_body_ChangeLevel_6(occurrence);
+    }
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_StartSimulation_7(final StartSimulation it, final StartSimulation occurrence) {
+    boolean _notEquals = (!Objects.equal(this.state, SimulationState.START));
+    return _notEquals;
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private void _eventhandler_body_StartSimulation_7(final StartSimulation occurrence) {
+    this.state = SimulationState.START;
+    int _size = this.listOfGUID.size();
+    boolean _notEquals = (_size != 0);
+    if (_notEquals) {
+      this.println("lancement simulation");
+    } else {
+      this.println("ok");
+      OptionPanel _optionPanel = this.gui.getOptionPanel();
+      JComboBox<String> _changeLevel = _optionPanel.getChangeLevel();
+      Object _selectedItem = _changeLevel.getSelectedItem();
+      String _valueOf = String.valueOf(_selectedItem);
+      ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(1, _valueOf);
+      this.wake(_resetAgentEnvironment);
+    }
   }
   
   @Percept
-  public void _handle_MAJGrid_8(final MAJGrid occurrence) {
+  public void _handle_StartSimulation_7(final StartSimulation occurrence) {
+    if (_eventhandler_guard_StartSimulation_7(occurrence, occurrence)) {
+      _eventhandler_body_StartSimulation_7(occurrence);
+    }
+  }
+  
+  @Percept
+  public void _handle_MAJTable_8(final MAJTable occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJGrid_9(final MAJGrid occurrence) {
   }
   
   /**

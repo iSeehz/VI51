@@ -9,11 +9,4 @@ import io.sarl.lang.core.Address
  * @author tiboty
  *
  */
-event StopSimulation{
-	var addr:Address
-	
-	new(ad:Address){
-		addr = ad;
-	}
-	
-}
+event StopSimulation

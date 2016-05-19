@@ -3,13 +3,15 @@
  */
 package fr.utbm.vi51.^agent
 
+import fr.utbm.vi51.controller.Controller
 import fr.utbm.vi51.^event.AreYouAwoken
+import fr.utbm.vi51.^event.ChangeLevel
 import fr.utbm.vi51.^event.CreateLemmingsAgent
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.MAJTable
-import fr.utbm.vi51.^event.SetAttributeAgentEnvironment
+import fr.utbm.vi51.^event.ResetAgentEnvironment
 import fr.utbm.vi51.^event.StartSimulation
 import fr.utbm.vi51.^event.StopSimulation
 import fr.utbm.vi51.^event.WantPerception
@@ -40,10 +42,13 @@ agent EnvironmentAgent {
 	var gui:FrameProject
 	var numberOfLemmingsMinds:int
 	var numberOfLemmingsBody:int = 0
+	var state:SimulationState
+	
 	on Initialize{
-		
-		wake(new SetAttributeAgentEnvironment(1,"lab_parachute.txt"))
+		wake(new ResetAgentEnvironment(1,"lab_parachute.txt"))
 		wake(new CreateLemmingsAgent)
+		var controller:Controller = new Controller(defaultSpace);
+		this.gui = new FrameProject(environment, controller)
 	}
 	on CreateLemmingsAgent{
 		
@@ -59,12 +64,13 @@ agent EnvironmentAgent {
 		]
 	}
 	
-	on SetAttributeAgentEnvironment{
-		
+	on ResetAgentEnvironment{
+
+		this.state = SimulationState.INIT;
 		this.listOfGUID = new ArrayList<Address>()
 		this.numberOfLemmingsMinds = occurrence.numberOfLemmings
 		this.environment = new EnvironmentModel(occurrence.level,this.numberOfLemmingsMinds)
-		this.gui = new FrameProject(environment)
+		
 	}
 	
 	on IamAwoken{
@@ -72,22 +78,24 @@ agent EnvironmentAgent {
 		this.listOfGUID.add(occurrence.source)
 		if(this.listOfGUID.size()==this.numberOfLemmingsMinds){
 			initAgent.cancel
-			
+
 			//give index body for each Agent in the entry cell
 			for (adr : listOfGUID){
-				
+
 				emit(new GiveBody(this.environment.getEntry().getListOfBodyInCell().get(this.listOfGUID.indexOf(adr)).getId()), Scopes::addresses(adr))
 			}
 		}
 
 	}
 	
-	on StopSimulation {
-		
+	on StopSimulation[this.state != SimulationState.STOP || this.state == SimulationState.START ] {
+		this.state = SimulationState.STOP
+		println("fin simulation")
 		for(adr: listOfGUID){
 			
 			emit(new Destroy, Scopes::addresses(adr))
 		}
+		this.listOfGUID.clear()
 				
 	}
 	
@@ -99,13 +107,29 @@ agent EnvironmentAgent {
 			
 			// all set and ready to go
 			println("Ready to go !")
-				//wake(new StartSimulation)
+
 
 		}
 		
 	}
 	
-	on StartSimulation {
+	on ChangeLevel[this.state == SimulationState.STOP || this.state == SimulationState.INIT]{
+		
+		this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
+		this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
+	}
+	
+	on StartSimulation[this.state != SimulationState.START] {
+		this.state = SimulationState.START
+		if(this.listOfGUID.size() != 0){
+			println("lancement simulation")
+			
+		//send perception to all Lemming Agent
+		}else{
+			println("ok")
+			wake(new ResetAgentEnvironment(1,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
+		}
+		
 		
 	}
 	

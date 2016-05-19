@@ -17,6 +17,8 @@ public class OptionPanel extends JPanel{
 	private JButton spawnAnotherLemmingButton;
 	
 	private JComboBox<String> changeLevel;
+	
+	
 	Object rowData[][] = { { "Lemmings lachés", "", ""},
             { "Lemmings en vie", "", ""},
             { "Lemmings arrivés", "", ""},
@@ -38,7 +40,7 @@ public class OptionPanel extends JPanel{
 		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
 		
 		//set the level
-		String level[] = {"lab_parachute.txt","level_2","level_3"};
+		String level[] = {"lab_parachute.txt","lab_arrivee.txt","level_3"};
 		changeLevel = new JComboBox<String>(level);
 		
 		this.add(lemmingDatas.getTableHeader());
@@ -59,6 +61,9 @@ public class OptionPanel extends JPanel{
 	}
 	public void setRowData(Object[][] rowData) {
 		this.rowData = rowData;
+	}
+	public JComboBox<String> getChangeLevel() {
+		return changeLevel;
 	}
 
 	
