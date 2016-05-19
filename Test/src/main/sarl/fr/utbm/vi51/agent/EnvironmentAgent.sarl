@@ -9,6 +9,7 @@ import fr.utbm.vi51.^event.ChangeLevel
 import fr.utbm.vi51.^event.CreateLemmingsAgent
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.MAJTable
 import fr.utbm.vi51.^event.ResetAgentEnvironment
@@ -17,6 +18,7 @@ import fr.utbm.vi51.^event.StopSimulation
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
+import fr.utbm.vi51.model.PossibleMove
 import io.sarl.core.AgentTask
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
@@ -28,7 +30,11 @@ import io.sarl.core.Schedules
 import io.sarl.lang.core.Address
 import io.sarl.util.Scopes
 import java.util.ArrayList
+import java.util.HashMap
+import java.util.Iterator
 import java.util.List
+import java.util.Map
+import java.util.Set
 
 /**
  * @author tiboty
@@ -36,13 +42,16 @@ import java.util.List
  */
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
+	
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
+	var mapOfGUID : HashMap<Address,Integer >
 	var environment:EnvironmentModel
 	var gui:FrameProject
 	var numberOfLemmingsMinds:int
-	var numberOfLemmingsBody:int = 0
+	var numberOfLemmingsBodyLinked:int = 0
 	var state:SimulationState
+	var moveInfluences:HashMap<Integer, PossibleMove>
 	
 	on Initialize{
 		wake(new ResetAgentEnvironment(1,"lab_parachute.txt"))
@@ -65,7 +74,8 @@ agent EnvironmentAgent {
 	
 	on ResetAgentEnvironment{
 
-		this.state = SimulationState.INIT;
+		this.state = SimulationState.INIT
+		this.mapOfGUID = new HashMap<Address, Integer>()
 		this.listOfGUID = new ArrayList<Address>()
 		this.numberOfLemmingsMinds = occurrence.numberOfLemmings
 		this.environment = new EnvironmentModel(occurrence.level,this.numberOfLemmingsMinds)
@@ -79,30 +89,46 @@ agent EnvironmentAgent {
 			initAgent.cancel
 
 			//give index body for each Agent in the entry cell
-			for (adr : listOfGUID){
-
-				emit(new GiveBody(this.environment.getEntry().getListOfBodyInCell().get(this.listOfGUID.indexOf(adr)).getId()), Scopes::addresses(adr))
+			var c:Integer = 0
+			for (adr : this.listOfGUID){
+				this.mapOfGUID.put(adr,this.environment.getEntry().getListOfBodyInCell().get(c).getId())
+				emit(new GiveBody(this.environment.getEntry().getListOfBodyInCell().get(c).getId()), Scopes::addresses(adr))
+				c++
+			}
+			
+			//display the map with id of body and adress of the agent
+			var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+			while(keySetIterator.hasNext()){
+			  var key:Address = keySetIterator.next();
+			  println("key: " + key + " value: " + this.mapOfGUID.get(key))
 			}
 		}
 
 	}
 	
 	on StopSimulation[this.state != SimulationState.STOP || this.state == SimulationState.START ] {
-		this.state = SimulationState.STOP
-		println("fin simulation")
-		for(adr: listOfGUID){
+		if(this.state != SimulationState.INIT){
 			
-			emit(new Destroy, Scopes::addresses(adr))
+			this.state = SimulationState.STOP
+			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
+			this.numberOfLemmingsBodyLinked = 0
+			this.mapOfGUID.clear()
+			this.listOfGUID.clear()
+			for(adr: this.listOfGUID){
+				emit(new Destroy, Scopes::addresses(adr))
+			}
+		}else{
+			println("Simulation non lancée")
 		}
-		this.listOfGUID.clear()
+		
 				
 	}
 	
 	on WantPerception{
 		
-		this.numberOfLemmingsBody +=1
+		this.numberOfLemmingsBodyLinked +=1
 		
-		if(this.listOfGUID.size()==this.numberOfLemmingsBody){
+		if(this.mapOfGUID.size()==this.numberOfLemmingsBodyLinked){
 			
 			// all set and ready to go
 			println("Ready to go !")
@@ -120,14 +146,13 @@ agent EnvironmentAgent {
 	
 	on StartSimulation[this.state != SimulationState.START] {
 		this.state = SimulationState.START
-		if(this.listOfGUID.size() != 0){
+		if(!this.mapOfGUID.isEmpty()){
 			println("lancement simulation")
 			
 		//send perception to all Lemming Agent
 		
 		}else{
-			wake(new ResetAgentEnvironment(1,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
-			
+			wake(new ResetAgentEnvironment(this.numberOfLemmingsMinds,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
 		//send perception to all Lemming Agent
 
 		}
@@ -135,6 +160,13 @@ agent EnvironmentAgent {
 		
 	}
 	
+	on Influence{
+		
+		println(this.mapOfGUID.get(occurrence.source))
+		this.moveInfluences.put(this.mapOfGUID.get(occurrence.source),occurrence.move)
+		
+		
+	}
 	
 	on MAJTable {
 		

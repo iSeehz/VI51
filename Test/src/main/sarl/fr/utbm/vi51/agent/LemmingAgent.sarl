@@ -40,6 +40,5 @@ agent LemmingAgent {
 	
 	on Destroy{
 		println("GoodBye World !")
-		killMe
 	}
 }

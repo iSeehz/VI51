@@ -9,6 +9,7 @@ import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.CreateLemmingsAgent;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
+import fr.utbm.vi51.event.Influence;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
 import fr.utbm.vi51.event.ResetAgentEnvironment;
@@ -22,6 +23,7 @@ import fr.utbm.vi51.gui.OptionPanel;
 import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
 import fr.utbm.vi51.model.LemmingBody;
+import fr.utbm.vi51.model.PossibleMove;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.AgentTask;
@@ -50,7 +52,10 @@ import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.util.Scopes;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
@@ -68,15 +73,19 @@ public class EnvironmentAgent extends Agent {
   
   protected List<Address> listOfGUID;
   
+  protected HashMap<Address, Integer> mapOfGUID;
+  
   protected EnvironmentModel environment;
   
   protected FrameProject gui;
   
   protected int numberOfLemmingsMinds;
   
-  protected int numberOfLemmingsBody = 0;
+  protected int numberOfLemmingsBodyLinked = 0;
   
   protected SimulationState state;
+  
+  protected HashMap<Integer, PossibleMove> moveInfluences;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
@@ -106,6 +115,8 @@ public class EnvironmentAgent extends Agent {
   @Percept
   public void _handle_ResetAgentEnvironment_2(final ResetAgentEnvironment occurrence) {
     this.state = SimulationState.INIT;
+    HashMap<Address, Integer> _hashMap = new HashMap<Address, Integer>();
+    this.mapOfGUID = _hashMap;
     ArrayList<Address> _arrayList = new ArrayList<Address>();
     this.listOfGUID = _arrayList;
     this.numberOfLemmingsMinds = occurrence.numberOfLemmings;
@@ -123,15 +134,33 @@ public class EnvironmentAgent extends Agent {
     boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
       this.cancel(this.initAgent);
+      Integer c = Integer.valueOf(0);
       for (final Address adr : this.listOfGUID) {
-        Cell _entry = this.environment.getEntry();
-        List<LemmingBody> _listOfBodyInCell = _entry.getListOfBodyInCell();
-        int _indexOf = this.listOfGUID.indexOf(adr);
-        LemmingBody _get = _listOfBodyInCell.get(_indexOf);
-        int _id = _get.getId();
-        GiveBody _giveBody = new GiveBody(_id);
-        Scope<Address> _addresses = Scopes.addresses(adr);
-        this.emit(_giveBody, _addresses);
+        {
+          Cell _entry = this.environment.getEntry();
+          List<LemmingBody> _listOfBodyInCell = _entry.getListOfBodyInCell();
+          LemmingBody _get = _listOfBodyInCell.get((c).intValue());
+          int _id = _get.getId();
+          this.mapOfGUID.put(adr, Integer.valueOf(_id));
+          Cell _entry_1 = this.environment.getEntry();
+          List<LemmingBody> _listOfBodyInCell_1 = _entry_1.getListOfBodyInCell();
+          LemmingBody _get_1 = _listOfBodyInCell_1.get((c).intValue());
+          int _id_1 = _get_1.getId();
+          GiveBody _giveBody = new GiveBody(_id_1);
+          Scope<Address> _addresses = Scopes.addresses(adr);
+          this.emit(_giveBody, _addresses);
+          c++;
+        }
+      }
+      Set<Address> _keySet = this.mapOfGUID.keySet();
+      Iterator<Address> keySetIterator = _keySet.iterator();
+      while (keySetIterator.hasNext()) {
+        {
+          Address key = keySetIterator.next();
+          Integer _get = this.mapOfGUID.get(key);
+          String _plus = ((("key: " + key) + " value: ") + _get);
+          this.println(_plus);
+        }
       }
     }
   }
@@ -152,14 +181,24 @@ public class EnvironmentAgent extends Agent {
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   private void _eventhandler_body_StopSimulation_4(final StopSimulation occurrence) {
-    this.state = SimulationState.STOP;
-    this.println("fin simulation");
-    for (final Address adr : this.listOfGUID) {
-      Destroy _destroy = new Destroy();
-      Scope<Address> _addresses = Scopes.addresses(adr);
-      this.emit(_destroy, _addresses);
+    boolean _notEquals = (!Objects.equal(this.state, SimulationState.INIT));
+    if (_notEquals) {
+      this.state = SimulationState.STOP;
+      int _size = this.listOfGUID.size();
+      String _plus = ("fin simulation : Terminaison de " + Integer.valueOf(_size));
+      String _plus_1 = (_plus + " agent(s) !");
+      this.println(_plus_1);
+      this.numberOfLemmingsBodyLinked = 0;
+      this.mapOfGUID.clear();
+      this.listOfGUID.clear();
+      for (final Address adr : this.listOfGUID) {
+        Destroy _destroy = new Destroy();
+        Scope<Address> _addresses = Scopes.addresses(adr);
+        this.emit(_destroy, _addresses);
+      }
+    } else {
+      this.println("Simulation non lancée");
     }
-    this.listOfGUID.clear();
   }
   
   @Percept
@@ -171,10 +210,10 @@ public class EnvironmentAgent extends Agent {
   
   @Percept
   public void _handle_WantPerception_5(final WantPerception occurrence) {
-    int _numberOfLemmingsBody = this.numberOfLemmingsBody;
-    this.numberOfLemmingsBody = (_numberOfLemmingsBody + 1);
-    int _size = this.listOfGUID.size();
-    boolean _equals = (_size == this.numberOfLemmingsBody);
+    int _numberOfLemmingsBodyLinked = this.numberOfLemmingsBodyLinked;
+    this.numberOfLemmingsBodyLinked = (_numberOfLemmingsBodyLinked + 1);
+    int _size = this.mapOfGUID.size();
+    boolean _equals = (_size == this.numberOfLemmingsBodyLinked);
     if (_equals) {
       this.println("Ready to go !");
     }
@@ -222,16 +261,16 @@ public class EnvironmentAgent extends Agent {
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   private void _eventhandler_body_StartSimulation_7(final StartSimulation occurrence) {
     this.state = SimulationState.START;
-    int _size = this.listOfGUID.size();
-    boolean _notEquals = (_size != 0);
-    if (_notEquals) {
+    boolean _isEmpty = this.mapOfGUID.isEmpty();
+    boolean _not = (!_isEmpty);
+    if (_not) {
       this.println("lancement simulation");
     } else {
       OptionPanel _optionPanel = this.gui.getOptionPanel();
       JComboBox<String> _changeLevel = _optionPanel.getChangeLevel();
       Object _selectedItem = _changeLevel.getSelectedItem();
       String _valueOf = String.valueOf(_selectedItem);
-      ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(1, _valueOf);
+      ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(this.numberOfLemmingsMinds, _valueOf);
       this.wake(_resetAgentEnvironment);
     }
   }
@@ -244,11 +283,21 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_MAJTable_8(final MAJTable occurrence) {
+  public void _handle_Influence_8(final Influence occurrence) {
+    Address _source = occurrence.getSource();
+    Integer _get = this.mapOfGUID.get(_source);
+    this.println(_get);
+    Address _source_1 = occurrence.getSource();
+    Integer _get_1 = this.mapOfGUID.get(_source_1);
+    this.moveInfluences.put(_get_1, occurrence.move);
   }
   
   @Percept
-  public void _handle_MAJGrid_9(final MAJGrid occurrence) {
+  public void _handle_MAJTable_9(final MAJTable occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJGrid_10(final MAJGrid occurrence) {
   }
   
   /**

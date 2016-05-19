@@ -7,7 +7,7 @@ public class LemmingBody extends EnviromnentObject{
 	private int fovLeft;
 	private int fovRight;
 	
-	private int id;
+	private Integer id;
 	
 	public LemmingBody(int id ,int x, int y) {
 		// TODO Auto-generated constructor stub

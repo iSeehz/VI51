@@ -62,9 +62,8 @@ public class GridPanel extends JPanel{
 				
 				if(tab.get(i).get(j).getListOfBodyInCell().size() != 0){
 					
-					this.grid[i][j].add(new JButton());
+					this.grid[i][j].add(new JButton(tab.get(i).get(j).getListOfBodyInCell().size() + " Lemming(s)"));
 				}
-				
 				this.add(this.grid[i][j]);
 				
 			}

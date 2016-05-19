@@ -87,7 +87,6 @@ public class LemmingAgent extends Agent {
   @Percept
   public void _handle_Destroy_3(final Destroy occurrence) {
     this.println("GoodBye World !");
-    this.killMe();
   }
   
   /**
