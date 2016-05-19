@@ -82,8 +82,6 @@ public class EnvironmentAgent extends Agent {
   public void _handle_Initialize_0(final Initialize occurrence) {
     ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(1, "lab_parachute.txt");
     this.wake(_resetAgentEnvironment);
-    CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
-    this.wake(_createLemmingsAgent);
     EventSpace _defaultSpace = this.getDefaultSpace();
     Controller controller = new Controller(_defaultSpace);
     FrameProject _frameProject = new FrameProject(this.environment, controller);
@@ -113,6 +111,8 @@ public class EnvironmentAgent extends Agent {
     this.numberOfLemmingsMinds = occurrence.numberOfLemmings;
     EnvironmentModel _environmentModel = new EnvironmentModel(occurrence.level, this.numberOfLemmingsMinds);
     this.environment = _environmentModel;
+    CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
+    this.wake(_createLemmingsAgent);
   }
   
   @Percept
@@ -227,7 +227,6 @@ public class EnvironmentAgent extends Agent {
     if (_notEquals) {
       this.println("lancement simulation");
     } else {
-      this.println("ok");
       OptionPanel _optionPanel = this.gui.getOptionPanel();
       JComboBox<String> _changeLevel = _optionPanel.getChangeLevel();
       Object _selectedItem = _changeLevel.getSelectedItem();

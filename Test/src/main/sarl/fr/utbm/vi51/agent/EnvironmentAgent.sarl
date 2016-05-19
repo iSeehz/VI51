@@ -46,7 +46,6 @@ agent EnvironmentAgent {
 	
 	on Initialize{
 		wake(new ResetAgentEnvironment(1,"lab_parachute.txt"))
-		wake(new CreateLemmingsAgent)
 		var controller:Controller = new Controller(defaultSpace);
 		this.gui = new FrameProject(environment, controller)
 	}
@@ -70,7 +69,7 @@ agent EnvironmentAgent {
 		this.listOfGUID = new ArrayList<Address>()
 		this.numberOfLemmingsMinds = occurrence.numberOfLemmings
 		this.environment = new EnvironmentModel(occurrence.level,this.numberOfLemmingsMinds)
-		
+		wake(new CreateLemmingsAgent)
 	}
 	
 	on IamAwoken{
@@ -125,9 +124,12 @@ agent EnvironmentAgent {
 			println("lancement simulation")
 			
 		//send perception to all Lemming Agent
+		
 		}else{
-			println("ok")
 			wake(new ResetAgentEnvironment(1,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
+			
+		//send perception to all Lemming Agent
+
 		}
 		
 		
