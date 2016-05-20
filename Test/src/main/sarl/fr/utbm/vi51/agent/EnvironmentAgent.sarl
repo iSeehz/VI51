@@ -97,11 +97,11 @@ agent EnvironmentAgent {
 			}
 			
 			//display the map with id of body and adress of the agent
-			var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
-			while(keySetIterator.hasNext()){
-			  var key:Address = keySetIterator.next();
-			  println("key: " + key + " value: " + this.mapOfGUID.get(key))
-			}
+//			var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+//			while(keySetIterator.hasNext()){
+//			  var key:Address = keySetIterator.next();
+//			  println("key: " + key + " value: " + this.mapOfGUID.get(key))
+//			}
 		}
 
 	}
