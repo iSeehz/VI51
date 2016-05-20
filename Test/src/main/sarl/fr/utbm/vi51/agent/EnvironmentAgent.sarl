@@ -113,10 +113,10 @@ agent EnvironmentAgent {
 			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
 			this.numberOfLemmingsBodyLinked = 0
 			this.mapOfGUID.clear()
-			this.listOfGUID.clear()
 			for(adr: this.listOfGUID){
 				emit(new Destroy, Scopes::addresses(adr))
 			}
+			this.listOfGUID.clear()
 		}else{
 			println("Simulation non lancée")
 		}
