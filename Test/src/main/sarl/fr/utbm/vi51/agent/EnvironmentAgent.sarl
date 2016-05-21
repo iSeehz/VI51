@@ -55,7 +55,7 @@ agent EnvironmentAgent {
 	
 	on Initialize{
 		wake(new ResetAgentEnvironment(1,"lab_parachute.txt"))
-		var controller:Controller = new Controller(defaultSpace);
+		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(environment, controller)
 	}
 	on CreateLemmingsAgent{

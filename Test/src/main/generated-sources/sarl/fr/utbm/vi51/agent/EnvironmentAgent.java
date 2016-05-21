@@ -90,7 +90,8 @@ public class EnvironmentAgent extends Agent {
     ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment(1, "lab_parachute.txt");
     this.wake(_resetAgentEnvironment);
     EventSpace _defaultSpace = this.getDefaultSpace();
-    Controller controller = new Controller(_defaultSpace);
+    Address _defaultAddress = this.getDefaultAddress();
+    Controller controller = new Controller(_defaultSpace, _defaultAddress);
     FrameProject _frameProject = new FrameProject(this.environment, controller);
     this.gui = _frameProject;
   }
