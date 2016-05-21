@@ -78,7 +78,7 @@ public class EnvironmentModel {
 			for (int i = 0; i == body.getFovLeft(); i++){
 				for (int j = 0; j == body.getFovUnder(); j++){
 					if (i+j != 0 && i+j <= body.getFovUnder() && x-i >= 0 && y-i <= grid.get(x).size()) {
-						list.add(new Percept(grid.get(i).get(j)));
+						list.add(new Percept(grid.get(x-i).get(x+j)));
 					}
 				}
 			}
@@ -86,7 +86,7 @@ public class EnvironmentModel {
 			for (int i = 0; i == body.getFovRight(); i++){
 				for (int j = 0; j == body.getFovUnder(); j++){
 					if (i+j != 0 && i+j <= body.getFovUnder() && x+i >= grid.size() && y-i <= grid.get(x).size()) {
-						list.add(new Percept(grid.get(i).get(j)));
+						list.add(new Percept(grid.get(x+i).get(x+j)));
 					}
 				}
 			}
