@@ -10,6 +10,7 @@ public class EnvironmentModel {
 	private int numberOfBody;
 	private Cell entry;
 	private Cell exit;
+	private List<Integer> listOfBody;
 
 	public EnvironmentModel(String level, int numberOfBody) {
 		
@@ -42,8 +43,30 @@ public class EnvironmentModel {
 	public Cell getExit() {
 		return exit;
 	}
+	
+	public LemmingBody searchBody (int id){
+		int i = 0;
+		int j = 0;
+		int k = 0;
+		do {
+			j = 0;
+			while (grid.get(i).get(j).getType().name() != "EMPTY" && grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && j < this.grid.get(0).size()){
+				if (grid.get(i).get(j).getListOfBodyInCell().size() != 0){ // check if there is any body in the cell
+					k = 0;
+					while (grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && k <= grid.get(i).get(j).getListOfBodyInCell().size()){
+						k++;
+					}					
+				}
+				j++;
+			} 
+			i++;
+		} while (grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && i < this.grid.size());
+		
+		
+		return grid.get(i).get(j).getListOfBodyInCell().get(k);
+	}
 
-	public List<Percept> getPerception (LemmingBody body){
+	public List<Percept> getPerception (int id){
 		/* Disposition of the perception
 		 * 			-->
 		 * 00 00 00 |
@@ -55,10 +78,9 @@ public class EnvironmentModel {
 		 * 
 		 */
 			List<Percept> list = null;
+			LemmingBody body = searchBody(id);
 			int x = body.getX();
 			int y = body.getY();
-			
-			//Doit on stocker la taille de la grid le temp de cette fonction ? pour éviter trop d'appel de size ?
 			
 			for (int i = 0; i == body.getFovLeft(); i++){
 				for (int j = 0; j == body.getFovUp(); j++){
@@ -69,7 +91,7 @@ public class EnvironmentModel {
 			}
 			for (int i = 0; i == body.getFovRight(); i++){
 				for (int j = 0; j == body.getFovUp(); j++){
-					if (i+j != 0 && x+i <= grid.size() && y-i >= 0) {
+					if (i+j != 0 && x+i < grid.size() && y-i >= 0) {
 						list.add(new Percept(grid.get(x+i).get(y-j)));
 					}
 				}
@@ -77,7 +99,7 @@ public class EnvironmentModel {
 		
 			for (int i = 0; i == body.getFovLeft(); i++){
 				for (int j = 0; j == body.getFovUnder(); j++){
-					if (i+j != 0 && i+j <= body.getFovUnder() && x-i >= 0 && y-i <= grid.get(x).size()) {
+					if (i+j != 0 && i+j <= body.getFovUnder() && x-i >= 0 && y-i < grid.get(x).size()) {
 						list.add(new Percept(grid.get(x-i).get(x+j)));
 					}
 				}
@@ -85,11 +107,13 @@ public class EnvironmentModel {
 			
 			for (int i = 0; i == body.getFovRight(); i++){
 				for (int j = 0; j == body.getFovUnder(); j++){
-					if (i+j != 0 && i+j <= body.getFovUnder() && x+i >= grid.size() && y-i <= grid.get(x).size()) {
+					if (i+j != 0 && i+j <= body.getFovUnder() && x+i > grid.size() && y-i < grid.get(x).size()) {
 						list.add(new Percept(grid.get(x+i).get(x+j)));
 					}
 				}
 			}
 			return list;
 		}
+	
+	
 }

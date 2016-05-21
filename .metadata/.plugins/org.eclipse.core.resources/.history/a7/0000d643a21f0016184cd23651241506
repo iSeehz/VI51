@@ -1,0 +1,28 @@
+package fr.utbm.vi51.model;
+
+public final class LemmingProperties {
+	private int coordinatex;
+	private int coordinatey;
+	private int fovUp;
+	private int fovUnder;
+	private int fovLeft;
+	private int fovRight;
+	
+	public LemmingProperties(int a, int b){
+		this.coordinatex = a;
+		this.coordinatey = b;
+	}
+	
+	public int getX(){
+		return coordinatex;
+	}
+	
+	public int getY(){
+		return coordinatey;
+	}
+	
+	public void setX(int x){
+		this.coordinatex = x;
+	}
+	
+}
