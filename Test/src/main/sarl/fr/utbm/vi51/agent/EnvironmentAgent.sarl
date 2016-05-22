@@ -33,8 +33,8 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
-import java.util.Map
-import java.util.Set
+import com.google.common.net.PercentEscaper
+import fr.utbm.vi51.^event.PerceptionEvent
 
 /**
  * @author tiboty
@@ -150,10 +150,17 @@ agent EnvironmentAgent {
 			println("lancement simulation")
 			
 		//send perception to all Lemming Agent
+		var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+		while(keySetIterator.hasNext()){
+			  var key:Address = keySetIterator.next();
+//			  println("key: " + " value: " + (this.mapOfGUID.get(key).intValue()-1))
+//********************************************** bug here *************************************//
+			  emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()-1)), Scopes::addresses(key))
+		}
+		
 		
 		}else{
 			wake(new ResetAgentEnvironment(this.numberOfLemmingsMinds,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
-		//send perception to all Lemming Agent
 
 		}
 		

@@ -1,0 +1,185 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^agent
+
+import fr.utbm.vi51.controller.Controller
+import fr.utbm.vi51.^event.AreYouAwoken
+import fr.utbm.vi51.^event.ChangeLevel
+import fr.utbm.vi51.^event.CreateLemmingsAgent
+import fr.utbm.vi51.^event.GiveBody
+import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.Influence
+import fr.utbm.vi51.^event.MAJGrid
+import fr.utbm.vi51.^event.MAJTable
+import fr.utbm.vi51.^event.ResetAgentEnvironment
+import fr.utbm.vi51.^event.StartSimulation
+import fr.utbm.vi51.^event.StopSimulation
+import fr.utbm.vi51.^event.WantPerception
+import fr.utbm.vi51.gui.FrameProject
+import fr.utbm.vi51.model.EnvironmentModel
+import fr.utbm.vi51.model.PossibleMove
+import io.sarl.core.AgentTask
+import io.sarl.core.Behaviors
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Destroy
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.core.Schedules
+import io.sarl.lang.core.Address
+import io.sarl.util.Scopes
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.Iterator
+import java.util.List
+import com.google.common.net.PercentEscaper
+import fr.utbm.vi51.^event.PerceptionEvent
+
+/**
+ * @author tiboty
+ *
+ */
+agent EnvironmentAgent {
+	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
+	
+	var initAgent : AgentTask
+	var listOfGUID : List<Address>
+	var mapOfGUID : HashMap<Address,Integer >
+	var environment:EnvironmentModel
+	var gui:FrameProject
+	var numberOfLemmingsMinds:int
+	var numberOfLemmingsBodyLinked:int = 0
+	var state:SimulationState
+	var moveInfluences:HashMap<Integer, PossibleMove>
+	
+	on Initialize{
+		wake(new ResetAgentEnvironment(1,"lab_parachute.txt"))
+		var controller:Controller = new Controller(defaultSpace, defaultAddress);
+		this.gui = new FrameProject(environment, controller)
+	}
+	on CreateLemmingsAgent{
+		
+		var i:int
+		for (i=0;i<this.numberOfLemmingsMinds;i++){
+			spawn(typeof(LemmingAgent))
+		}
+		
+		initAgent = task("presentation")
+		
+		initAgent.every(1000) [
+			emit(new AreYouAwoken)
+		]
+	}
+	
+	on ResetAgentEnvironment{
+
+		this.state = SimulationState.INIT
+		this.mapOfGUID = new HashMap<Address, Integer>()
+		this.listOfGUID = new ArrayList<Address>()
+		this.numberOfLemmingsMinds = occurrence.numberOfLemmings
+		this.environment = new EnvironmentModel(occurrence.level,this.numberOfLemmingsMinds)
+		wake(new CreateLemmingsAgent)
+	}
+	
+	on IamAwoken{
+		
+		this.listOfGUID.add(occurrence.source)
+		if(this.listOfGUID.size()==this.numberOfLemmingsMinds){
+			initAgent.cancel
+
+			//give index body for each Agent in the entry cell
+			var c:Integer = 0
+			for (adr : this.listOfGUID){
+				this.mapOfGUID.put(adr,this.environment.getEntry().getListOfBodyInCell().get(c).getId())
+				emit(new GiveBody(this.environment.getEntry().getListOfBodyInCell().get(c).getId()), Scopes::addresses(adr))
+				c++
+			}
+			
+			//display the map with id of body and adress of the agent
+//			var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+//			while(keySetIterator.hasNext()){
+//			  var key:Address = keySetIterator.next();
+//			  println("key: " + key + " value: " + this.mapOfGUID.get(key))
+//			}
+		}
+
+	}
+	
+	on StopSimulation[this.state != SimulationState.STOP || this.state == SimulationState.START ] {
+		if(this.state != SimulationState.INIT){
+			
+			this.state = SimulationState.STOP
+			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
+			this.numberOfLemmingsBodyLinked = 0
+			this.mapOfGUID.clear()
+			for(adr: this.listOfGUID){
+				emit(new Destroy, Scopes::addresses(adr))
+			}
+			this.listOfGUID.clear()
+		}else{
+			println("Simulation non lancée")
+		}
+		
+				
+	}
+	
+	on WantPerception{
+		
+		this.numberOfLemmingsBodyLinked +=1
+		
+		if(this.mapOfGUID.size()==this.numberOfLemmingsBodyLinked){
+			
+			// all set and ready to go
+			println("Ready to go !")
+
+
+		}
+		
+	}
+	
+	on ChangeLevel[this.state == SimulationState.STOP || this.state == SimulationState.INIT]{
+		
+		this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
+		this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
+	}
+	
+	on StartSimulation[this.state != SimulationState.START] {
+		this.state = SimulationState.START
+		if(!this.mapOfGUID.isEmpty()){
+			println("lancement simulation")
+			
+		//send perception to all Lemming Agent
+		var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+		while(keySetIterator.hasNext()){
+			  var key:Address = keySetIterator.next();
+			  println("key: " + " value: " + (this.mapOfGUID.get(key).intValue()-1))
+//			  emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key)-1)), Scopes::addresses(key))
+		}
+		
+		
+		}else{
+			wake(new ResetAgentEnvironment(this.numberOfLemmingsMinds,String.valueOf(this.gui.getOptionPanel().getChangeLevel().getSelectedItem())))
+
+		}
+		
+		
+	}
+	
+	on Influence{
+		
+		println(this.mapOfGUID.get(occurrence.source))
+		this.moveInfluences.put(this.mapOfGUID.get(occurrence.source),occurrence.move)
+		
+		
+	}
+	
+	on MAJTable {
+		
+	}
+	
+	on MAJGrid {
+		
+		
+	}
+}

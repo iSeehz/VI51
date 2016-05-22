@@ -6,6 +6,7 @@ package fr.utbm.vi51.^agent
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.WantPerception
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
@@ -36,6 +37,11 @@ agent LemmingAgent {
 	on GiveBody{
 		index = occurrence.index
 		emit(new WantPerception, Scopes::addresses(occurrence.source))
+	}
+	
+	on PerceptionEvent {
+		
+		println(occurrence.source)
 	}
 	
 	on Destroy{
