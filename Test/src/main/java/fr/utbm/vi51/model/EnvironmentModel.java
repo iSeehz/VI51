@@ -44,7 +44,7 @@ public class EnvironmentModel {
 		return exit;
 	}
 	
-	public LemmingBody searchBody (int id){
+	public SearchedBody searchBody (int id){
 		int i = 0;
 		int j = 0;
 		int k = 0;
@@ -53,7 +53,7 @@ public class EnvironmentModel {
 			while (grid.get(i).get(j).getType().name() != "EMPTY" && grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && j < this.grid.get(0).size()){
 				if (grid.get(i).get(j).getListOfBodyInCell().size() != 0){ // check if there is any body in the cell
 					k = 0;
-					while (grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && k <= grid.get(i).get(j).getListOfBodyInCell().size()){
+					while (grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && k < grid.get(i).get(j).getListOfBodyInCell().size()){
 						k++;
 					}					
 				}
@@ -63,7 +63,7 @@ public class EnvironmentModel {
 		} while (grid.get(i).get(j).getListOfBodyInCell().get(k).getId() != id && i < this.grid.size());
 		
 		
-		return grid.get(i).get(j).getListOfBodyInCell().get(k);
+		return new SearchedBody(grid.get(i).get(j).getListOfBodyInCell().get(k), k);
 	}
 
 	public List<Percept> getPerception (int id){
@@ -78,7 +78,7 @@ public class EnvironmentModel {
 		 * 
 		 */
 			List<Percept> list = null;
-			LemmingBody body = searchBody(id);
+			LemmingBody body = searchBody(id).getBody();
 			int x = body.getX();
 			int y = body.getY();
 			
@@ -115,5 +115,110 @@ public class EnvironmentModel {
 			return list;
 		}
 	
+	// with an id and a move, the body is moved
+	public boolean moveBody (int id, PossibleMove move){
+		
+		LemmingBody body = searchBody(id).getBody();
+		int p = searchBody(id).getPosition();
+		
+		int x = body.getX();
+		int y = body.getY();
+		switch (move.toString()){
+
+			case "LEFT":
+				
+				if ((x > 0) && (grid.get(x-1).get(y).getType().name().equals("EMPTY"))){
+			    	grid.get(x-1).get(y).getListOfBodyInCell().add(body);
+			    	grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			    	return true;
+				}
+				break;
+			case "RIGHT":
+				
+				if ((x < grid.size()) && (grid.get(x+1).get(y).getType().name().equals("EMPTY"))){
+			    	grid.get(x+1).get(y).getListOfBodyInCell().add(body);
+			    	grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			    	return true;
+				}
+				break;
+				
+			case "UP":
+	
+				if ((y > 0) && (grid.get(x).get(y-1).getType().name().equals("EMPTY"))){
+			    	grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+			    	grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			    	return true;
+				}
+				break;
+				
+				
+			case "PARACHUTE":
+	
+				if ((y < grid.get(x).size()) && (grid.get(x).get(y+1).getType().name().equals("EMPTY"))){
+			    	grid.get(x).get(y+1).getListOfBodyInCell().add(body);
+			    	grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			    	return true;
+				}
+				
+				break;
+				
+			case "DIG":
+				
+				if ((y < grid.get(x).size()) && (grid.get(x).get(y+1).getType().name().equals("LAND"))){
+					grid.get(x).get(y+1).setType(TypeObject.HALF);
+				} else if (grid.get(x).get(y+1).getType().name().equals("LAND")) {
+					grid.get(x).get(y+1).setType(TypeObject.EMPTY);
+					//every body on this case fall
+					for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++){
+						//mutex ?
+						grid.get(x).get(y).getListOfBodyInCell().get(i).fall();
+						grid.get(x).get(y+1).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(i));
+						grid.get(x).get(y).getListOfBodyInCell().remove(i);
+						
+					}
+					return true;
+				}
+				break;
+
+		  default:
+
+			  return false;
+		}		
+		return false;
+		
+	}
+	
+	public void fallingBody(LemmingBody body){
+		
+	}
+	
+	public void statusBody(MovedBody m){
+		LemmingBody body = m.getBody();
+		int x = m.getX();
+		int y = m.getY();
+		int p = 0;
+		int i = 0;
+		if (((y+1) < grid.get(x+1).size()) && grid.get(x).get(y+1).getType().equals("EMPTY")){
+			while (grid.get(x).get(y).getListOfBodyInCell().get(p).getId() != body.getId() && p < grid.get(x).get(y).getListOfBodyInCell().size()){
+				p++;
+			}
+			while(((y+1) < grid.get(x+i).size()) && grid.get(x).get(y+i).getType().equals("EMPTY")){
+				
+			}
+			
+		}
+	}
+	
+	public void activiateParachute (int id){
+		LemmingBody body = searchBody(id).getBody();
+		int p = searchBody(id).getPosition();
+		grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(p).activateParachute();
+	}
+	
+	public void disactiviateParachute (int id){
+		LemmingBody body = searchBody(id).getBody();
+		int p = searchBody(id).getPosition();
+		grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(p).disactivateParachute();
+	}
 	
 }
