@@ -1,0 +1,18 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+import fr.utbm.vi51.model.PossibleMove
+
+/**
+ * @author Tiboty
+ *
+ */
+event Influence{
+	
+	var move:PossibleMove
+	new(move:PossibleMove){
+		this.move = move
+	}
+}

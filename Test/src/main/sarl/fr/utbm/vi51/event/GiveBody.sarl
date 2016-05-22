@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event GiveBody{
+	
+	var index:int 
+	new (index:int ){
+		this.index = index
+	}
+}

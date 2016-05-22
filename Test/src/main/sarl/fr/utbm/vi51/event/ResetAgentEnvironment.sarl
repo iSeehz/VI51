@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event ResetAgentEnvironment{
+	
+	var numberOfLemmings:int
+	var level:String
+	
+	new (numberOfLemmings:int, level:String){
+		this.numberOfLemmings = numberOfLemmings
+		this.level = level
+	}
+}

@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event ChangeLevel{
+	var level:String
+	new(level:String){
+		this.level = level
+	}
+}

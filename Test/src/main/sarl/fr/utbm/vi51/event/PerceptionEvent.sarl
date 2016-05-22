@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+import fr.utbm.vi51.model.Percept
+import java.util.List
+
+/**
+ * @author Tiboty
+ *
+ */
+event PerceptionEvent{
+	
+	var perceptions: List<Percept>
+	new (perceptions : List<Percept>){
+		
+		this.perceptions = perceptions
+	}
+}
