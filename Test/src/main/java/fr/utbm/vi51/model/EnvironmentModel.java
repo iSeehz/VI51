@@ -163,7 +163,7 @@ public class EnvironmentModel {
 					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setY(y - 1);
-					body.setOrientation(Orientation.CLIMB);
+					body.setOrientation(Orientation.UP);
 					return true;
 				}
 				break;
