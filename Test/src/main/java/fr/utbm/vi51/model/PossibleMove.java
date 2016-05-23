@@ -4,6 +4,6 @@ public enum PossibleMove {
 	RIGHT,
 	LEFT,
 	DIG,
-	UP,
+	CLIMB,
 	PARACHUTE
 }

@@ -8,7 +8,7 @@ public class LemmingBody extends EnviromnentObject{
 	private int fovRight;
 	
 	private int fall;
-	
+	private Orientation orientation;
 	private boolean parachute;
 	
 	private Integer id;
@@ -25,7 +25,7 @@ public class LemmingBody extends EnviromnentObject{
 		fovUnder = 4;
 		
 		this.fall = 0;
-		
+		this.orientation = Orientation.RIGHT;
 		this.parachute = false;
 	}
 	
@@ -75,4 +75,11 @@ public class LemmingBody extends EnviromnentObject{
 		this.fall ++;
 	}
 	
+	public void setOrientation(Orientation m){
+		this.orientation = m;
+	}
+	
+	public Orientation getOrientation(){
+		return this.orientation;
+	}
 }
