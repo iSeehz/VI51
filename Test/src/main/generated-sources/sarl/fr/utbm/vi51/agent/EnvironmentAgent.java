@@ -12,6 +12,7 @@ import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.Influence;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
+import fr.utbm.vi51.event.PerceptionEvent;
 import fr.utbm.vi51.event.ResetAgentEnvironment;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StopSimulation;
@@ -118,6 +119,8 @@ public class EnvironmentAgent extends Agent {
     this.state = SimulationState.INIT;
     HashMap<Address, Integer> _hashMap = new HashMap<Address, Integer>();
     this.mapOfGUID = _hashMap;
+    HashMap<Integer, PossibleMove> _hashMap_1 = new HashMap<Integer, PossibleMove>();
+    this.moveInfluences = _hashMap_1;
     ArrayList<Address> _arrayList = new ArrayList<Address>();
     this.listOfGUID = _arrayList;
     this.numberOfLemmingsMinds = occurrence.numberOfLemmings;
@@ -135,22 +138,22 @@ public class EnvironmentAgent extends Agent {
     boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
       this.cancel(this.initAgent);
-      Integer c = Integer.valueOf(0);
       for (final Address adr : this.listOfGUID) {
         {
           Cell _entry = this.environment.getEntry();
           List<LemmingBody> _listOfBodyInCell = _entry.getListOfBodyInCell();
-          LemmingBody _get = _listOfBodyInCell.get((c).intValue());
+          int _indexOf = this.listOfGUID.indexOf(adr);
+          LemmingBody _get = _listOfBodyInCell.get(_indexOf);
           int _id = _get.getId();
           this.mapOfGUID.put(adr, Integer.valueOf(_id));
           Cell _entry_1 = this.environment.getEntry();
           List<LemmingBody> _listOfBodyInCell_1 = _entry_1.getListOfBodyInCell();
-          LemmingBody _get_1 = _listOfBodyInCell_1.get((c).intValue());
+          int _indexOf_1 = this.listOfGUID.indexOf(adr);
+          LemmingBody _get_1 = _listOfBodyInCell_1.get(_indexOf_1);
           int _id_1 = _get_1.getId();
           GiveBody _giveBody = new GiveBody(_id_1);
           Scope<Address> _addresses = Scopes.addresses(adr);
           this.emit(_giveBody, _addresses);
-          c++;
         }
       }
     }
@@ -259,7 +262,13 @@ public class EnvironmentAgent extends Agent {
       Set<Address> _keySet = this.mapOfGUID.keySet();
       Iterator<Address> keySetIterator = _keySet.iterator();
       while (keySetIterator.hasNext()) {
-        Address key = keySetIterator.next();
+        {
+          Address key = keySetIterator.next();
+          ArrayList<fr.utbm.vi51.model.Percept> _arrayList = new ArrayList<fr.utbm.vi51.model.Percept>();
+          PerceptionEvent _perceptionEvent = new PerceptionEvent(_arrayList);
+          Scope<Address> _addresses = Scopes.addresses(key);
+          this.emit(_perceptionEvent, _addresses);
+        }
       }
     } else {
       OptionPanel _optionPanel = this.gui.getOptionPanel();
@@ -283,6 +292,7 @@ public class EnvironmentAgent extends Agent {
     Address _source = occurrence.getSource();
     Integer _get = this.mapOfGUID.get(_source);
     this.println(_get);
+    this.println(occurrence.move);
     Address _source_1 = occurrence.getSource();
     Integer _get_1 = this.mapOfGUID.get(_source_1);
     this.moveInfluences.put(_get_1, occurrence.move);

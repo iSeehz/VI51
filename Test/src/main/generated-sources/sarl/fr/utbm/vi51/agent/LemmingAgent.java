@@ -3,8 +3,10 @@ package fr.utbm.vi51.agent;
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
+import fr.utbm.vi51.event.Influence;
 import fr.utbm.vi51.event.PerceptionEvent;
 import fr.utbm.vi51.event.WantPerception;
+import fr.utbm.vi51.model.PossibleMove;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.Behaviors;
@@ -87,8 +89,11 @@ public class LemmingAgent extends Agent {
   
   @Percept
   public void _handle_PerceptionEvent_3(final PerceptionEvent occurrence) {
+    this.println("bien reçu capitaine !");
+    Influence _influence = new Influence(PossibleMove.RIGHT);
     Address _source = occurrence.getSource();
-    this.println(_source);
+    Scope<Address> _addresses = Scopes.addresses(_source);
+    this.emit(_influence, _addresses);
   }
   
   @Percept

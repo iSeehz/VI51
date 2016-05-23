@@ -6,8 +6,10 @@ package fr.utbm.vi51.^agent
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.WantPerception
+import fr.utbm.vi51.model.PossibleMove
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Destroy
@@ -41,7 +43,13 @@ agent LemmingAgent {
 	
 	on PerceptionEvent {
 		
-		println(occurrence.source)
+		println("bien reçu capitaine !")
+		
+		//chose how to do !!
+		
+		
+		// return the choice
+		emit(new Influence(PossibleMove.RIGHT),Scopes::addresses(occurrence.source))
 	}
 	
 	on Destroy{
