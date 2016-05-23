@@ -14,3 +14,5 @@
 /.ResetAgentEnvironment.java._trace
 /.ChangeLevel.java._trace
 /.GrabageAgent.java._trace
+/.StepByStepSimulation.java._trace
+/.ManagerEvent.java._trace

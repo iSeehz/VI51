@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.StartSimulation;
+import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Event;
@@ -48,6 +49,12 @@ public class Controller {
 		this.emitEvent(new ChangeLevel(level));
 		System.out.println("change level : " + level); 
 	}
+	
+	public void stepByStep() {
+		this.emitEvent(new StepByStepSimulation());
+//		System.out.println("coup par coup"); 
+	}
+	
 	
 	private void emitEvent(Event event) {
 		event.setSource(this.address);
