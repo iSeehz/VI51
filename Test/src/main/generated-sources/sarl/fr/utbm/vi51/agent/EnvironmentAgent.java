@@ -12,6 +12,7 @@ import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.Influence;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
+import fr.utbm.vi51.event.Manager;
 import fr.utbm.vi51.event.PerceptionEvent;
 import fr.utbm.vi51.event.ResetAgentEnvironment;
 import fr.utbm.vi51.event.StartSimulation;
@@ -60,7 +61,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
-import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -191,12 +191,8 @@ public class EnvironmentAgent extends Agent {
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   private void _eventhandler_body_StartSimulation_5(final StartSimulation occurrence) {
     this.state = SimulationState.START;
-    boolean _isEmpty = this.mapOfGUID.isEmpty();
-    boolean _not = (!_isEmpty);
-    if (_not) {
-      this.println("start simulation");
-      this.sendPerceptionsToAgents();
-    }
+    this.println("lancement de le simulation en auto");
+    this.sendPerceptionsToAgents();
   }
   
   @Percept
@@ -220,29 +216,10 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  @Pure
-  private boolean _eventhandler_guard_StepByStepSimulation_6(final StepByStepSimulation it, final StepByStepSimulation occurrence) {
-    boolean _notEquals = (!Objects.equal(this.state, SimulationState.STEP_BY_STEP));
-    return _notEquals;
-  }
-  
-  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  private void _eventhandler_body_StepByStepSimulation_6(final StepByStepSimulation occurrence) {
-    try {
-      this.state = SimulationState.STEP_BY_STEP;
-      this.println(this.state);
-      Thread.sleep(1000);
-    } catch (Throwable _e) {
-      throw Exceptions.sneakyThrow(_e);
-    }
-  }
-  
   @Percept
   public void _handle_StepByStepSimulation_6(final StepByStepSimulation occurrence) {
-    if (_eventhandler_guard_StepByStepSimulation_6(occurrence, occurrence)) {
-      _eventhandler_body_StepByStepSimulation_6(occurrence);
-    }
+    this.state = SimulationState.STEP_BY_STEP;
+    this.sendPerceptionsToAgents();
   }
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
@@ -283,9 +260,19 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  @Percept
-  public void _handle_ChangeLevel_8(final ChangeLevel occurrence) {
-    this.nextLevel = occurrence.level;
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_ChangeLevel_8(final ChangeLevel it, final ChangeLevel occurrence) {
+    boolean _notEquals = (!Objects.equal(occurrence.level, this.currentLevel));
+    return _notEquals;
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private void _eventhandler_body_ChangeLevel_8(final ChangeLevel occurrence) {
+    boolean _notEquals = (!Objects.equal(occurrence.level, ""));
+    if (_notEquals) {
+      this.nextLevel = occurrence.level;
+    }
     boolean _or = false;
     boolean _equals = Objects.equal(this.state, SimulationState.STOP);
     if (_equals) {
@@ -305,18 +292,18 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
+  @Percept
+  public void _handle_ChangeLevel_8(final ChangeLevel occurrence) {
+    if (_eventhandler_guard_ChangeLevel_8(occurrence, occurrence)) {
+      _eventhandler_body_ChangeLevel_8(occurrence);
+    }
+  }
+  
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @Pure
   private boolean _eventhandler_guard_Influence_9(final Influence it, final Influence occurrence) {
-    boolean _and = false;
     boolean _notEquals = (!Objects.equal(this.state, SimulationState.STOP));
-    if (!_notEquals) {
-      _and = false;
-    } else {
-      boolean _equals = Objects.equal(this.state, SimulationState.START);
-      _and = _equals;
-    }
-    return _and;
+    return _notEquals;
   }
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
@@ -331,9 +318,50 @@ public class EnvironmentAgent extends Agent {
     int _size = this.moveInfluences.size();
     boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
+      List<List<Cell>> _grid = this.environment.getGrid();
+      Cell _entry = this.environment.getEntry();
+      int _x = _entry.getX();
+      List<Cell> _get_2 = _grid.get(_x);
+      Cell _entry_1 = this.environment.getEntry();
+      int _y = _entry_1.getY();
+      Cell _get_3 = _get_2.get(_y);
+      List<LemmingBody> _listOfBodyInCell = _get_3.getListOfBodyInCell();
+      int _size_1 = _listOfBodyInCell.size();
+      boolean _notEquals = (_size_1 != 0);
+      if (_notEquals) {
+        List<List<Cell>> _grid_1 = this.environment.getGrid();
+        Cell _entry_2 = this.environment.getEntry();
+        int _x_1 = _entry_2.getX();
+        List<Cell> _get_4 = _grid_1.get(_x_1);
+        Cell _entry_3 = this.environment.getEntry();
+        int _y_1 = _entry_3.getY();
+        int _plus = (_y_1 + 1);
+        Cell _get_5 = _get_4.get(_plus);
+        List<LemmingBody> _listOfBodyInCell_1 = _get_5.getListOfBodyInCell();
+        List<List<Cell>> _grid_2 = this.environment.getGrid();
+        Cell _entry_4 = this.environment.getEntry();
+        int _x_2 = _entry_4.getX();
+        List<Cell> _get_6 = _grid_2.get(_x_2);
+        Cell _entry_5 = this.environment.getEntry();
+        int _y_2 = _entry_5.getY();
+        Cell _get_7 = _get_6.get(_y_2);
+        List<LemmingBody> _listOfBodyInCell_2 = _get_7.getListOfBodyInCell();
+        LemmingBody _get_8 = _listOfBodyInCell_2.get(0);
+        _listOfBodyInCell_1.add(_get_8);
+        List<List<Cell>> _grid_3 = this.environment.getGrid();
+        Cell _entry_6 = this.environment.getEntry();
+        int _x_3 = _entry_6.getX();
+        List<Cell> _get_9 = _grid_3.get(_x_3);
+        Cell _entry_7 = this.environment.getEntry();
+        int _y_3 = _entry_7.getY();
+        Cell _get_10 = _get_9.get(_y_3);
+        List<LemmingBody> _listOfBodyInCell_3 = _get_10.getListOfBodyInCell();
+        _listOfBodyInCell_3.remove(0);
+      }
       this.moveInfluences.clear();
+      MAJGrid _mAJGrid = new MAJGrid();
+      this.wake(_mAJGrid);
     }
-    this.sendPerceptionsToAgents();
   }
   
   @Percept
@@ -344,11 +372,25 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_MAJTable_10(final MAJTable occurrence) {
+  public void _handle_Manager_10(final Manager occurrence) {
+    boolean _equals = Objects.equal(this.state, SimulationState.START);
+    if (_equals) {
+      this.sendPerceptionsToAgents();
+    }
   }
   
   @Percept
-  public void _handle_MAJGrid_11(final MAJGrid occurrence) {
+  public void _handle_MAJTable_11(final MAJTable occurrence) {
+  }
+  
+  @Percept
+  public void _handle_MAJGrid_12(final MAJGrid occurrence) {
+    MainPanel _mainPanel = this.gui.getMainPanel();
+    GridPanel _gridPanel = _mainPanel.getGridPanel();
+    List<List<Cell>> _grid = this.environment.getGrid();
+    _gridPanel.paint(_grid);
+    Manager _manager = new Manager();
+    this.wake(_manager);
   }
   
   /**

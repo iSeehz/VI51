@@ -52,7 +52,7 @@ public class Controller {
 	
 	public void stepByStep() {
 		this.emitEvent(new StepByStepSimulation());
-//		System.out.println("coup par coup"); 
+//		System.out.println("coup par coup");
 	}
 	
 	

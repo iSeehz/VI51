@@ -24,7 +24,7 @@ import io.sarl.util.Scopes
  */
 agent LemmingAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Behaviors
-	var presentation:Boolean
+	var presentation:boolean
 	var index:int
 	on Initialize{
 		presentation = false

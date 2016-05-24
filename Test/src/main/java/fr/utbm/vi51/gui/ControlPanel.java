@@ -11,29 +11,23 @@ public class ControlPanel extends JPanel{
 	 */
 	private static final long serialVersionUID = 1728868702650993414L;
 	private JButton playButton;
-	private JButton pauseButton;
 	private JButton stepBystepButton;
 	private JButton stopButton;
 	public ControlPanel() {
 		
 		// initialize Buttons
 		playButton = new JButton("Play");
-		pauseButton = new JButton("Pause");
 		stepBystepButton = new JButton("Coup par coup");
 		stopButton = new JButton("Stop");
 		//set the Panel
 		this.setLayout(new FlowLayout());
 		this.add(playButton);
-		this.add(pauseButton);
 		this.add(stepBystepButton);
 		this.add(stopButton);
 		
 	}
 	public JButton getPlayButton() {
 		return playButton;
-	}
-	public JButton getPauseButton() {
-		return pauseButton;
 	}
 	public JButton getStepBystepButton() {
 		return stepBystepButton;

@@ -59,19 +59,11 @@ public class FrameProject extends JFrame {
 		    }
 		});
 		
-		this.mainPanel.getControlPanel().getPauseButton().addActionListener( new ActionListener()
-		{
-		    public void actionPerformed(ActionEvent e)
-		    {
-		        System.out.println("Pause");
-		    }
-		});
-		
 		this.mainPanel.getControlPanel().getStepBystepButton().addActionListener( new ActionListener()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		        System.out.println("Step By Step");
+		        controller.stepByStep();
 		    }
 		});
 		

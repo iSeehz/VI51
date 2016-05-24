@@ -12,6 +12,7 @@ import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.MAJTable
+import fr.utbm.vi51.^event.Manager
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.ResetAgentEnvironment
 import fr.utbm.vi51.^event.StartSimulation
@@ -131,13 +132,13 @@ agent EnvironmentAgent {
 	
 	on StartSimulation[this.state != SimulationState.START] {
 		this.state = SimulationState.START
-		if(!this.mapOfGUID.isEmpty()){
-			println("start simulation")
+	
+			println("lancement de le simulation en auto")
 
 			sendPerceptionsToAgents()
 		
 		
-		}
+		
 		
 		
 	}
@@ -153,11 +154,9 @@ agent EnvironmentAgent {
 		}
 	}
 	
-	on StepByStepSimulation[this.state != SimulationState.STEP_BY_STEP]{
+	on StepByStepSimulation{
 		this.state = SimulationState.STEP_BY_STEP
-		println(this.state)
-		Thread.sleep(1000)
-//		sendPerceptionsToAgents()
+		sendPerceptionsToAgents()
 		
 	}
 	
@@ -173,6 +172,7 @@ agent EnvironmentAgent {
 			}
 			this.listOfGUID.clear()
 			wake(new ResetAgentEnvironment())
+//			wake(new MAJGrid())
 		}else{
 			println("Simulation non lancée")
 		}
@@ -183,15 +183,17 @@ agent EnvironmentAgent {
 	
 	
 		
-	on ChangeLevel{
-		this.nextLevel = occurrence.level
+	on ChangeLevel[occurrence.level != this.currentLevel]{
+		if(occurrence.level != ""){
+			this.nextLevel = occurrence.level
+		}
 		if(this.state == SimulationState.STOP || this.state == SimulationState.INIT){
 			this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
 			this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
 		}
 	}
 		
-	on Influence[this.state != SimulationState.STOP && this.state == SimulationState.START]{
+	on Influence[this.state != SimulationState.STOP]{
 		
 		println(this.mapOfGUID.get(occurrence.source))
 		println(occurrence.move)
@@ -200,16 +202,31 @@ agent EnvironmentAgent {
 		// if all the agents have given their influences
 		if(this.moveInfluences.size() == this.numberOfLemmingsMinds){
 			
-			//do checks and move agents
+			//do checks and move bodies
 			
-			
+			if(	this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().size() != 0){
+				
+				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()+1).getListOfBodyInCell().add(this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().get(0))
+				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().remove(0)
+				
+			}
 			this.moveInfluences.clear();
+			wake(new MAJGrid())
+//			Thread.sleep(10000)
+			
 		}
 			
-		sendPerceptionsToAgents();
+		
 
 	}
 	
+	on Manager{
+		
+		if(this.state == SimulationState.START){
+			sendPerceptionsToAgents()
+		}
+		
+	}
 	
 	on MAJTable {
 		
@@ -217,6 +234,7 @@ agent EnvironmentAgent {
 	
 	on MAJGrid {
 		
-		
+		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
+		wake(new Manager)
 	}
 }

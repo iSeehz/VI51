@@ -43,30 +43,30 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @SarlSpecification("0.3")
 @SuppressWarnings("all")
 public class LemmingAgent extends Agent {
-  protected Boolean presentation;
+  protected boolean presentation;
   
   protected int index;
   
   @Percept
   public void _handle_Initialize_0(final Initialize occurrence) {
-    this.presentation = Boolean.valueOf(false);
+    this.presentation = false;
   }
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @Pure
   private boolean _eventhandler_guard_AreYouAwoken_1(final AreYouAwoken it, final AreYouAwoken occurrence) {
-    return (!(this.presentation).booleanValue());
+    return (!this.presentation);
   }
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  private Boolean _eventhandler_body_AreYouAwoken_1(final AreYouAwoken occurrence) {
-    Boolean _xblockexpression = null;
+  private boolean _eventhandler_body_AreYouAwoken_1(final AreYouAwoken occurrence) {
+    boolean _xblockexpression = false;
     {
       IamAwoken _iamAwoken = new IamAwoken();
       Address _source = occurrence.getSource();
       Scope<Address> _addresses = Scopes.addresses(_source);
       this.emit(_iamAwoken, _addresses);
-      _xblockexpression = this.presentation = Boolean.valueOf(true);
+      _xblockexpression = this.presentation = true;
     }
     return _xblockexpression;
   }
