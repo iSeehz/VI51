@@ -134,6 +134,7 @@ public class EnvironmentModel {
 		
 		// check if the body is on a land
 		if (grid.get(x).get(y).getType().equals("LAND") || grid.get(x).get(y).getType().equals("HALF") ){
+		//all moves allowed			
 			switch (move.toString()) {
 
 			case "LEFT":
@@ -143,7 +144,7 @@ public class EnvironmentModel {
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x - 1);
 					body.setOrientation(Orientation.LEFT);
-					statusBody(new MovedBody(body, x-1, y));
+					statusBody(body);
 					return true;
 				} else {
 					return false;
@@ -156,7 +157,7 @@ public class EnvironmentModel {
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x + 1);
 					body.setOrientation(Orientation.RIGHT);
-					statusBody(new MovedBody(body, x, y-1));
+					statusBody(body);
 					return true;
 				} else {
 					return false;
@@ -165,12 +166,12 @@ public class EnvironmentModel {
 
 			case "CLIMB":
 				
-				if ((y > 0) && accessibleCase(x, y-1)) {
+				if (canClimb(x, y)) {
 					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setY(y - 1);
 					body.setOrientation(Orientation.UP);
-					statusBody(new MovedBody(body, x-1, y));
+					statusBody(body);
 					return true;
 				} else {
 					return false;
@@ -183,6 +184,7 @@ public class EnvironmentModel {
 					grid.get(x).get(y + 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setOrientation(Orientation.DOWN);
+					body.activateParachute();
 					return true;
 				}
 
@@ -212,20 +214,36 @@ public class EnvironmentModel {
 				return false;
 			}
 		} else {
-	
+			//body falling or climbing
+			
+		}
+			
 	}
 
 	public void fallingBody(LemmingBody body) {
 
 	}
-
-	public void statusBody(MovedBody m) {
-		LemmingBody body = m.getBody();
-		int x = m.getX();
-		int y = m.getY();
+	//action after any move
+	public void statusBody(LemmingBody body) {
+		int x = body.getX();
+		int y = body.getY();
 		int p = 0;
 		int i = 0;
-		if (((y + 1) < grid.get(x + 1).size()) && grid.get(x).get(y + 1).getType().equals("EMPTY")) {
+	/* All possibilities :
+	 * the body is on the ground
+	 * 		the body moved from left to right
+	 * 		the body landed
+	 * 		the body is digging
+	 * the body is not on the ground
+	 * 		the body is falling
+	 * 		the body is climbing
+	 * 
+	 * 
+	 * 
+	 * 	
+	 */
+
+	/*	if (((y + 1) < grid.get(x).size()) && grid.get(x).get(y + 1).getType().equals("EMPTY")) {
 			while (grid.get(x).get(y).getListOfBodyInCell().get(p).getId() != body.getId()
 					&& p < grid.get(x).get(y).getListOfBodyInCell().size()) {
 				p++;
@@ -235,18 +253,8 @@ public class EnvironmentModel {
 			}
 
 		}
-	}
-
-	public void activiateParachute(int id) {
-		LemmingBody body = searchBody(id).getBody();
-		int p = searchBody(id).getPosition();
-		grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(p).activateParachute();
-	}
-
-	public void disactiviateParachute(int id) {
-		LemmingBody body = searchBody(id).getBody();
-		int p = searchBody(id).getPosition();
-		grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(p).disactivateParachute();
+		
+	*/
 	}
 	
 	public boolean accessibleCase (int x, int y){
