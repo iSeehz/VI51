@@ -2,6 +2,7 @@ package fr.utbm.vi51.gui;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import fr.utbm.vi51.model.Cell;
+import fr.utbm.vi51.model.TypeObject;
 
 public class GridPanel extends JPanel{
 	/**
@@ -40,33 +42,59 @@ public class GridPanel extends JPanel{
 		for (int i = 0;i<this.height;i++){
 			
 			for (int j = 0;j<this.width;j++){
-				Color c = Color.WHITE;
-				
-				this.grid[i][j] = new JPanel();
-				this.grid[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
-				
-				switch(tab.get(i).get(j).getType()){
-				
-				case EMPTY: this.grid[i][j].setBackground(Color.WHITE);
-					break;
-				case LAND: this.grid[i][j].setBackground(Color.DARK_GRAY);	
-					break;
-				case ENTRY: this.grid[i][j].setBackground(Color.MAGENTA);
-					break;
-				case EXIT: this.grid[i][j].setBackground(Color.GREEN);
-					break;
-				case HALF: this.grid[i][j].setBackground(Color.GRAY);
-					break;
-				default:
-				}
-				
+
+				this.grid[i][j] = createPanelByType(tab.get(i).get(j).getType());
+
 				if(tab.get(i).get(j).getListOfBodyInCell().size() != 0){
 					
-					this.grid[i][j].add(new JButton(tab.get(i).get(j).getListOfBodyInCell().size() + " Lemming(s)"));
+					this.grid[i][j].add(drawLemming(tab.get(i).get(j)));
 				}
 				this.add(this.grid[i][j]);
 				
 			}
 		}
+	}
+	
+	public JButton drawLemming(Cell c){
+		
+		return new JButton(c.getListOfBodyInCell().size() + " Lemming(s)");
+
+	}
+	
+	
+	public JPanel createPanelByType(TypeObject to){
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		switch(to){
+		
+		case EMPTY: panel.setBackground(Color.WHITE);
+			break;
+		case LAND: panel.setBackground(Color.DARK_GRAY);	
+			break;
+		case ENTRY: panel.setBackground(Color.MAGENTA);
+			break;
+		case EXIT: panel.setBackground(Color.GREEN);
+			break;
+		case HALF: panel.setBackground(Color.GRAY);
+			break;
+		default:
+		}
+		return panel;
+	}
+	
+	
+	public void smartPaint(List<Point> listOfChange,List<List<Cell>> tab){
+		for(Point p : listOfChange){
+			this.grid[p.x][p.y] = createPanelByType(tab.get(p.x).get(p.y).getType());
+			if(tab.get(p.x).get(p.y).getListOfBodyInCell().size() != 0){
+				this.grid[p.x][p.y].add(drawLemming(tab.get(p.x).get(p.y)));
+			}
+			this.remove(p.x +p.y);
+			this.add(this.grid[p.x][p.y],p.x +p.y);
+			System.out.println(p);
+		}
+		
+		listOfChange.clear();
 	}
 }

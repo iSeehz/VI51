@@ -10,12 +10,12 @@ import javax.annotation.Generated;
  */
 @SarlSpecification("0.3")
 @SuppressWarnings("all")
-public class GrabageAgent extends Event {
+public class ResetGrid extends Event {
   /**
    * Construct an event. The source of the event is unknown.
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  public GrabageAgent() {
+  public ResetGrid() {
     super();
   }
   
@@ -24,7 +24,7 @@ public class GrabageAgent extends Event {
    * @param source - address of the agent that is emitting this event.
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  public GrabageAgent(final Address source) {
+  public ResetGrid(final Address source) {
     super(source);
   }
   

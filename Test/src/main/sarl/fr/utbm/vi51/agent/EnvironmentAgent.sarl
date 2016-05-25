@@ -15,6 +15,7 @@ import fr.utbm.vi51.^event.MAJTable
 import fr.utbm.vi51.^event.Manager
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.ResetAgentEnvironment
+import fr.utbm.vi51.^event.ResetGrid
 import fr.utbm.vi51.^event.StartSimulation
 import fr.utbm.vi51.^event.StepByStepSimulation
 import fr.utbm.vi51.^event.StopSimulation
@@ -33,10 +34,12 @@ import io.sarl.core.Logging
 import io.sarl.core.Schedules
 import io.sarl.lang.core.Address
 import io.sarl.util.Scopes
+import java.awt.Point
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
+import fr.utbm.vi51.^event.GarbageAgent
 
 /**
  * @author tiboty
@@ -91,6 +94,7 @@ agent EnvironmentAgent {
 		if (this.currentLevel != this.nextLevel){
 			wake(new ChangeLevel(this.nextLevel))
 		}
+		wake(new ResetGrid)
 		wake(new CreateLemmingsAgent)
 	}
 	
@@ -134,7 +138,6 @@ agent EnvironmentAgent {
 		this.state = SimulationState.START
 	
 			println("lancement de le simulation en auto")
-
 			sendPerceptionsToAgents()
 		
 		
@@ -172,7 +175,6 @@ agent EnvironmentAgent {
 			}
 			this.listOfGUID.clear()
 			wake(new ResetAgentEnvironment())
-//			wake(new MAJGrid())
 		}else{
 			println("Simulation non lancée")
 		}
@@ -203,16 +205,19 @@ agent EnvironmentAgent {
 		if(this.moveInfluences.size() == this.numberOfLemmingsMinds){
 			
 			//do checks and move bodies
-			
+			var l:List<Point> = new ArrayList<Point>()
 			if(	this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().size() != 0){
 				
 				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()+1).getListOfBodyInCell().add(this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().get(0))
+				l.add(new Point(this.environment.getEntry().getX(),this.environment.getEntry().getY()+1))
 				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().remove(0)
-				
+				l.add(new Point(this.environment.getEntry().getX(),this.environment.getEntry().getY()))
 			}
 			this.moveInfluences.clear();
-			wake(new MAJGrid())
-//			Thread.sleep(10000)
+			
+			//** to do check if the list contains distinct points
+			wake(new MAJGrid(l))
+//			Thread.sleep(1000)
 			
 		}
 			
@@ -220,8 +225,25 @@ agent EnvironmentAgent {
 
 	}
 	
-	on Manager{
+	on GarbageAgent{
+			var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
+			var find:boolean =false
+			while(!find && keySetIterator.hasNext()){
+			  var key:Address = keySetIterator.next();
+			  if(this.mapOfGUID.get(key) == occurrence.bodyIndex){
+			  	emit(new Destroy,  Scopes::addresses(key))
+			  	find = true
+			  	this.mapOfGUID.remove(key)
+			  	}
+			}
+		}
 		
+	
+	
+	
+	on Manager{
+		//********slow down the process
+//		Thread.sleep(1000)
 		if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
 		}
@@ -232,9 +254,16 @@ agent EnvironmentAgent {
 		
 	}
 	
-	on MAJGrid {
+	on MAJGrid{
+		
+		this.gui.getMainPanel().getGridPanel().smartPaint(occurrence.list,this.environment.getGrid())
+		wake(new Manager)
+	}
+	
+	
+	on ResetGrid [this.gui != null]{
 		
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
-		wake(new Manager)
+
 	}
 }

@@ -3,8 +3,18 @@
  */
 package fr.utbm.vi51.^event
 
+import java.awt.Point
+import java.util.List
+
 /**
  * @author Tiboty
  *
  */
-event MAJGrid
+event MAJGrid{
+	var list:List<Point>
+	
+	new(list:List<Point>){
+		this.list = list
+	}
+	
+}

@@ -7,6 +7,7 @@ import fr.utbm.vi51.controller.Controller;
 import fr.utbm.vi51.event.AreYouAwoken;
 import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.CreateLemmingsAgent;
+import fr.utbm.vi51.event.GarbageAgent;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.Influence;
@@ -15,6 +16,7 @@ import fr.utbm.vi51.event.MAJTable;
 import fr.utbm.vi51.event.Manager;
 import fr.utbm.vi51.event.PerceptionEvent;
 import fr.utbm.vi51.event.ResetAgentEnvironment;
+import fr.utbm.vi51.event.ResetGrid;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
@@ -53,6 +55,7 @@ import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.util.Scopes;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -137,6 +140,8 @@ public class EnvironmentAgent extends Agent {
       ChangeLevel _changeLevel = new ChangeLevel(this.nextLevel);
       this.wake(_changeLevel);
     }
+    ResetGrid _resetGrid = new ResetGrid();
+    this.wake(_resetGrid);
     CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
     this.wake(_createLemmingsAgent);
   }
@@ -318,6 +323,7 @@ public class EnvironmentAgent extends Agent {
     int _size = this.moveInfluences.size();
     boolean _equals = (_size == this.numberOfLemmingsMinds);
     if (_equals) {
+      List<Point> l = new ArrayList<Point>();
       List<List<Cell>> _grid = this.environment.getGrid();
       Cell _entry = this.environment.getEntry();
       int _x = _entry.getX();
@@ -348,18 +354,31 @@ public class EnvironmentAgent extends Agent {
         List<LemmingBody> _listOfBodyInCell_2 = _get_7.getListOfBodyInCell();
         LemmingBody _get_8 = _listOfBodyInCell_2.get(0);
         _listOfBodyInCell_1.add(_get_8);
-        List<List<Cell>> _grid_3 = this.environment.getGrid();
         Cell _entry_6 = this.environment.getEntry();
         int _x_3 = _entry_6.getX();
-        List<Cell> _get_9 = _grid_3.get(_x_3);
         Cell _entry_7 = this.environment.getEntry();
         int _y_3 = _entry_7.getY();
-        Cell _get_10 = _get_9.get(_y_3);
+        int _plus_1 = (_y_3 + 1);
+        Point _point = new Point(_x_3, _plus_1);
+        l.add(_point);
+        List<List<Cell>> _grid_3 = this.environment.getGrid();
+        Cell _entry_8 = this.environment.getEntry();
+        int _x_4 = _entry_8.getX();
+        List<Cell> _get_9 = _grid_3.get(_x_4);
+        Cell _entry_9 = this.environment.getEntry();
+        int _y_4 = _entry_9.getY();
+        Cell _get_10 = _get_9.get(_y_4);
         List<LemmingBody> _listOfBodyInCell_3 = _get_10.getListOfBodyInCell();
         _listOfBodyInCell_3.remove(0);
+        Cell _entry_10 = this.environment.getEntry();
+        int _x_5 = _entry_10.getX();
+        Cell _entry_11 = this.environment.getEntry();
+        int _y_5 = _entry_11.getY();
+        Point _point_1 = new Point(_x_5, _y_5);
+        l.add(_point_1);
       }
       this.moveInfluences.clear();
-      MAJGrid _mAJGrid = new MAJGrid();
+      MAJGrid _mAJGrid = new MAJGrid(l);
       this.wake(_mAJGrid);
     }
   }
@@ -372,7 +391,28 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_Manager_10(final Manager occurrence) {
+  public void _handle_GarbageAgent_10(final GarbageAgent occurrence) {
+    Set<Address> _keySet = this.mapOfGUID.keySet();
+    Iterator<Address> keySetIterator = _keySet.iterator();
+    boolean find = false;
+    while (((!find) && keySetIterator.hasNext())) {
+      {
+        Address key = keySetIterator.next();
+        Integer _get = this.mapOfGUID.get(key);
+        boolean _equals = Objects.equal(_get, occurrence.bodyIndex);
+        if (_equals) {
+          Destroy _destroy = new Destroy();
+          Scope<Address> _addresses = Scopes.addresses(key);
+          this.emit(_destroy, _addresses);
+          find = true;
+          this.mapOfGUID.remove(key);
+        }
+      }
+    }
+  }
+  
+  @Percept
+  public void _handle_Manager_11(final Manager occurrence) {
     boolean _equals = Objects.equal(this.state, SimulationState.START);
     if (_equals) {
       this.sendPerceptionsToAgents();
@@ -380,17 +420,39 @@ public class EnvironmentAgent extends Agent {
   }
   
   @Percept
-  public void _handle_MAJTable_11(final MAJTable occurrence) {
+  public void _handle_MAJTable_12(final MAJTable occurrence) {
   }
   
   @Percept
-  public void _handle_MAJGrid_12(final MAJGrid occurrence) {
+  public void _handle_MAJGrid_13(final MAJGrid occurrence) {
+    MainPanel _mainPanel = this.gui.getMainPanel();
+    GridPanel _gridPanel = _mainPanel.getGridPanel();
+    List<List<Cell>> _grid = this.environment.getGrid();
+    _gridPanel.smartPaint(occurrence.list, _grid);
+    Manager _manager = new Manager();
+    this.wake(_manager);
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  @Pure
+  private boolean _eventhandler_guard_ResetGrid_14(final ResetGrid it, final ResetGrid occurrence) {
+    boolean _notEquals = (!Objects.equal(this.gui, null));
+    return _notEquals;
+  }
+  
+  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
+  private void _eventhandler_body_ResetGrid_14(final ResetGrid occurrence) {
     MainPanel _mainPanel = this.gui.getMainPanel();
     GridPanel _gridPanel = _mainPanel.getGridPanel();
     List<List<Cell>> _grid = this.environment.getGrid();
     _gridPanel.paint(_grid);
-    Manager _manager = new Manager();
-    this.wake(_manager);
+  }
+  
+  @Percept
+  public void _handle_ResetGrid_14(final ResetGrid occurrence) {
+    if (_eventhandler_guard_ResetGrid_14(occurrence, occurrence)) {
+      _eventhandler_body_ResetGrid_14(occurrence);
+    }
   }
   
   /**

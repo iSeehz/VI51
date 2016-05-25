@@ -1,0 +1,18 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event GarbageAgent{
+	
+	var bodyIndex:Integer
+	
+	new (bodyIndex:Integer){
+		
+		this.bodyIndex = bodyIndex
+	}
+}
