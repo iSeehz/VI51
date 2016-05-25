@@ -108,8 +108,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected void emit(final Event e) {
-    getSkill(io.sarl.core.DefaultContextInteractions.class).emit(e);
+  protected void emit(final Event arg0) {
+    getSkill(io.sarl.core.DefaultContextInteractions.class).emit(arg0);
   }
   
   /**
@@ -119,8 +119,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected void emit(final Event e, final Scope<Address> scope) {
-    getSkill(io.sarl.core.DefaultContextInteractions.class).emit(e, scope);
+  protected void emit(final Event arg0, final Scope<Address> arg1) {
+    getSkill(io.sarl.core.DefaultContextInteractions.class).emit(arg0, arg1);
   }
   
   /**
@@ -163,8 +163,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isDefaultContext(final AgentContext context) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultContext(context);
+  protected boolean isDefaultContext(final AgentContext arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultContext(arg0);
   }
   
   /**
@@ -174,8 +174,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isDefaultContext(final UUID contextID) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultContext(contextID);
+  protected boolean isDefaultContext(final UUID arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultContext(arg0);
   }
   
   /**
@@ -185,8 +185,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isDefaultSpace(final Space space) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(space);
+  protected boolean isDefaultSpace(final Space arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(arg0);
   }
   
   /**
@@ -196,8 +196,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isDefaultSpace(final SpaceID space) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(space);
+  protected boolean isDefaultSpace(final SpaceID arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(arg0);
   }
   
   /**
@@ -207,8 +207,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isDefaultSpace(final UUID space) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(space);
+  protected boolean isDefaultSpace(final UUID arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isDefaultSpace(arg0);
   }
   
   /**
@@ -218,8 +218,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected boolean isInDefaultSpace(final Event event) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).isInDefaultSpace(event);
+  protected boolean isInDefaultSpace(final Event arg0) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).isInDefaultSpace(arg0);
   }
   
   /**
@@ -229,8 +229,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected void receive(final UUID receiver, final Event e) {
-    getSkill(io.sarl.core.DefaultContextInteractions.class).receive(receiver, e);
+  protected void receive(final UUID arg0, final Event arg1) {
+    getSkill(io.sarl.core.DefaultContextInteractions.class).receive(arg0, arg1);
   }
   
   /**
@@ -241,8 +241,8 @@ public class LemmingAgent extends Agent {
   @FiredEvent(AgentSpawned.class)
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(DefaultContextInteractions.class)
-  protected UUID spawn(final Class<? extends Agent> aAgent, final Object... params) {
-    return getSkill(io.sarl.core.DefaultContextInteractions.class).spawn(aAgent, params);
+  protected UUID spawn(final Class<? extends Agent> arg0, final Object... arg1) {
+    return getSkill(io.sarl.core.DefaultContextInteractions.class).spawn(arg0, arg1);
   }
   
   /**
@@ -252,8 +252,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void debug(final Object message) {
-    getSkill(io.sarl.core.Logging.class).debug(message);
+  protected void debug(final Object arg0) {
+    getSkill(io.sarl.core.Logging.class).debug(arg0);
   }
   
   /**
@@ -263,8 +263,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void error(final Object message) {
-    getSkill(io.sarl.core.Logging.class).error(message);
+  protected void error(final Object arg0) {
+    getSkill(io.sarl.core.Logging.class).error(arg0);
   }
   
   /**
@@ -274,8 +274,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void error(final Object message, final Throwable exception) {
-    getSkill(io.sarl.core.Logging.class).error(message, exception);
+  protected void error(final Object arg0, final Throwable arg1) {
+    getSkill(io.sarl.core.Logging.class).error(arg0, arg1);
   }
   
   /**
@@ -296,8 +296,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void info(final Object message) {
-    getSkill(io.sarl.core.Logging.class).info(message);
+  protected void info(final Object arg0) {
+    getSkill(io.sarl.core.Logging.class).info(arg0);
   }
   
   /**
@@ -351,8 +351,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void println(final Object message) {
-    getSkill(io.sarl.core.Logging.class).println(message);
+  protected void println(final Object arg0) {
+    getSkill(io.sarl.core.Logging.class).println(arg0);
   }
   
   /**
@@ -362,8 +362,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void setLogLevel(final int level) {
-    getSkill(io.sarl.core.Logging.class).setLogLevel(level);
+  protected void setLogLevel(final int arg0) {
+    getSkill(io.sarl.core.Logging.class).setLogLevel(arg0);
   }
   
   /**
@@ -373,8 +373,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void setLoggingName(final String name) {
-    getSkill(io.sarl.core.Logging.class).setLoggingName(name);
+  protected void setLoggingName(final String arg0) {
+    getSkill(io.sarl.core.Logging.class).setLoggingName(arg0);
   }
   
   /**
@@ -384,8 +384,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void warning(final Object message) {
-    getSkill(io.sarl.core.Logging.class).warning(message);
+  protected void warning(final Object arg0) {
+    getSkill(io.sarl.core.Logging.class).warning(arg0);
   }
   
   /**
@@ -395,8 +395,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Logging.class)
-  protected void warning(final Object message, final Throwable exception) {
-    getSkill(io.sarl.core.Logging.class).warning(message, exception);
+  protected void warning(final Object arg0, final Throwable arg1) {
+    getSkill(io.sarl.core.Logging.class).warning(arg0, arg1);
   }
   
   /**
@@ -420,8 +420,8 @@ public class LemmingAgent extends Agent {
   @FiredEvent(AgentSpawned.class)
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Lifecycle.class)
-  protected UUID spawnInContext(final Class<? extends Agent> agentClass, final AgentContext context, final Object... params) {
-    return getSkill(io.sarl.core.Lifecycle.class).spawnInContext(agentClass, context, params);
+  protected UUID spawnInContext(final Class<? extends Agent> arg0, final AgentContext arg1, final Object... arg2) {
+    return getSkill(io.sarl.core.Lifecycle.class).spawnInContext(arg0, arg1, arg2);
   }
   
   /**
@@ -432,8 +432,8 @@ public class LemmingAgent extends Agent {
   @FiredEvent(AgentSpawned.class)
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Lifecycle.class)
-  protected UUID spawnInContextWithID(final Class<? extends Agent> agentClass, final UUID agentID, final AgentContext context, final Object... params) {
-    return getSkill(io.sarl.core.Lifecycle.class).spawnInContextWithID(agentClass, agentID, context, params);
+  protected UUID spawnInContextWithID(final Class<? extends Agent> arg0, final UUID arg1, final AgentContext arg2, final Object... arg3) {
+    return getSkill(io.sarl.core.Lifecycle.class).spawnInContextWithID(arg0, arg1, arg2, arg3);
   }
   
   /**
@@ -454,8 +454,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Behaviors.class)
-  protected Behavior registerBehavior(final Behavior attitude) {
-    return getSkill(io.sarl.core.Behaviors.class).registerBehavior(attitude);
+  protected Behavior registerBehavior(final Behavior arg0) {
+    return getSkill(io.sarl.core.Behaviors.class).registerBehavior(arg0);
   }
   
   /**
@@ -465,8 +465,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Behaviors.class)
-  protected Behavior unregisterBehavior(final Behavior attitude) {
-    return getSkill(io.sarl.core.Behaviors.class).unregisterBehavior(attitude);
+  protected Behavior unregisterBehavior(final Behavior arg0) {
+    return getSkill(io.sarl.core.Behaviors.class).unregisterBehavior(arg0);
   }
   
   /**
@@ -476,8 +476,8 @@ public class LemmingAgent extends Agent {
    */
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
   @ImportedCapacityFeature(Behaviors.class)
-  protected void wake(final Event evt) {
-    getSkill(io.sarl.core.Behaviors.class).wake(evt);
+  protected void wake(final Event arg0) {
+    getSkill(io.sarl.core.Behaviors.class).wake(arg0);
   }
   
   /**

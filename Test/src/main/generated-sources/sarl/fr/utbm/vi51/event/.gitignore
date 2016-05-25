@@ -19,3 +19,11 @@
 /.Manager.java._trace
 /.ResetGrid.java._trace
 /.GarbageAgent.java._trace
+/.Manager.sarlbin
+/Manager.java
+/.GarbageAgent.sarlbin
+/.ResetGrid.sarlbin
+/.StepByStepSimulation.sarlbin
+/GarbageAgent.java
+/ResetGrid.java
+/StepByStepSimulation.java

@@ -138,7 +138,7 @@ public class EnvironmentModel {
 
 			case "LEFT":
 
-				if ((x > 0) && (grid.get(x - 1).get(y).getType().name().equals("EMPTY"))) {
+				if ((x > 0) && accessibleCase(x-1, y)) {
 					grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x - 1);
@@ -148,7 +148,7 @@ public class EnvironmentModel {
 				break;
 			case "RIGHT":
 
-				if ((x < grid.size()) && (grid.get(x + 1).get(y).getType().name().equals("EMPTY"))) {
+				if ((x < grid.size()) && accessibleCase(x+1, y)) {
 					grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x + 1);
@@ -159,7 +159,7 @@ public class EnvironmentModel {
 
 			case "CLIMB":
 
-				if ((y > 0) && (grid.get(x).get(y - 1).getType().name().equals("EMPTY"))) {
+				if ((y > 0) && accessibleCase(x, y-1)) {
 					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setY(y - 1);
@@ -170,7 +170,7 @@ public class EnvironmentModel {
 
 			case "PARACHUTE":
 
-				if ((y < grid.get(x).size()) && (grid.get(x).get(y + 1).getType().name().equals("EMPTY"))) {
+				if ((y < grid.get(x).size()) && accessibleCase(x, y+1)) {
 					grid.get(x).get(y + 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setOrientation(Orientation.DOWN);
@@ -241,5 +241,12 @@ public class EnvironmentModel {
 		int p = searchBody(id).getPosition();
 		grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(p).disactivateParachute();
 	}
-
+	
+	public boolean accessibleCase (int x, int y){
+		if (grid.get(x).get(y).getType().name().equals("EMPTY") || grid.get(x).get(y).getType().name().equals("ENTRY") || grid.get(x).get(y).getType().name().equals("EXIT")){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
