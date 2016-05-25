@@ -133,7 +133,7 @@ public class EnvironmentModel {
 		int y = body.getY();
 		
 		// check if the body is on a land
-		if (grid.get(x).get(y).getType().equals("LAND")){
+		if (grid.get(x).get(y).getType().equals("LAND") || grid.get(x).get(y).getType().equals("HALF") ){
 			switch (move.toString()) {
 
 			case "LEFT":
@@ -143,7 +143,10 @@ public class EnvironmentModel {
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x - 1);
 					body.setOrientation(Orientation.LEFT);
+					statusBody(new MovedBody(body, x-1, y));
 					return true;
+				} else {
+					return false;
 				}
 				break;
 			case "RIGHT":
@@ -153,18 +156,24 @@ public class EnvironmentModel {
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setX(x + 1);
 					body.setOrientation(Orientation.RIGHT);
+					statusBody(new MovedBody(body, x, y-1));
 					return true;
+				} else {
+					return false;
 				}
 				break;
 
 			case "CLIMB":
-
+				
 				if ((y > 0) && accessibleCase(x, y-1)) {
 					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
 					body.setY(y - 1);
 					body.setOrientation(Orientation.UP);
+					statusBody(new MovedBody(body, x-1, y));
 					return true;
+				} else {
+					return false;
 				}
 				break;
 
@@ -202,10 +211,8 @@ public class EnvironmentModel {
 
 				return false;
 			}
-			return false;
-		}
-		
-
+		} else {
+	
 	}
 
 	public void fallingBody(LemmingBody body) {
@@ -249,4 +256,17 @@ public class EnvironmentModel {
 			return false;
 		}
 	}
+	public boolean canClimb (int x, int y){
+		if (x > 0 && y > 0 && x< grid.size()){
+			if (grid.get(x-1).get(y-1).getType().name().equals("LAND") && grid.get(x).get(y-1).getType().name().equals("EMPTY") || grid.get(x+1).get(y-1).getType().name().equals("LAND")){
+				return true;
+			} else {
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+		
+	
 }
