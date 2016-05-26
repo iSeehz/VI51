@@ -11,6 +11,7 @@ import fr.utbm.vi51.event.GarbageAgent;
 import fr.utbm.vi51.event.GiveBody;
 import fr.utbm.vi51.event.IamAwoken;
 import fr.utbm.vi51.event.Influence;
+import fr.utbm.vi51.event.KillLemmingsAgents;
 import fr.utbm.vi51.event.MAJGrid;
 import fr.utbm.vi51.event.MAJTable;
 import fr.utbm.vi51.event.Manager;
@@ -20,6 +21,7 @@ import fr.utbm.vi51.event.ResetGrid;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
+import fr.utbm.vi51.event.TerminateSimulation;
 import fr.utbm.vi51.event.WantPerception;
 import fr.utbm.vi51.gui.FrameProject;
 import fr.utbm.vi51.gui.GridPanel;
@@ -256,11 +258,8 @@ public class EnvironmentAgent extends Agent {
       this.println(_plus_1);
       this.numberOfLemmingsBodyLinked = 0;
       this.mapOfGUID.clear();
-      for (final Address adr : this.listOfGUID) {
-        Destroy _destroy = new Destroy();
-        Scope<Address> _addresses = Scopes.addresses(adr);
-        this.emit(_destroy, _addresses);
-      }
+      KillLemmingsAgents _killLemmingsAgents = new KillLemmingsAgents();
+      this.wake(_killLemmingsAgents);
       this.listOfGUID.clear();
       ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment();
       this.wake(_resetAgentEnvironment);
@@ -417,6 +416,8 @@ public class EnvironmentAgent extends Agent {
           this.emit(_destroy, _addresses);
           find = true;
           this.mapOfGUID.remove(key);
+          int _indexOf = this.listOfGUID.indexOf(key);
+          this.listOfGUID.remove(_indexOf);
         }
       }
     }
@@ -469,6 +470,22 @@ public class EnvironmentAgent extends Agent {
     if (_eventhandler_guard_ResetGrid_14(occurrence, occurrence)) {
       _eventhandler_body_ResetGrid_14(occurrence);
     }
+  }
+  
+  @Percept
+  public void _handle_KillLemmingsAgents_15(final KillLemmingsAgents occurrence) {
+    for (final Address adr : this.listOfGUID) {
+      Destroy _destroy = new Destroy();
+      Scope<Address> _addresses = Scopes.addresses(adr);
+      this.emit(_destroy, _addresses);
+    }
+  }
+  
+  @Percept
+  public void _handle_TerminateSimulation_16(final TerminateSimulation occurrence) {
+    KillLemmingsAgents _killLemmingsAgents = new KillLemmingsAgents();
+    this.wake(_killLemmingsAgents);
+    this.killMe();
   }
   
   /**

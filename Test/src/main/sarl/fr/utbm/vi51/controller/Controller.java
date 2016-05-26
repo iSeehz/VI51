@@ -6,6 +6,7 @@ import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
+import fr.utbm.vi51.event.TerminateSimulation;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Event;
 import io.sarl.lang.core.EventSpace;
@@ -48,6 +49,10 @@ public class Controller {
 	public void changeLevel(String level) {
 		this.emitEvent(new ChangeLevel(level));
 		System.out.println("change level : " + level); 
+	}
+	
+	public void preparationToQuit(){
+		this.emitEvent(new TerminateSimulation());
 	}
 	
 	public void stepByStep() {

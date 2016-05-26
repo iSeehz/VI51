@@ -7,9 +7,11 @@ import fr.utbm.vi51.controller.Controller
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.ChangeLevel
 import fr.utbm.vi51.^event.CreateLemmingsAgent
+import fr.utbm.vi51.^event.GarbageAgent
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.Influence
+import fr.utbm.vi51.^event.KillLemmingsAgents
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.MAJTable
 import fr.utbm.vi51.^event.Manager
@@ -19,6 +21,7 @@ import fr.utbm.vi51.^event.ResetGrid
 import fr.utbm.vi51.^event.StartSimulation
 import fr.utbm.vi51.^event.StepByStepSimulation
 import fr.utbm.vi51.^event.StopSimulation
+import fr.utbm.vi51.^event.TerminateSimulation
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
@@ -39,7 +42,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
-import fr.utbm.vi51.^event.GarbageAgent
 
 /**
  * @author tiboty
@@ -171,9 +173,8 @@ agent EnvironmentAgent {
 			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
 			this.numberOfLemmingsBodyLinked = 0
 			this.mapOfGUID.clear()
-			for(adr: this.listOfGUID){
-				emit(new Destroy, Scopes::addresses(adr))
-			}
+			wake(new KillLemmingsAgents)
+			//**************** est-ce que l'agent est bien tué avant le reset    *******************
 			this.listOfGUID.clear()
 			wake(new ResetAgentEnvironment())
 		}else{
@@ -235,6 +236,7 @@ agent EnvironmentAgent {
 			  	emit(new Destroy,  Scopes::addresses(key))
 			  	find = true
 			  	this.mapOfGUID.remove(key)
+			  	this.listOfGUID.remove(this.listOfGUID.indexOf(key))
 			  	}
 			}
 		}
@@ -266,5 +268,19 @@ agent EnvironmentAgent {
 		
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
 
+	}
+	
+	
+	on KillLemmingsAgents{
+		
+		for(adr: this.listOfGUID){
+			emit(new Destroy, Scopes::addresses(adr))
+		}
+		
+	}
+	
+	on TerminateSimulation{
+		wake(new KillLemmingsAgents)
+		killMe
 	}
 }
