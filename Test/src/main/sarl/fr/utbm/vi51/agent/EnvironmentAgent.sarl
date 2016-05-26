@@ -161,6 +161,7 @@ agent EnvironmentAgent {
 	
 	on StepByStepSimulation{
 		this.state = SimulationState.STEP_BY_STEP
+		this.gui.getMainPanel().getTime().start()
 		sendPerceptionsToAgents()
 		
 	}
@@ -249,6 +250,8 @@ agent EnvironmentAgent {
 		Thread.sleep(1000)
 		if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
+		}else if(this.state == SimulationState.STEP_BY_STEP){
+			this.gui.getMainPanel().getTime().pause()
 		}
 		
 	}

@@ -231,6 +231,9 @@ public class EnvironmentAgent extends Agent {
   @Percept
   public void _handle_StepByStepSimulation_6(final StepByStepSimulation occurrence) {
     this.state = SimulationState.STEP_BY_STEP;
+    MainPanel _mainPanel = this.gui.getMainPanel();
+    Clock _time = _mainPanel.getTime();
+    _time.start();
     this.sendPerceptionsToAgents();
   }
   
@@ -430,6 +433,13 @@ public class EnvironmentAgent extends Agent {
       boolean _equals = Objects.equal(this.state, SimulationState.START);
       if (_equals) {
         this.sendPerceptionsToAgents();
+      } else {
+        boolean _equals_1 = Objects.equal(this.state, SimulationState.STEP_BY_STEP);
+        if (_equals_1) {
+          MainPanel _mainPanel = this.gui.getMainPanel();
+          Clock _time = _mainPanel.getTime();
+          _time.pause();
+        }
       }
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
