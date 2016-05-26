@@ -144,9 +144,10 @@ public class EnvironmentAgent extends Agent {
       ChangeLevel _changeLevel = new ChangeLevel(this.nextLevel);
       this.wake(_changeLevel);
       this.currentLevel = this.nextLevel;
+    } else {
+      ResetGrid _resetGrid = new ResetGrid();
+      this.wake(_resetGrid);
     }
-    ResetGrid _resetGrid = new ResetGrid();
-    this.wake(_resetGrid);
     CreateLemmingsAgent _createLemmingsAgent = new CreateLemmingsAgent();
     this.wake(_createLemmingsAgent);
   }

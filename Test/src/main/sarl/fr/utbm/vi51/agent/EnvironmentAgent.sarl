@@ -96,8 +96,10 @@ agent EnvironmentAgent {
 		if (this.currentLevel != this.nextLevel){
 			wake(new ChangeLevel(this.nextLevel))
 			this.currentLevel = this.nextLevel
+		}else{
+			wake(new ResetGrid)
 		}
-		wake(new ResetGrid)
+		
 		wake(new CreateLemmingsAgent)
 	}
 	
