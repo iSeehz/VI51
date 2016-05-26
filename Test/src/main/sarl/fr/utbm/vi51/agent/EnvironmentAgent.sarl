@@ -95,6 +95,7 @@ agent EnvironmentAgent {
 		this.environment = new EnvironmentModel(this.nextLevel,this.numberOfLemmingsMinds)
 		if (this.currentLevel != this.nextLevel){
 			wake(new ChangeLevel(this.nextLevel))
+			this.currentLevel = this.nextLevel
 		}
 		wake(new ResetGrid)
 		wake(new CreateLemmingsAgent)
@@ -188,14 +189,16 @@ agent EnvironmentAgent {
 	
 	
 		
-	on ChangeLevel[occurrence.level != this.currentLevel]{
-		if(occurrence.level != ""){
-			this.nextLevel = occurrence.level
+	on ChangeLevel{
+		this.nextLevel = occurrence.level
+		if (this.state == SimulationState.INIT){
+			if(this.state == SimulationState.STOP || this.state == SimulationState.INIT){
+				this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
+				this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
+			}
+			
 		}
-		if(this.state == SimulationState.STOP || this.state == SimulationState.INIT){
-			this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
-			this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
-		}
+		
 	}
 		
 	on Influence[this.state != SimulationState.STOP]{

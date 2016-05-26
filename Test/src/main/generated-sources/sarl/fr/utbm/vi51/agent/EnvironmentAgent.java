@@ -143,6 +143,7 @@ public class EnvironmentAgent extends Agent {
     if (_notEquals) {
       ChangeLevel _changeLevel = new ChangeLevel(this.nextLevel);
       this.wake(_changeLevel);
+      this.currentLevel = this.nextLevel;
     }
     ResetGrid _resetGrid = new ResetGrid();
     this.wake(_resetGrid);
@@ -278,42 +279,28 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  @Pure
-  private boolean _eventhandler_guard_ChangeLevel_8(final ChangeLevel it, final ChangeLevel occurrence) {
-    boolean _notEquals = (!Objects.equal(occurrence.level, this.currentLevel));
-    return _notEquals;
-  }
-  
-  @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  private void _eventhandler_body_ChangeLevel_8(final ChangeLevel occurrence) {
-    boolean _notEquals = (!Objects.equal(occurrence.level, ""));
-    if (_notEquals) {
-      this.nextLevel = occurrence.level;
-    }
-    boolean _or = false;
-    boolean _equals = Objects.equal(this.state, SimulationState.STOP);
-    if (_equals) {
-      _or = true;
-    } else {
-      boolean _equals_1 = Objects.equal(this.state, SimulationState.INIT);
-      _or = _equals_1;
-    }
-    if (_or) {
-      EnvironmentModel _environment = this.gui.getEnvironment();
-      _environment.setGrid(occurrence.level, this.numberOfLemmingsMinds);
-      MainPanel _mainPanel = this.gui.getMainPanel();
-      GridPanel _gridPanel = _mainPanel.getGridPanel();
-      EnvironmentModel _environment_1 = this.gui.getEnvironment();
-      List<List<Cell>> _grid = _environment_1.getGrid();
-      _gridPanel.generate(_grid);
-    }
-  }
-  
   @Percept
   public void _handle_ChangeLevel_8(final ChangeLevel occurrence) {
-    if (_eventhandler_guard_ChangeLevel_8(occurrence, occurrence)) {
-      _eventhandler_body_ChangeLevel_8(occurrence);
+    this.nextLevel = occurrence.level;
+    boolean _equals = Objects.equal(this.state, SimulationState.INIT);
+    if (_equals) {
+      boolean _or = false;
+      boolean _equals_1 = Objects.equal(this.state, SimulationState.STOP);
+      if (_equals_1) {
+        _or = true;
+      } else {
+        boolean _equals_2 = Objects.equal(this.state, SimulationState.INIT);
+        _or = _equals_2;
+      }
+      if (_or) {
+        EnvironmentModel _environment = this.gui.getEnvironment();
+        _environment.setGrid(occurrence.level, this.numberOfLemmingsMinds);
+        MainPanel _mainPanel = this.gui.getMainPanel();
+        GridPanel _gridPanel = _mainPanel.getGridPanel();
+        EnvironmentModel _environment_1 = this.gui.getEnvironment();
+        List<List<Cell>> _grid = _environment_1.getGrid();
+        _gridPanel.generate(_grid);
+      }
     }
   }
   
