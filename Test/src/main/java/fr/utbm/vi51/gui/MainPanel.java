@@ -16,9 +16,11 @@ public class MainPanel extends JPanel{
 	private static final long serialVersionUID = 2013026409215368873L;
 	private ControlPanel controlPanel;
 	private GridPanel gridPanel;
+	private Clock time;
 	public MainPanel(List<List<Cell>> tab) {
 		
 		// initialize content objects
+		this.time = new Clock();
 		controlPanel = new ControlPanel();
 		gridPanel = new GridPanel(tab);
 		this.setBackground(Color.WHITE);
@@ -28,13 +30,16 @@ public class MainPanel extends JPanel{
 		this.add("North",controlPanel);
 		this.add("Center",gridPanel);
 		
-		this.add("South",new Clock());
+		this.add("South",this.time);
 	}
 	public ControlPanel getControlPanel() {
 		return controlPanel;
 	}
 	public GridPanel getGridPanel() {
 		return gridPanel;
+	}
+	public Clock getTime() {
+		return time;
 	}
 	
 	

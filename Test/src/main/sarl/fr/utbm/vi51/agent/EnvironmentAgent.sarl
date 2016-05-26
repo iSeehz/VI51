@@ -137,9 +137,9 @@ agent EnvironmentAgent {
 	on StartSimulation[this.state != SimulationState.START] {
 		this.state = SimulationState.START
 	
-			println("lancement de le simulation en auto")
-			sendPerceptionsToAgents()
-		
+		println("lancement de le simulation en auto")
+		sendPerceptionsToAgents()
+		this.gui.getMainPanel().getTime().start()
 		
 		
 		
@@ -165,7 +165,8 @@ agent EnvironmentAgent {
 	
 	on StopSimulation[this.state != SimulationState.STOP] {
 		if(this.state != SimulationState.INIT){
-			
+			this.gui.getMainPanel().getTime().pause()
+			this.gui.getMainPanel().getTime().restart()
 			this.state = SimulationState.STOP
 			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
 			this.numberOfLemmingsBodyLinked = 0

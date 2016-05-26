@@ -28,6 +28,7 @@ import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
 import fr.utbm.vi51.model.LemmingBody;
 import fr.utbm.vi51.model.PossibleMove;
+import fr.utbm.vi51.time.Clock;
 import io.sarl.core.AgentKilled;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.AgentTask;
@@ -199,6 +200,9 @@ public class EnvironmentAgent extends Agent {
     this.state = SimulationState.START;
     this.println("lancement de le simulation en auto");
     this.sendPerceptionsToAgents();
+    MainPanel _mainPanel = this.gui.getMainPanel();
+    Clock _time = _mainPanel.getTime();
+    _time.start();
   }
   
   @Percept
@@ -239,6 +243,12 @@ public class EnvironmentAgent extends Agent {
   private void _eventhandler_body_StopSimulation_7(final StopSimulation occurrence) {
     boolean _notEquals = (!Objects.equal(this.state, SimulationState.INIT));
     if (_notEquals) {
+      MainPanel _mainPanel = this.gui.getMainPanel();
+      Clock _time = _mainPanel.getTime();
+      _time.pause();
+      MainPanel _mainPanel_1 = this.gui.getMainPanel();
+      Clock _time_1 = _mainPanel_1.getTime();
+      _time_1.restart();
       this.state = SimulationState.STOP;
       int _size = this.listOfGUID.size();
       String _plus = ("fin simulation : Terminaison de " + Integer.valueOf(_size));
