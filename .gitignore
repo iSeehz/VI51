@@ -1,6 +1,5 @@
 *.class
-.metadata/
-Test/src/main/generated-sources/
+.metadata/*
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
