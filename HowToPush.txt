@@ -1,0 +1,9 @@
+ouvrir le github shell
+
+lancer la commande "git status"
+
+si les fichiers de .metadata apparaissent:
+
+UTILISER la commande "git checkout -- ." afin de les enlever !! 
+
+vous pouvez ensuite faire un git commit et ensuite un git push
