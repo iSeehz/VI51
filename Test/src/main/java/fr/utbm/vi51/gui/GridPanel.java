@@ -50,7 +50,7 @@ public class GridPanel extends JPanel{
 					this.grid[i][j].add(drawLemming(tab.get(i).get(j)));
 				}
 				this.add(this.grid[i][j]);
-				
+				this.updateUI();
 			}
 		}
 	}
@@ -92,6 +92,7 @@ public class GridPanel extends JPanel{
 			}
 			this.remove(p.x +p.y);
 			this.add(this.grid[p.x][p.y],p.x +p.y);
+			this.updateUI();
 			System.out.println(p);
 		}
 		

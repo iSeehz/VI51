@@ -64,6 +64,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Generated;
 import javax.inject.Inject;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -413,9 +414,14 @@ public class EnvironmentAgent extends Agent {
   
   @Percept
   public void _handle_Manager_11(final Manager occurrence) {
-    boolean _equals = Objects.equal(this.state, SimulationState.START);
-    if (_equals) {
-      this.sendPerceptionsToAgents();
+    try {
+      Thread.sleep(1000);
+      boolean _equals = Objects.equal(this.state, SimulationState.START);
+      if (_equals) {
+        this.sendPerceptionsToAgents();
+      }
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
     }
   }
   
