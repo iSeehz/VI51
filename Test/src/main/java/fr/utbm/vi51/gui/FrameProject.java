@@ -28,7 +28,7 @@ public class FrameProject extends JFrame {
 		//initialize object
 		this.environment = model;
 		mainPanel = new MainPanel(model.getGrid());
-		optionPanel = new OptionPanel();
+		optionPanel = new OptionPanel(model.getNumberOfBody());
 		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, mainPanel, optionPanel);
 		
 		// set the Frame 

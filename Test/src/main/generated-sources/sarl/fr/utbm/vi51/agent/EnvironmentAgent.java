@@ -26,6 +26,7 @@ import fr.utbm.vi51.event.WantPerception;
 import fr.utbm.vi51.gui.FrameProject;
 import fr.utbm.vi51.gui.GridPanel;
 import fr.utbm.vi51.gui.MainPanel;
+import fr.utbm.vi51.gui.OptionPanel;
 import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.EnvironmentModel;
 import fr.utbm.vi51.model.LemmingBody;
@@ -266,6 +267,8 @@ public class EnvironmentAgent extends Agent {
       KillLemmingsAgents _killLemmingsAgents = new KillLemmingsAgents();
       this.wake(_killLemmingsAgents);
       this.listOfGUID.clear();
+      OptionPanel _optionPanel = this.gui.getOptionPanel();
+      _optionPanel.updateTab(0, 0, 0);
       ResetAgentEnvironment _resetAgentEnvironment = new ResetAgentEnvironment();
       this.wake(_resetAgentEnvironment);
     } else {

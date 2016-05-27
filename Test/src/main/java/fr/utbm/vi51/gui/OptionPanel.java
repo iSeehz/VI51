@@ -4,6 +4,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -15,36 +16,36 @@ public class OptionPanel extends JPanel{
 	private JButton halfTurnAllButton;
 	private JButton digAllButton;
 	private JButton spawnAnotherLemmingButton;
-	
+
 	private JComboBox<String> changeLevel;
+	private int lemmingFree;
 	
+	private String print;
+	private JLabel data;
 	
-	Object rowData[][] = { { "Lemmings lachés", "", ""},
-            { "Lemmings en vie", "", ""},
-            { "Lemmings arrivés", "", ""},
-            { "Lemmings morts", "", ""}};
-	Object columnNames[] = { "Status", "Nombre", "Pourcentage"};
-	
-	public OptionPanel() {
+	public OptionPanel(int numberOfLemmings) {
 		super();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		//set by default the table which displays the Lemming's current state
-		JTable lemmingDatas = new JTable(rowData, columnNames);
-		lemmingDatas.setEnabled(false);
+		this.lemmingFree = numberOfLemmings;
+		//set the Table
+		this.print =  "<html>Lemmings lachés: " + lemmingFree + " Total : 100%" + "<br>"
+	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%" +"<br>"
+	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%" +"<br>"
+	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%</html>";
 		
-		
+		this.data = new JLabel(this.print);
+			
 		//set Action Button
 		halfTurnAllButton = new JButton("Tout le monde, demi tour! ");
 		digAllButton = new JButton("Tout le monde, creusez !");
 		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
 		
 		//set the level
-		String level[] = {"lab_parachute.txt","lab_arrivee.txt","level_3"};
+		String level[] = {"lab_parachute.txt","lab_arrivee.txt"};
 		changeLevel = new JComboBox<String>(level);
 		
-		this.add(lemmingDatas.getTableHeader());
-		this.add(lemmingDatas);
+		this.add(data);
 		this.add(Box.createVerticalStrut(50));
 		this.add(halfTurnAllButton);
 		this.add(Box.createVerticalStrut(50));
@@ -56,16 +57,21 @@ public class OptionPanel extends JPanel{
 		this.add(Box.createVerticalStrut(500));
 		
 	}
-	public Object[][] getRowData() {
-		return rowData;
-	}
-	public void setRowData(Object[][] rowData) {
-		this.rowData = rowData;
+	
+	
+	
+	
+	public void updateTab(int lemmingAlive,int lemmingDead,int lemmingSave){
+            this.print =  "<html>Lemmings lachés: " + this.lemmingFree + " Total : 100%" + "<br>"
+   	             + "Lemmings en vie :" + lemmingAlive+ "<br> Total : " + (lemmingAlive/this.lemmingFree)*100 +"%<br>"
+   	             + "Lemmings arrivés :" + lemmingSave + "<br> Total : " + (lemmingSave/this.lemmingFree)*100 +"%<br>"
+   	             + "Lemmings morts :" + lemmingDead + "<br> Total : " + (lemmingDead/this.lemmingFree)*100 + "%</html>";
+        this.data.setText(this.print);
+		
 	}
 	public JComboBox<String> getChangeLevel() {
 		return changeLevel;
 	}
 
-	
 
 }

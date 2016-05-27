@@ -18,6 +18,14 @@ public class EnvironmentModel {
 		this.setGrid(level, numberOfBody);
 
 	}
+	
+	
+
+	public int getNumberOfBody() {
+		return numberOfBody;
+	}
+
+
 
 	public List<List<Cell>> getGrid() {
 		return grid;

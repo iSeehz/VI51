@@ -180,6 +180,7 @@ agent EnvironmentAgent {
 			wake(new KillLemmingsAgents)
 			//**************** est-ce que l'agent est bien tué avant le reset    *******************
 			this.listOfGUID.clear()
+			this.gui.getOptionPanel().updateTab(0,0,0)
 			wake(new ResetAgentEnvironment())
 		}else{
 			println("Simulation non lancée")
@@ -265,9 +266,10 @@ agent EnvironmentAgent {
 		
 	}
 	
-	on MAJGrid{
+	on MAJGrid{//maj gui
 		
 		this.gui.getMainPanel().getGridPanel().smartPaint(occurrence.list,this.environment.getGrid())
+		//this.gui.getOptionPanel().updateTab(1,2,3)
 		wake(new Manager)
 	}
 	
