@@ -31,8 +31,8 @@ public class OptionPanel extends JPanel{
 		//set the Table
 		this.print =  "<html>Lemmings lachés: " + lemmingFree + " Total : 100%" + "<br>"
 	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%" +"<br>"
-	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%" +"<br>"
-	             + "Lemmings en vie :" + "0"+ "<br> Total : 0%</html>";
+	             + "Lemmings arrivés :" + "0"+ "<br> Total : 0%" +"<br>"
+	             + "Lemmings morts :" + "0"+ "<br> Total : 0%</html>";
 		
 		this.data = new JLabel(this.print);
 			

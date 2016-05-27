@@ -1,12 +1,18 @@
 package fr.utbm.vi51.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.utbm.vi51.model.Cell;
@@ -20,7 +26,19 @@ public class GridPanel extends JPanel{
 	private int width;
 	private int height;
 	private JPanel grid [][];
+	private BufferedImage  lemmingLogo;
 	public GridPanel(List<List<Cell>> tab) {
+		
+		//initialize the picture
+		try {
+		    String path = System.getProperty("user.dir") + "/src/main/resources/fr/utbm/vi51/img/lemming.png";
+		    this.lemmingLogo = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+		
+		
 		// Initialize the grid
 		generate(tab);
 	}
@@ -46,7 +64,6 @@ public class GridPanel extends JPanel{
 				this.grid[i][j] = createPanelByType(tab.get(i).get(j).getType());
 
 				if(tab.get(i).get(j).getListOfBodyInCell().size() != 0){
-					
 					this.grid[i][j].add(drawLemming(tab.get(i).get(j)));
 				}
 				this.add(this.grid[i][j]);
@@ -56,11 +73,15 @@ public class GridPanel extends JPanel{
 		this.updateUI();
 	}
 	
-	public JButton drawLemming(Cell c){
+	public JPanel drawLemming(Cell c){
 		
-		return new JButton(c.getListOfBodyInCell().size() + " Lemming(s)");
-
+		JLabel picLabel = new JLabel(new ImageIcon(this.lemmingLogo.getScaledInstance(50, 50, 50)));
+		JPanel panel = new JPanel();
+		panel.add(picLabel);
+		panel.add(new JLabel(""+c.getListOfBodyInCell().size()));
+		return panel;
 	}
+	
 	
 	
 	public JPanel createPanelByType(TypeObject to){
@@ -93,7 +114,7 @@ public class GridPanel extends JPanel{
 			}
 			this.remove(p.x +p.y);
 			this.add(this.grid[p.x][p.y],p.x +p.y);
-			System.out.println(p);
+//			System.out.println(p);
 		}
 		this.updateUI();
 		listOfChange.clear();
