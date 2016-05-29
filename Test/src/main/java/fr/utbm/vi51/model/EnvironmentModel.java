@@ -194,30 +194,20 @@ public class EnvironmentModel {
 		//all moves allowed			
 			switch (move.toString()) {
 
-			case "LEFT":
-
-				if ((x > 0) && accessibleCase(x-1, y)) {
-					grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
-					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x - 1);
-					body.setOrientation(Orientation.LEFT);
-					statusBody(body);
-					return true;
-				} else {
-					return false;
+			case "MOVEBACWARD":
+				if (body.getOrientation().equals(Orientation.RIGHT)){
+					return moveLeft(body, p);
+				} else{
+					return moveRight(body,p);
 				}
-			case "RIGHT":
-
-				if ((x < grid.size()) && accessibleCase(x+1, y)) {
-					grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
-					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x + 1);
-					body.setOrientation(Orientation.RIGHT);
-					statusBody(body);
-					return true;
-				} else {
-					return false;
+				
+			case "MOVEFORWARD":
+				if (body.getOrientation().equals(Orientation.LEFT)){
+					return moveLeft(body, p);
+				} else{
+					return moveRight(body,p);
 				}
+				
 
 			case "CLIMB":
 				
@@ -396,5 +386,36 @@ public class EnvironmentModel {
 	
 	public void outLemming(LemmingBody body){
 		addOut();
+	}
+	
+	public boolean moveLeft(LemmingBody body, int p){
+		int x = body.getX();
+		int y = body.getY();
+		if ((x > 0) && accessibleCase(x-1, y)) {
+			grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
+			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			body.setX(x - 1);
+			body.setOrientation(Orientation.LEFT);
+			statusBody(body);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean moveRight(LemmingBody body, int p){
+		int x = body.getX();
+		int y = body.getY();
+		if ((x < grid.size()) && accessibleCase(x+1, y)) {
+			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			body.setX(x + 1);
+			body.setOrientation(Orientation.RIGHT);
+			statusBody(body);
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 }

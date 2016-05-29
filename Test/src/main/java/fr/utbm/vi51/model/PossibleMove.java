@@ -1,8 +1,8 @@
 package fr.utbm.vi51.model;
 
 public enum PossibleMove {
-	RIGHT,
-	LEFT,
+	MOVEBACKWARD,
+	MOVEFORWARD,
 	DIG,
 	CLIMB,
 	PARACHUTE,
