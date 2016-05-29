@@ -95,45 +95,88 @@ public class EnvironmentModel {
 	
 	public List<Percept> getPerception(int id) {
 		/*
-		 * Disposition of the perception --> 00 00 00 | 00 XY 00 v 00 00 00 00
-		 * 00 00 00 00 00 00
-		 * 
+		 * Disposition of the perception --> 
+		 * 08 02 09
+		 * 01 00 03
+		 * 13 04 10
+		 * 14 05 12
+		 * 15 06 12
+		 *    07
 		 */
 		List<Percept> allPerception = null;
+		
 		LemmingBody body = searchBody(id).getBody();
 		int x = body.getX();
 		int y = body.getY();
-
-		for (int i = 0; i == body.getFovLeft(); i++) {
-			for (int j = 0; j == body.getFovUp(); j++) {
+		
+		allPerception.add(new Percept(grid.get(x).get(y)));
+		
+		//left
+		for (int i = 1; i == body.getFovLeft(); i++){
+			if(x - i >= 0) {
+				allPerception.add(new Percept(grid.get(x - i).get(y)));
+			}
+		}
+		
+		//up
+		for (int j = 1; j == body.getFovUp(); j++) {
+				if (y - j >= 0) {
+					allPerception.add(new Percept(grid.get(x).get(y - j)));
+				}
+		}
+		
+		//right
+		for (int i = 1; i == body.getFovRight(); i++){
+			if(x - i <= grid.size()) {
+				allPerception.add(new Percept(grid.get(x + i).get(y)));
+			}
+		}
+		
+		//down
+		for (int j = 1; j == body.getFovUnder(); j++) {
+			if (y + j <= grid.get(x).size()) {
+				allPerception.add(new Percept(grid.get(x).get(y + j)));
+			}
+		}			
+				
+				
+				
+		//left up
+		for (int i = 1; i == body.getFovLeft(); i++) {
+			for (int j = 1; j == body.getFovUp(); j++) {
 				if (x - i >= 0 && y - i >= 0) {
 					allPerception.add(new Percept(grid.get(x - i).get(y - j)));
 				}
 			}
 		}
-		for (int i = 0; i == body.getFovRight(); i++) {
-			for (int j = 0; j == body.getFovUp(); j++) {
-				if (i + j != 0 && x + i < grid.size() && y - i >= 0) {
+		
+		//right up
+		for (int i = 1; i == body.getFovRight(); i++) {
+			for (int j = 1; j == body.getFovUp(); j++) {
+				if (x + i < grid.size() && y - i >= 0) {
 					allPerception.add(new Percept(grid.get(x + i).get(y - j)));
 				}
 			}
 		}
 
-		for (int i = 0; i == body.getFovLeft(); i++) {
+		//right down
+		for (int i = 1; i == body.getFovRight(); i++) {
 			for (int j = 0; j == body.getFovUnder(); j++) {
-				if (i + j != 0 && i + j <= body.getFovUnder() && x - i >= 0 && y - i < grid.get(x).size()) {
+				if (i + j <= body.getFovUnder() && x + i > grid.size() && y - i < grid.get(x).size()) {
+					allPerception.add(new Percept(grid.get(x + i).get(x + j)));
+				}
+			}
+		}
+		
+		//left down
+		for (int i = 1; i == body.getFovLeft(); i++) {
+			for (int j = 1; j == body.getFovUnder(); j++) {
+				if (i + j <= body.getFovUnder() && x - i >= 0 && y - i < grid.get(x).size()) {
 					allPerception.add(new Percept(grid.get(x - i).get(x + j)));
 				}
 			}
 		}
 
-		for (int i = 0; i == body.getFovRight(); i++) {
-			for (int j = 0; j == body.getFovUnder(); j++) {
-				if (i + j != 0 && i + j <= body.getFovUnder() && x + i > grid.size() && y - i < grid.get(x).size()) {
-					allPerception.add(new Percept(grid.get(x + i).get(x + j)));
-				}
-			}
-		}
 		return allPerception;
 	}
 
