@@ -5,5 +5,6 @@ public enum PossibleMove {
 	LEFT,
 	DIG,
 	CLIMB,
-	PARACHUTE
+	PARACHUTE,
+	WIN
 }

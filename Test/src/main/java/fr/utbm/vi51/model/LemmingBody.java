@@ -66,13 +66,22 @@ public class LemmingBody extends EnviromnentObject{
 	
 	public void activateParachute(){
 		this.parachute = true;
+		this.fall = 0;
 	}
 	
 	public void disactivateParachute(){
 		this.parachute = false;
+		this.fall = 0;
+	}
+	
+	public boolean statusParachute(){
+		return this.parachute;
 	}
 	public void fall(){
 		this.fall ++;
+	}
+	public int getFall(){
+		return this.fall;
 	}
 	
 	public void setOrientation(Orientation m){
