@@ -4,7 +4,6 @@ public enum Orientation {
 	LEFT,
 	RIGHT,
 	DOWN,
-	UP,
 	WIN,
 	DEAD,
 }

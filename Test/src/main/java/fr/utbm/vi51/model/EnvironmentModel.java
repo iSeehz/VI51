@@ -209,9 +209,13 @@ public class EnvironmentModel {
 				}
 				
 
-			case "CLIMB":
+			case "CLIMBFORWARD":
 				
-				return climbingBody(body, p);
+				return climbingBody(body, p, false);
+				
+			case "CLIMBBACKWARD":
+				
+				return climbingBody(body, p, true);
 			/*  useless here
 			 * case "PARACHUTE":
 			 * 
@@ -249,9 +253,13 @@ public class EnvironmentModel {
 			}
 		// body climbing
 		
-		} else if (body.getOrientation().equals(Orientation.UP) && move.equals(PossibleMove.CLIMB)){ 
+		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBFORWARD)){ 
 			
-			return climbingBody(body, p);
+			return climbingBody(body, p, false);
+			
+		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBBACKWARD)){
+			
+			return climbingBody(body, p, true);
 			
 		// body parachute
 		} else if (move.equals(PossibleMove.PARACHUTE)){
@@ -294,11 +302,11 @@ public class EnvironmentModel {
 			body.disactivateParachute();
 			
 		// if the body is falling
-		} else if (accessibleCase(x, y+1) && !body.getOrientation().equals(Orientation.UP) && !body.statusParachute()){
+		} else if (accessibleCase(x, y+1) && !body.isClimbing() && !body.statusParachute()){
 			body.fall();
-			
+			body.setOrientation(Orientation.DOWN);
 		// body climbing, if the cases up are free, get to the right one, or the left one if right one is not accessible
-		} else if (accessibleCase(x, y-1) && body.getOrientation().equals(Orientation.UP)){
+		} else if (accessibleCase(x, y-1) && body.isClimbing()){
 			
 			if (x-1 >= 0 && x+1<= grid.get(x).size() && y-1 >= 0){
 				
@@ -329,11 +337,14 @@ public class EnvironmentModel {
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
 	}
 	
-	public boolean climbingBody (LemmingBody body, int p){
-		
+	public boolean climbingBody (LemmingBody body, int p, boolean type){
+		// True  = Backward
+		// False = Forward
 		int x = body.getX();
 		int y = body.getY();
-		
+		if (type){
+			
+		}
 		if (canClimb(x, y)) {
 			grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
@@ -355,7 +366,7 @@ public class EnvironmentModel {
 	}
 	public boolean canClimb (int x, int y){
 		if (x > 0 && y > 0 && x< grid.size()){
-			if (grid.get(x-1).get(y-1).getType().equals(TypeObject.EMPTY) && (isLand(x-1,y-1) || isLand(x+1,y-1))){
+			if (accessibleCase(x, y-1) && (isLand(x-1,y-1) || isLand(x+1,y-1))){
 				return true;
 			} else {
 				return false;
@@ -418,4 +429,29 @@ public class EnvironmentModel {
 		}
 		
 	}
+	
+	// Jump is go on diagonal left-up or right-up
+	public boolean canJump(int x, int y, boolean side){
+		//TRUE  = LEFT
+		//FLASE = RIGHT
+		if (side){ // LEFT
+			if (x > 0 && y > 0){
+				if (accessibleCase(x, y-1) && isLand(x-1, y) && accessibleCase(x-1, y-1)){
+					return true;
+				} else {
+					return false;
+				}
+			} else return false;
+			
+		} else {   // RIGHT
+			if (x < grid.size() && y > 0){
+				if (accessibleCase(x, y-1) && isLand(x+1, y) && accessibleCase(x-1, y+1)){
+					return true;
+				} else {
+					return false;
+				}
+			} else return false;
+		}
+	}
+	
 }
