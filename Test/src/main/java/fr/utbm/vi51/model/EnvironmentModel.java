@@ -211,6 +211,7 @@ public class EnvironmentModel {
 			switch (move.toString()) {
 
 			case "MOVEBACWARD":
+				body.increaseFatigue();
 				if (body.getOrientation().equals(Orientation.RIGHT)){
 					return moveLeft(body, p);
 				} else{
@@ -262,6 +263,7 @@ public class EnvironmentModel {
 			
 		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBBACKWARD)){
 			
+			body.increaseFatigue();
 			return climbingBody(body, p, true);
 			
 		// body parachute
@@ -273,7 +275,7 @@ public class EnvironmentModel {
 				return true;
 			} else{
 				return false;
-			}			
+			}
 		} else {
 			if (y +1 < grid.get(x).size()){
 				if (!body.statusParachute()){
@@ -332,8 +334,15 @@ public class EnvironmentModel {
 			outLemming(body);
 		// if the body is on a land nothing to do except disable parachute and stop climbing
 		} else if (isLand(x,y+1)){
-			body.disactivateParachute();
-			body.stopClimbing();
+			if (body.getOrientation().equals(Orientation.DOWN)){
+				if(body.isClimbing()){
+					body.increaseFatigue();
+					body.getUp();
+				} else {
+					body.getUp();
+					body.resetFatigue();
+				}		
+			}
 		// if the body is falling
 		} else if (accessibleCase(x, y+1) && !body.isClimbing() && !body.statusParachute()){
 			body.fall();
