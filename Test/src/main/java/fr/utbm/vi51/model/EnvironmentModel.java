@@ -208,26 +208,13 @@ public class EnvironmentModel {
 					return moveRight(body,p);
 				}
 				
-
 			case "CLIMBFORWARD":
 				
 				return climbingBody(body, p, false);
 				
 			case "CLIMBBACKWARD":
 				
-				return climbingBody(body, p, true);
-			/*  useless here
-			 * case "PARACHUTE":
-			 * 
-				if ((y < grid.get(x).size()-1) && accessibleCase(x, y+1)) {
-					grid.get(x).get(y + 1).getListOfBodyInCell().add(body);
-					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setOrientation(Orientation.DOWN);
-					body.activateParachute();
-					return true;
-				}
-			 */
-			
+				return climbingBody(body, p, true);			
 
 			case "DIG":
 				//the case is full Land
@@ -264,6 +251,7 @@ public class EnvironmentModel {
 		// body parachute
 		} else if (move.equals(PossibleMove.PARACHUTE)){
 			if (y +1 < grid.get(x).size()){
+				body.activateParachute();
 				fallingBody(body, p);
 				statusBody(body);
 				return true;
@@ -272,7 +260,9 @@ public class EnvironmentModel {
 			}			
 		} else {
 			if (y +1 < grid.get(x).size()){
-				body.fall();
+				if (!body.statusParachute()){
+					body.fall();
+				}
 				fallingBody(body, p);
 				statusBody(body);
 				return true;
@@ -283,48 +273,59 @@ public class EnvironmentModel {
 		
 			
 	}
+	public boolean moveLeft(LemmingBody body, int p){
+		int x = body.getX();
+		int y = body.getY();
+		if ((x > 0) && accessibleCase(x-1, y)) {
+			grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
+			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			body.setX(x - 1);
+			body.setOrientation(Orientation.LEFT);
+			statusBody(body);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean moveRight(LemmingBody body, int p){
+		int x = body.getX();
+		int y = body.getY();
+		if ((x < grid.size()) && accessibleCase(x+1, y)) {
+			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			body.setX(x + 1);
+			body.setOrientation(Orientation.RIGHT);
+			statusBody(body);
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+
 	// Action after any move
 	public void statusBody(LemmingBody body) {
 		
 		int x = body.getX();
 		int y = body.getY();
-		int p = searchBodyInCell(body);
 		
-		// Body on the exit = body oriented "win" (not deleted yet, do we delete it directly or on next turn ?)	
+		// Body on the Exit
 		if (isExit(x, y)){
-			body.setOrientation(Orientation.WIN);
+			body.winner();
 			outLemming(body);
-		} else if (body.getFall()==3){
-			body.setOrientation(Orientation.DEAD);
-			killLemming(body);
-		// if the body is on a land nothing to do except disable parachute
+		// if the body is on a land nothing to do except disable parachute and stop climbing
 		} else if (isLand(x,y+1)){
 			body.disactivateParachute();
-			
+			body.stopClimbing();
 		// if the body is falling
 		} else if (accessibleCase(x, y+1) && !body.isClimbing() && !body.statusParachute()){
 			body.fall();
 			body.setOrientation(Orientation.DOWN);
-		// body climbing, if the cases up are free, get to the right one, or the left one if right one is not accessible
-		} else if (accessibleCase(x, y-1) && body.isClimbing()){
-			
-			if (x-1 >= 0 && x+1<= grid.get(x).size() && y-1 >= 0){
-				
-				if(accessibleCase(x, y-1) && accessibleCase(x+1, y-1) && isLand(x+1,y)){
-					grid.get(x + 1).get(y - 1).getListOfBodyInCell().add(body);
-					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x+1);
-					body.setY(y-1);
-					body.setOrientation(Orientation.RIGHT);
-					
-				} else if (accessibleCase(x, y-1) && accessibleCase(x-1, y-1) && isLand(x-1,y)){
-					grid.get(x - 1).get(y - 1).getListOfBodyInCell().add(body);
-					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x-1);
-					body.setY(y-1);
-					body.setOrientation(Orientation.LEFT);
-				}
-			}
+			 if (body.getFall()==3){
+				body.setOrientation(Orientation.DEAD);
+				killLemming(body);
+			 }
 		}
 	}
 	public void fallingBody (LemmingBody body, int p){
@@ -342,18 +343,93 @@ public class EnvironmentModel {
 		// False = Forward
 		int x = body.getX();
 		int y = body.getY();
-		if (type){
-			
-		}
-		if (canClimb(x, y)) {
-			grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setY(y - 1);
-			body.setOrientation(Orientation.UP);
-			statusBody(body);
-			return true;
-		} else {
-			return false;
+		
+		if (type){ //BACKWARD
+			if(body.getOrientation().equals(Orientation.LEFT)){ //Try Jump Right First
+				if(canJump(x,y, false)){ // Try to jump right
+					grid.get(x+1).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setX(x+1);
+					body.setY(y-1);
+					body.setOrientation(Orientation.RIGHT);
+					statusBody(body);
+					return true;
+				} else if (canClimb(x,y)){ // Try to climb
+					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setY(y-1);
+					body.setOrientation(Orientation.RIGHT);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else { //Stay where you are
+					body.startClimbing();
+					return false;
+				}
+			} else {
+				if(canJump(x,y, true)){ // Try to jump left
+					grid.get(x-1).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setX(x-1);
+					body.setY(y-1);
+					body.setOrientation(Orientation.LEFT);
+					statusBody(body);
+					return true;
+				} else if (canClimb(x,y)){ // Try to climb
+					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setY(y-1);
+					body.setOrientation(Orientation.LEFT);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else { //Stay where you are
+					body.startClimbing();
+					return false;
+				}
+			}
+		} else { //FORWARD
+			if(body.getOrientation().equals(Orientation.RIGHT)){ //Try Jump Right First
+				if(canJump(x,y, false)){ // Try to jump right
+					grid.get(x+1).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setX(x+1);
+					body.setY(y-1);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else if (canClimb(x,y)){ // Try to climb
+					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setY(y-1);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else { //Stay where you are
+					body.startClimbing();
+					return false;
+				}
+			} else {
+				if(canJump(x,y, true)){ // Try to jump left
+					grid.get(x-1).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setX(x-1);
+					body.setY(y-1);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else if (canClimb(x,y)){ // Try to climb
+					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+					grid.get(x).get(y).getListOfBodyInCell().remove(p);
+					body.setY(y-1);
+					body.startClimbing();
+					statusBody(body);
+					return true;
+				} else { //Stay where you are
+					body.startClimbing();
+					return false;
+				}
+			}
 		}
 	}
 	
@@ -376,6 +452,30 @@ public class EnvironmentModel {
 		}
 	}
 	
+	// Jump is go on diagonal left-up or right-up
+	public boolean canJump(int x, int y, boolean side){
+		//TRUE  = LEFT
+		//FALSE = RIGHT
+		if (side){ // LEFT
+			if (x > 0 && y > 0){
+				if (accessibleCase(x, y-1) && isLand(x-1, y) && accessibleCase(x-1, y-1)){
+					return true;
+				} else {
+					return false;
+				}
+			} else return false;
+			
+		} else {   // RIGHT
+			if (x < grid.size() && y > 0){
+				if (accessibleCase(x, y-1) && isLand(x+1, y) && accessibleCase(x-1, y+1)){
+					return true;
+				} else {
+					return false;
+				}
+			} else return false;
+		}
+	}
+
 	public boolean isLand (int x, int y){
 		if (grid.get(x).get(y).getType().equals(TypeObject.HALF) || grid.get(x).get(y).getType().equals(TypeObject.LAND)){
 			return true;
@@ -397,61 +497,6 @@ public class EnvironmentModel {
 	
 	public void outLemming(LemmingBody body){
 		addOut();
-	}
-	
-	public boolean moveLeft(LemmingBody body, int p){
-		int x = body.getX();
-		int y = body.getY();
-		if ((x > 0) && accessibleCase(x-1, y)) {
-			grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setX(x - 1);
-			body.setOrientation(Orientation.LEFT);
-			statusBody(body);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean moveRight(LemmingBody body, int p){
-		int x = body.getX();
-		int y = body.getY();
-		if ((x < grid.size()) && accessibleCase(x+1, y)) {
-			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setX(x + 1);
-			body.setOrientation(Orientation.RIGHT);
-			statusBody(body);
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
-	
-	// Jump is go on diagonal left-up or right-up
-	public boolean canJump(int x, int y, boolean side){
-		//TRUE  = LEFT
-		//FLASE = RIGHT
-		if (side){ // LEFT
-			if (x > 0 && y > 0){
-				if (accessibleCase(x, y-1) && isLand(x-1, y) && accessibleCase(x-1, y-1)){
-					return true;
-				} else {
-					return false;
-				}
-			} else return false;
-			
-		} else {   // RIGHT
-			if (x < grid.size() && y > 0){
-				if (accessibleCase(x, y-1) && isLand(x+1, y) && accessibleCase(x-1, y+1)){
-					return true;
-				} else {
-					return false;
-				}
-			} else return false;
-		}
 	}
 	
 }

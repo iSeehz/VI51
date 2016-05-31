@@ -11,6 +11,7 @@ public class LemmingBody extends EnviromnentObject{
 	private Orientation orientation;
 	private boolean parachute;
 	private boolean climbing;
+	private boolean winner;
 	
 	private Integer id;
 	
@@ -28,7 +29,8 @@ public class LemmingBody extends EnviromnentObject{
 		this.fall = 0;
 		this.orientation = Orientation.RIGHT;
 		this.parachute = false;
-		this.climbing;
+		this.climbing = false;
+		this.winner = false;
 	}
 	
 	public LemmingBody(int id ,int x, int y, int f, boolean p) {
@@ -42,6 +44,8 @@ public class LemmingBody extends EnviromnentObject{
 		
 		this.fall = f;
 		this.parachute = p;
+		this.climbing = false;
+		this.winner = false;
 	}
 		
 	public int getId() {
@@ -104,6 +108,14 @@ public class LemmingBody extends EnviromnentObject{
 	
 	public void stopClimbing(){
 		this.climbing = false;
+	}
+	
+	public void winner(){
+		this.winner = true;
+	}
+	
+	public boolean isWinner(){
+		return this.winner;
 	}
 		
 }
