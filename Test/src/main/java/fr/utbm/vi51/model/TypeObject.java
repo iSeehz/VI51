@@ -5,5 +5,6 @@ public enum TypeObject {
 	LAND,
 	HALF,
 	ENTRY,
-	EXIT
+	EXIT,
+	WALL
 }

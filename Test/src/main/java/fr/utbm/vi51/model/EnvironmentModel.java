@@ -103,76 +103,101 @@ public class EnvironmentModel {
 		 * 15 06 12
 		 *    07
 		 */
-		List<Percept> allPerception = null;
+		List<Percept> allPerception = new ArrayList<Percept>();
 		
 		LemmingBody body = searchBody(id).getBody();
 		int x = body.getX();
 		int y = body.getY();
-		
+		System.out.println(x + ":" + y);
+//		System.out.println(grid.get(x).get(y+1).getType());
 		allPerception.add(new Percept(grid.get(x).get(y)));
 		
 		//left
-		for (int i = 1; i == body.getFovLeft(); i++){
-			if(x - i >= 0) {
-				allPerception.add(new Percept(grid.get(x - i).get(y)));
+		for (int i = 1; i <= body.getFovLeft(); i++){
+			if(y - i >= 0) {
+				allPerception.add(new Percept(grid.get(x).get(y - i)));
+			}else{
+				
+				allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 			}
 		}
 		
 		//up
-		for (int j = 1; j == body.getFovUp(); j++) {
-				if (y - j >= 0) {
-					allPerception.add(new Percept(grid.get(x).get(y - j)));
+		for (int j = 1; j <= body.getFovUp(); j++) {
+				if (x - j >= 0) {
+					allPerception.add(new Percept(grid.get(x - j).get(y)));
+				}else{
+					
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 		}
 		
 		//right
-		for (int i = 1; i == body.getFovRight(); i++){
-			if(x - i <= grid.size()) {
-				allPerception.add(new Percept(grid.get(x + i).get(y)));
+		for (int i = 1; i <= body.getFovRight(); i++){
+			if(y + i < grid.get(x).size()) {
+				allPerception.add(new Percept(grid.get(x).get(y + i)));
+			}else{
+				
+				allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 			}
 		}
 		
 		//down
-		for (int j = 1; j == body.getFovUnder(); j++) {
-			if (y + j <= grid.get(x).size()) {
-				allPerception.add(new Percept(grid.get(x).get(y + j)));
+		for (int j = 1; j <= body.getFovUnder(); j++) {
+			if (x + j < grid.size()) {
+				allPerception.add(new Percept(grid.get(x + j).get(y)));
+			}else{
+				
+				allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 			}
 		}			
 				
 				
 				
 		//left up
-		for (int i = 1; i == body.getFovLeft(); i++) {
-			for (int j = 1; j == body.getFovUp(); j++) {
-				if (x - i >= 0 && y - i >= 0) {
-					allPerception.add(new Percept(grid.get(x - i).get(y - j)));
+		for (int i = 1; i <= body.getFovLeft(); i++) {
+			for (int j = 1; j <= body.getFovUp(); j++) {
+				if (x - j >= 0 && y - i >= 0) {
+					allPerception.add(new Percept(grid.get(x - j).get(y - i)));
+				}else{
+					
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 			}
 		}
 		
 		//right up
-		for (int i = 1; i == body.getFovRight(); i++) {
-			for (int j = 1; j == body.getFovUp(); j++) {
-				if (x + i < grid.size() && y - i >= 0) {
-					allPerception.add(new Percept(grid.get(x + i).get(y - j)));
+		for (int i = 1; i <= body.getFovRight(); i++) {
+			for (int j = 1; j <= body.getFovUp(); j++) {
+				if (x - j >= 0 && y + i <= grid.get(x).size()) {
+					allPerception.add(new Percept(grid.get(x - j).get(y + i)));
+				}else{
+					
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 			}
 		}
 
 		//right down
-		for (int i = 1; i == body.getFovRight(); i++) {
-			for (int j = 0; j == body.getFovUnder(); j++) {
-				if (i + j <= body.getFovUnder() && x + i > grid.size() && y - i < grid.get(x).size()) {
-					allPerception.add(new Percept(grid.get(x + i).get(x + j)));
+		for (int i = 1; i <= body.getFovRight(); i++) {
+			for (int j = 1; j <= body.getFovUnder()-1; j++) {
+				if ( (x + j) < grid.size() && (y + i) < grid.get(x).size()) {
+					allPerception.add(new Percept(grid.get(x + j).get(y + i)));
+				}else{
+					
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 			}
 		}
 		
 		//left down
-		for (int i = 1; i == body.getFovLeft(); i++) {
-			for (int j = 1; j == body.getFovUnder(); j++) {
-				if (i + j <= body.getFovUnder() && x - i >= 0 && y - i < grid.get(x).size()) {
-					allPerception.add(new Percept(grid.get(x - i).get(x + j)));
+		for (int i = 1; i <= body.getFovLeft(); i++) {
+			for (int j = 1; j <= body.getFovUnder()-1; j++) {
+				if ( (x + j) < grid.size() && (y - i) >=0) {
+					allPerception.add(new Percept(grid.get(x + j).get(y - i)));
+				}else{
+					
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 			}
 		}
