@@ -9,16 +9,17 @@ import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.model.Orientation
-import fr.utbm.vi51.model.TypeObject
 import fr.utbm.vi51.model.Percept
+import fr.utbm.vi51.model.PossibleMove
+import fr.utbm.vi51.model.TypeObject
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Destroy
 import io.sarl.core.Initialize
 import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
 import java.util.List
-import io.sarl.core.Destroy
 
 /**
  * @author tiboty
@@ -29,6 +30,10 @@ agent LemmingAgent {
 	var presentation:boolean
 	var index:int
 	var percept:List<Percept>
+	var previousAction:PossibleMove
+	var previousState:int
+	
+	
 	on Initialize{
 		presentation = false
 	}
@@ -46,10 +51,16 @@ agent LemmingAgent {
 	
 	on PerceptionEvent {
 		
-		println("bien reçu capitaine !")
+		//println("bien reçu capitaine !")
 		this.percept = occurrence.perceptions
 		//chose how to do !!
 		
+		var currentSate:int = computeState(0, Orientation.LEFT,true)
+		//function eval
+		//vector of possibleMove
+		//currentAction : choice of the possibleMove by the agent
+		//previousState = currentState
+		//previousAction = currentAction
 		
 		// return the choice
 		//emit(new Influence(PossibleMove.RIGHT),Scopes::addresses(occurrence.source))
@@ -59,7 +70,7 @@ agent LemmingAgent {
 		var NF = (fatigue<3)
 		var F = (fatigue<5 && fatigue>2)
 		var FF = (fatigue>4)
-		var I = (percept.get(1).getType()==TypeObject.LAND)
+		var I = (percept.get(4).getType()==TypeObject.LAND)
 		var A = (percept.get(2).getType()==TypeObject.LAND)
 
 		var E = ((percept.get(7).getType()==TypeObject.LAND) || (percept.get(6).getType()==TypeObject.LAND)|| (percept.get(5).getType()==TypeObject.LAND))

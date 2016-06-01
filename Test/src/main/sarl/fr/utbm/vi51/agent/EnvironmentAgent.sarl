@@ -156,7 +156,7 @@ agent EnvironmentAgent {
 		while(keySetIterator.hasNext()){
 			  var key:Address = keySetIterator.next();
 //			  println("key: " + " value: " + (this.mapOfGUID.get(key).intValue()-1))
-//********************************************** bug here *************************************//
+//********************************************** check lemming agent to include the perception and ... etc *************************************//
 //			  emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()-1)), Scopes::addresses(key))
 			emit(new PerceptionEvent(new ArrayList<Percept>), Scopes::addresses(key))
 		}
