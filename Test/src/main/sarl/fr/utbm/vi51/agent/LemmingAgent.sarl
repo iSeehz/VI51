@@ -55,11 +55,12 @@ agent LemmingAgent {
 		this.percept = occurrence.perceptions
 		//chose how to do !!
 		println(this.percept.size())
-		for(p  : this.percept){
-			
-			println(this.percept.indexOf(p) + " :" +p.getType())
-		}
-		//var currentSate:int = computeState(0, Orientation.LEFT,true)
+//		for(p  : this.percept){
+//			
+//			println(this.percept.indexOf(p) + " :" +p.getType())
+//		}
+		var currentState:int = computeState(0, Orientation.RIGHT,false)
+		println(currentState)
 		//function eval
 		//vector of possibleMove
 		//currentAction : choice of the possibleMove by the agent
