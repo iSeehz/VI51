@@ -66,7 +66,7 @@ agent LemmingAgent {
 //			println(this.percept.indexOf(p) + " :" +p.getType())
 //		}
 		var currentState:int = computeState(0, Orientation.RIGHT,false)
-//		println(currentState)
+		println("State :" +currentState)
 		if(previousAction!=null && previousState!=-1){
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
 		}

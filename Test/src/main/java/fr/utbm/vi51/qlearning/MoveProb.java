@@ -74,7 +74,7 @@ public class MoveProb {
 		random = Math.random() * totalWeigth;
 
 		while(randomIndex==-1){
-			random -= possibleChoice[count];
+			random -= Math.max(possibleChoice[count], 0);
 			if(random<=0.0d){
 				randomIndex = count;
 			}
