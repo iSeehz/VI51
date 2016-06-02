@@ -1,5 +1,9 @@
 package fr.utbm.vi51.qlearning;
 
+import java.util.NavigableMap;
+import java.util.Random;
+import java.util.TreeMap;
+
 import fr.utbm.vi51.model.PossibleMove;
 import fr.utbm.vi51.parser.JSONReadAndWriteQLearning;
 
@@ -8,22 +12,18 @@ public class MoveProb {
 	private Long ProbaMat[][];
 	private Long EvalMat[][];
 	private JSONReadAndWriteQLearning json;
-
+	private PossibleMove [] convertingIntToPossibleMove = {PossibleMove.PARACHUTE,PossibleMove.MOVEFORWARD,PossibleMove.MOVEBACKWARD,
+			PossibleMove.CLIMBFORWARD,PossibleMove.CLIMBBACKWARD,PossibleMove.DIG};
+	
 	public MoveProb() {
 		this.json = new JSONReadAndWriteQLearning();
 		this.ProbaMat = json.getProbabilities();
 		this.EvalMat = json.getEvaluation();
+		
 	}
 
 	public Long[] getProba(int state) {
 		
-		Long[] tmp = ProbaMat[state];
-		
-//		for (int i = 0 ;i<tmp.length;i++){
-//			System.out.println(tmp[i]);
-//
-//		}
-//		
 		return ProbaMat[state];
 	}
 
@@ -60,6 +60,29 @@ public class MoveProb {
 		json.writeFile();
 	}
 
+	public PossibleMove randomWeigthChoice(int state){
+		
+		double totalWeigth = 0;
+		int randomIndex = -1;
+		int count = 0;
+		double random;
+		
+		Long [] possibleChoice = this.getProba(state);
+		for(int i=0;i<possibleChoice.length;i++){
+			totalWeigth += possibleChoice[i];
+		}
+		random = Math.random() * totalWeigth;
+
+		while(randomIndex==-1){
+			random -= possibleChoice[count];
+			if(random<=0.0d){
+				randomIndex = count;
+			}
+			count++;
+		}
+        return convertingIntToPossibleMove[randomIndex];
+
+	}
 }
 
 

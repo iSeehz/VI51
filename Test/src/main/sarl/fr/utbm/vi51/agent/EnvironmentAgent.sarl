@@ -213,19 +213,17 @@ agent EnvironmentAgent {
 		// if all the agents have given their influences
 		if(this.moveInfluences.size() == this.numberOfLemmingsMinds){
 			
-			//do checks and move bodies
-			var l:List<Point> = new ArrayList<Point>()
-			if(	this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().size() != 0){
-				
-				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()+1).getListOfBodyInCell().add(this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().get(0))
-				l.add(new Point(this.environment.getEntry().getX(),this.environment.getEntry().getY()+1))
-				this.environment.getGrid().get(this.environment.getEntry().getX()).get(this.environment.getEntry().getY()).getListOfBodyInCell().remove(0)
-				l.add(new Point(this.environment.getEntry().getX(),this.environment.getEntry().getY()))
+			//move bodies
+			var keySetIterator:Iterator<Integer>  = this.moveInfluences.keySet().iterator()
+			while(keySetIterator.hasNext()){
+			  var key:Integer = keySetIterator.next();
+			  println("key: " + key + " value: " + this.moveInfluences.get(key))
+			  this.environment.moveBody(key, this.moveInfluences.get(key))
 			}
 			this.moveInfluences.clear();
-			
+			wake(new ResetGrid)
 			//** to do check if the list contains distinct points
-			wake(new MAJGrid(l))
+			//wake(new MAJGrid(l))
 //			Thread.sleep(1000)
 			
 		}

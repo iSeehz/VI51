@@ -20,6 +20,9 @@ import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
 import java.util.List
+import java.util.NavigableMap
+import java.util.Random
+import java.util.TreeMap
 import fr.utbm.vi51.^event.Influence
 
 /**
@@ -67,21 +70,15 @@ agent LemmingAgent {
 		if(previousAction!=null && previousState!=-1){
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
 		}
-		var possibleChoice:Long[]  = occurrence.moveProb.getProba(currentState)
-		
-		//currentAction : choice of the possibleMove by the agent
-		//previousState = currentState
-		//previousAction = currentAction
+		var currentAction:PossibleMove = occurrence.moveProb.randomWeigthChoice(currentState)
+		println("choix : " + currentAction)
+		this.previousState = currentState
+		this.previousAction = currentAction
 		
 		// return the choice
-		//emit(new Influence(PossibleMove.MOVEFORWARD),Scopes::addresses(occurrence.source))
+		emit(new Influence(currentAction),Scopes::addresses(occurrence.source))
 	}
-	
-	def decide(possibleChoice:Long[] ):int{
 		
-		return 0		
-	}
-	
 	def computeState(fatigue:int,ori:Orientation,climbing:boolean):int{
 		var NF = (fatigue<3)
 		var F = (fatigue<5 && fatigue>2)
