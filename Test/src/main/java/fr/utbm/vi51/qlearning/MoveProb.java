@@ -11,16 +11,23 @@ public class MoveProb {
 
 	public MoveProb() {
 		this.json = new JSONReadAndWriteQLearning();
-		
 		this.ProbaMat = json.getProbabilities();
 		this.EvalMat = json.getEvaluation();
 	}
 
 	public Long[] getProba(int state) {
+		
+		Long[] tmp = ProbaMat[state];
+		
+//		for (int i = 0 ;i<tmp.length;i++){
+//			System.out.println(tmp[i]);
+//
+//		}
+//		
 		return ProbaMat[state];
 	}
 
-	public void reevaluate(int prevstate, PossibleMove prevaction, int currstate) {
+	public synchronized  void reevaluate(int prevstate, PossibleMove prevaction, int currstate) {
 		long max_Val = 0;
 		int action_Val;
 		for (int i = 0; i < ProbaMat[currstate].length; i++) {
@@ -54,3 +61,5 @@ public class MoveProb {
 	}
 
 }
+
+

@@ -13,7 +13,6 @@ import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.KillLemmingsAgents
 import fr.utbm.vi51.^event.MAJGrid
-import fr.utbm.vi51.^event.MAJTable
 import fr.utbm.vi51.^event.Manager
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.ResetAgentEnvironment
@@ -25,6 +24,7 @@ import fr.utbm.vi51.^event.TerminateSimulation
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
+import fr.utbm.vi51.model.Orientation
 import fr.utbm.vi51.model.PossibleMove
 import fr.utbm.vi51.qlearning.MoveProb
 import io.sarl.core.AgentTask
@@ -62,7 +62,6 @@ agent EnvironmentAgent {
 	var currentLevel:String
 	var nextLevel:String
 	var qlearning:MoveProb
-	//add list of perceptions in a map qlearning
 	
 	on Initialize{
 		this.currentLevel = "lab_parachute.txt"
@@ -72,7 +71,6 @@ agent EnvironmentAgent {
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
 		this.qlearning = new MoveProb()
-		this.qlearning.write()
 	}
 	on CreateLemmingsAgent{
 		
@@ -157,11 +155,10 @@ agent EnvironmentAgent {
 		var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
 		while(keySetIterator.hasNext()){
 			  var key:Address = keySetIterator.next();
-//			  println("key: " + " value: " + (this.mapOfGUID.get(key).intValue()-1))
 //********************************************** check lemming agent to include the perception and ... etc *************************************//
 //			println(this.mapOfGUID.get(key).intValue())
-		    emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue())), Scopes::addresses(key))
-			//emit(new PerceptionEvent(new ArrayList<Percept>), Scopes::addresses(key))
+		    emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))
+
 		}
 	}
 	
@@ -256,7 +253,7 @@ agent EnvironmentAgent {
 	
 	on Manager{
 		//********slow down the process
-		Thread.sleep(1000)
+		//Thread.sleep(1000)
 		if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
 		}else if(this.state == SimulationState.STEP_BY_STEP){
@@ -265,9 +262,6 @@ agent EnvironmentAgent {
 		
 	}
 	
-	on MAJTable {
-		
-	}
 	
 	on MAJGrid{//maj gui
 		

@@ -46,6 +46,7 @@ public class FrameProject extends JFrame {
 		addWindowListener(new WindowAdapter() {
 		  	public void windowClosing(WindowEvent e) {
 		  		controller.preparationToQuit();
+		  		System.exit(0);
 		  	}	
 		} );
 		

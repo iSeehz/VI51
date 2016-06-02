@@ -20,6 +20,7 @@ import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
 import java.util.List
+import fr.utbm.vi51.^event.Influence
 
 /**
  * @author tiboty
@@ -36,6 +37,8 @@ agent LemmingAgent {
 	
 	on Initialize{
 		presentation = false
+		previousAction = null
+		previousState = -1
 	}
 	
 	on AreYouAwoken[!presentation]{
@@ -61,14 +64,22 @@ agent LemmingAgent {
 //		}
 		var currentState:int = computeState(0, Orientation.RIGHT,false)
 //		println(currentState)
-		//function eval
-		//vector of possibleMove
+		if(previousAction!=null && previousState!=-1){
+			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
+		}
+		var possibleChoice:Long[]  = occurrence.moveProb.getProba(currentState)
+		
 		//currentAction : choice of the possibleMove by the agent
 		//previousState = currentState
 		//previousAction = currentAction
 		
 		// return the choice
-		//emit(new Influence(PossibleMove.RIGHT),Scopes::addresses(occurrence.source))
+		//emit(new Influence(PossibleMove.MOVEFORWARD),Scopes::addresses(occurrence.source))
+	}
+	
+	def decide(possibleChoice:Long[] ):int{
+		
+		return 0		
 	}
 	
 	def computeState(fatigue:int,ori:Orientation,climbing:boolean):int{

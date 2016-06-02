@@ -108,7 +108,7 @@ public class EnvironmentModel {
 		LemmingBody body = searchBody(id).getBody();
 		int x = body.getX();
 		int y = body.getY();
-		System.out.println(x + ":" + y);
+//		System.out.println(x + ":" + y);
 //		System.out.println(grid.get(x).get(y+1).getType());
 		allPerception.add(new Percept(grid.get(x).get(y)));
 		

@@ -3,7 +3,9 @@
  */
 package fr.utbm.vi51.^event
 
+import fr.utbm.vi51.model.Orientation
 import fr.utbm.vi51.model.Percept
+import fr.utbm.vi51.qlearning.MoveProb
 import java.util.List
 
 /**
@@ -13,8 +15,17 @@ import java.util.List
 event PerceptionEvent{
 	
 	var perceptions: List<Percept>
-	new (perceptions : List<Percept>){
+	var fatigue:int
+	var orientation:Orientation
+	var climbing:boolean
+	var moveProb:MoveProb
+	
+	new (perceptions : List<Percept>, fatigue:int,orientation:Orientation,climbing:boolean, moveProb:MoveProb ){
 		
 		this.perceptions = perceptions
+		this.fatigue = fatigue
+		this.orientation = orientation
+		this.climbing = climbing
+		this.moveProb = moveProb
 	}
 }
