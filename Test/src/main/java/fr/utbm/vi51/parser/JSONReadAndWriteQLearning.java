@@ -1,7 +1,9 @@
 package fr.utbm.vi51.parser;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -79,6 +81,41 @@ public class JSONReadAndWriteQLearning {
 	}
 	
 	public void writeFile(){//in Proba.txt
+		
+		
+		 JSONObject data = new JSONObject();  
+	        data.put("Height", this.probabilities.length);  
+	        data.put("Width", this.probabilities[0].length);  
+	  
+	        
+	        List<JSONArray> line = new JSONArray();  
+	        for (int i = 0 ;i<this.probabilities.length;i++){
+	        	JSONArray column = new JSONArray();
+	        	for(int j = 0 ; j<this.probabilities[0].length;j++){
+	     
+	        		column.add(this.probabilities[i][j]);
+	        	}
+	        	line.add(column);
+	        }
+	        data.put("Content", line);  
+	  
+	        try {  
+	              
+	            // Writing to a file  
+	            File file=new File(System.getProperty("user.dir") + "/src/main/resources/fr/utbm/vi51/qlearning/test.txt");  
+	            file.createNewFile();  
+	            FileWriter fileWriter = new FileWriter(file);  
+	            System.out.println("Writing JSON object to file");  
+	            System.out.println("-----------------------");  
+	            System.out.print(data);  
+	  
+	            fileWriter.write(data.toJSONString());  
+	            fileWriter.flush();  
+	            fileWriter.close();  
+	  
+	        } catch (IOException e) {  
+	            e.printStackTrace();  
+	        }  
 		
 		
 	}
