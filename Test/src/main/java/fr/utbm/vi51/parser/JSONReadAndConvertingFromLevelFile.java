@@ -14,7 +14,7 @@ import fr.utbm.vi51.model.Cell;
 import fr.utbm.vi51.model.TypeObject;
 
 
-public class JSONReadAndConvertingFromFile {
+public class JSONReadAndConvertingFromLevelFile {
 
 	/**
 	 * Parse the json.txt and converting the data to gridModel 
@@ -32,7 +32,7 @@ public class JSONReadAndConvertingFromFile {
 	private List<List<Long>> content;
 	private Point entryPosition;
 	private Point exitPosition;
-	public JSONReadAndConvertingFromFile(String level) {
+	public JSONReadAndConvertingFromLevelFile(String level) {
 		
 		JSONParser parser = new JSONParser();
 		

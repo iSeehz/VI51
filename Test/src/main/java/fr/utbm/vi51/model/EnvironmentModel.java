@@ -3,7 +3,7 @@ package fr.utbm.vi51.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.utbm.vi51.parser.JSONReadAndConvertingFromFile;
+import fr.utbm.vi51.parser.JSONReadAndConvertingFromLevelFile;
 
 public class EnvironmentModel {
 
@@ -52,7 +52,7 @@ public class EnvironmentModel {
 	public void setGrid(String level, int numberOfBody) {
 		this.listOfBody = new ArrayList<LemmingBody>();
 		this.numberOfBody = numberOfBody;
-		JSONReadAndConvertingFromFile js = new JSONReadAndConvertingFromFile(level);
+		JSONReadAndConvertingFromLevelFile js = new JSONReadAndConvertingFromLevelFile(level);
 		this.grid = js.convertingContentForGame();
 		if (js.getEntryPosition() != null)
 			this.entry = this.grid.get((int) js.getEntryPosition().getX()).get((int) js.getEntryPosition().getY());

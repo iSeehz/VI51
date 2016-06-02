@@ -25,8 +25,8 @@ import fr.utbm.vi51.^event.TerminateSimulation
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
-import fr.utbm.vi51.model.Percept
 import fr.utbm.vi51.model.PossibleMove
+import fr.utbm.vi51.parser.JSONReadAndWriteQLearning
 import io.sarl.core.AgentTask
 import io.sarl.core.Behaviors
 import io.sarl.core.DefaultContextInteractions
@@ -61,7 +61,7 @@ agent EnvironmentAgent {
 	var moveInfluences:HashMap<Integer, PossibleMove>
 	var currentLevel:String
 	var nextLevel:String
-	
+	var j:JSONReadAndWriteQLearning
 	//add list of perceptions in a map qlearning
 	
 	on Initialize{
@@ -71,6 +71,8 @@ agent EnvironmentAgent {
 		wake(new ResetAgentEnvironment())
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
+		
+		this.j = new JSONReadAndWriteQLearning();
 	}
 	on CreateLemmingsAgent{
 		
