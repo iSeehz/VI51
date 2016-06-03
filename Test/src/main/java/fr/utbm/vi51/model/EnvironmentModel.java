@@ -160,8 +160,9 @@ public class EnvironmentModel {
 		//right up
 		for (int i = 1; i <= body.getFovRight(); i++) {
 			for (int j = 1; j <= body.getFovUp(); j++) {
-				if (x - j >= 0 && y + i <= grid.get(x).size()) {
-					allPerception.add(new Percept(grid.get(x - j).get(y + i)));
+				if (x - j >= 0) {
+					System.out.println(x-j + " " + y+i);// a vérif
+					allPerception.add(new Percept(grid.get(x - j).get((y + i)%grid.get(x).size())));
 				}else{
 					
 					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
