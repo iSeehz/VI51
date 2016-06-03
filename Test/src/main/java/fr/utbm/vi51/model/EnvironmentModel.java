@@ -291,10 +291,11 @@ public class EnvironmentModel {
 	public boolean moveLeft(LemmingBody body, int p){
 		int x = body.getX();
 		int y = body.getY();
-		if ((x > 0) && accessibleCase(x, y-1)) {
-			grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+		int futurY = (y-1+grid.get(x).size())%grid.get(x).size();
+		if ((x > 0) && accessibleCase(x, futurY)) {
+			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setY(y-1);
+			body.setY(futurY);
 			body.setOrientation(Orientation.LEFT);
 			statusBody(body);
 			return true;
@@ -308,9 +309,9 @@ public class EnvironmentModel {
 		int y = body.getY();
 		int futurY = (y+1)%grid.get(x).size();
 		if ( accessibleCase(x, futurY)) {
-			grid.get(x).get(y+1).getListOfBodyInCell().add(body);
+			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setY(y + 1);
+			body.setY(futurY);
 			body.setOrientation(Orientation.RIGHT);
 			statusBody(body);
 			return true;
