@@ -306,7 +306,8 @@ public class EnvironmentModel {
 	public boolean moveRight(LemmingBody body, int p){
 		int x = body.getX();
 		int y = body.getY();
-		if ((x < grid.size()) && accessibleCase(x, y+1)) {
+		int futurY = (y+1)%grid.get(x).size();
+		if ( accessibleCase(x, futurY)) {
 			grid.get(x).get(y+1).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			body.setY(y + 1);
