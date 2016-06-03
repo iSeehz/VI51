@@ -205,7 +205,7 @@ public class EnvironmentModel {
 
 		int x = body.getX();
 		int y = body.getY();
-		
+		System.out.println(x + " :" + y);
 		// check if the body is on a land
 		if (isLand(x+1, y)){
 		//all moves allowed			
@@ -263,7 +263,7 @@ public class EnvironmentModel {
 		// body parachute
 		} else if (move.equals(PossibleMove.PARACHUTE)){
 			if (x +1 < grid.size()){
-				System.out.println("premier");
+				System.out.println("parachute");
 				body.activateParachute();
 				fallingBody(body, p);
 				statusBody(body);
@@ -273,7 +273,6 @@ public class EnvironmentModel {
 			}
 		} else {
 			if (x +1 < grid.size()){
-				System.out.println("en chemin");
 				if (!body.statusParachute()){
 					body.fall();
 				}
@@ -458,6 +457,7 @@ public class EnvironmentModel {
 	}
 	
 	public boolean accessibleCase (int x, int y){
+		System.out.println("accessible : " +x+","+y);
 		if (grid.get(x).get(y).getType().equals(TypeObject.EMPTY) || grid.get(x).get(y).getType().equals(TypeObject.ENTRY) || grid.get(x).get(y).getType().equals(TypeObject.EXIT)){
 			return true;
 		} else {

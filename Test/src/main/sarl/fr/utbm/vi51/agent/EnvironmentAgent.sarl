@@ -251,7 +251,7 @@ agent EnvironmentAgent {
 	
 	on Manager{
 		//********slow down the process
-		//Thread.sleep(1000)
+		Thread.sleep(1000)
 		if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
 		}else if(this.state == SimulationState.STEP_BY_STEP){
@@ -272,7 +272,8 @@ agent EnvironmentAgent {
 	on ResetGrid [this.gui != null]{
 		
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
-
+		//a supprimer quand le smart sera posé
+		wake(new Manager)
 	}
 	
 	
