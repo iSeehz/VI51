@@ -303,10 +303,10 @@ public class EnvironmentModel {
 	public boolean moveRight(LemmingBody body, int p){
 		int x = body.getX();
 		int y = body.getY();
-		if ((x < grid.size()) && accessibleCase(x+1, y)) {
-			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+		if ((x < grid.size()) && accessibleCase(x, y+1)) {
+			grid.get(x).get(y+1).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setX(x + 1);
+			body.setY(y + 1);
 			body.setOrientation(Orientation.RIGHT);
 			statusBody(body);
 			return true;
@@ -327,7 +327,7 @@ public class EnvironmentModel {
 			body.winner();
 			outLemming(body);
 		// if the body is on a land nothing to do except disable parachute and stop climbing
-		} else if (isLand(x,y+1)){
+		} else if (isLand(x+1,y)){
 			if (body.getOrientation().equals(Orientation.DOWN)){
 				if(body.isClimbing()){
 					body.increaseFatigue();
@@ -338,7 +338,7 @@ public class EnvironmentModel {
 				}		
 			}
 		// if the body is falling
-		} else if (accessibleCase(x, y+1) && !body.isClimbing() && !body.statusParachute()){
+		} else if (accessibleCase(x+1, y) && !body.isClimbing() && !body.statusParachute()){
 			body.fall();
 			body.setOrientation(Orientation.DOWN);
 			 if (body.getFall()==3){
@@ -353,10 +353,10 @@ public class EnvironmentModel {
 		int y = body.getY();
 		
 		grid.get(x).get(y).getListOfBodyInCell().get(p).setOrientation(Orientation.DOWN);
-		grid.get(x).get(y + 1).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
+		grid.get(x+1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
 	}
-	
+	//************* pas vérif ***********************
 	public boolean climbingBody (LemmingBody body, int p, boolean type){
 		// True  = Backward
 		// False = Forward
