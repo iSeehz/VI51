@@ -261,7 +261,8 @@ public class EnvironmentModel {
 			
 		// body parachute
 		} else if (move.equals(PossibleMove.PARACHUTE)){
-			if (y +1 < grid.get(x).size()){
+			if (x +1 < grid.size()){
+				System.out.println("premier");
 				body.activateParachute();
 				fallingBody(body, p);
 				statusBody(body);
@@ -270,7 +271,8 @@ public class EnvironmentModel {
 				return false;
 			}
 		} else {
-			if (y +1 < grid.get(x).size()){
+			if (x +1 < grid.size()){
+				System.out.println("en chemin");
 				if (!body.statusParachute()){
 					body.fall();
 				}
@@ -355,6 +357,8 @@ public class EnvironmentModel {
 		grid.get(x).get(y).getListOfBodyInCell().get(p).setOrientation(Orientation.DOWN);
 		grid.get(x+1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
+		//ajout pour changer la position du lemming
+		this.listOfBody.get(this.listOfBody.indexOf(body)).setX(x+1);
 	}
 	//************* pas vérif ***********************
 	public boolean climbingBody (LemmingBody body, int p, boolean type){
