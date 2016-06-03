@@ -148,8 +148,8 @@ public class EnvironmentModel {
 		//left up
 		for (int i = 1; i <= body.getFovLeft(); i++) {
 			for (int j = 1; j <= body.getFovUp(); j++) {
-				if (x - j >= 0 && y - i >= 0) {
-					allPerception.add(new Percept(grid.get(x - j).get(y - i)));
+				if (x - j >= 0) {
+					allPerception.add(new Percept(grid.get(x - j).get((y - i+grid.get(x).size())%grid.get(x).size())));
 				}else{
 					
 					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
@@ -291,10 +291,10 @@ public class EnvironmentModel {
 	public boolean moveLeft(LemmingBody body, int p){
 		int x = body.getX();
 		int y = body.getY();
-		if ((x > 0) && accessibleCase(x-1, y)) {
-			grid.get(x - 1).get(y).getListOfBodyInCell().add(body);
+		if ((x > 0) && accessibleCase(x, y-1)) {
+			grid.get(x).get(y-1).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			body.setX(x - 1);
+			body.setY(y-1);
 			body.setOrientation(Orientation.LEFT);
 			statusBody(body);
 			return true;
@@ -360,7 +360,7 @@ public class EnvironmentModel {
 		grid.get(x+1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
 		//ajout pour changer la position du lemming
-		this.listOfBody.get(this.listOfBody.indexOf(body)).setX(x+1);
+		body.setX(x+1);
 	}
 	//************* pas vérif ***********************
 	public boolean climbingBody (LemmingBody body, int p, boolean type){
