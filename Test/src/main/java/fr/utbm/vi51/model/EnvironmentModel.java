@@ -198,7 +198,7 @@ public class EnvironmentModel {
 
 	// with an id and a move, the body is moved
 	public boolean moveBody(int id, PossibleMove move) {
-
+		
 		LemmingBody body = searchBody(id).getBody();
 		int p = searchBody(id).getPosition();
 
@@ -206,34 +206,30 @@ public class EnvironmentModel {
 		int y = body.getY();
 		
 		// check if the body is on a land
-		if (isLand(x, y+1)){
+		if (isLand(x+1, y)){
 		//all moves allowed			
-			switch (move.toString()) {
-
-			case "MOVEBACWARD":
+			if(move == PossibleMove.MOVEBACKWARD){
 				body.increaseFatigue();
 				if (body.getOrientation().equals(Orientation.RIGHT)){
 					return moveLeft(body, p);
 				} else{
 					return moveRight(body,p);
 				}
-				
-			case "MOVEFORWARD":
+			}
+			else if(move == PossibleMove.MOVEFORWARD){
 				if (body.getOrientation().equals(Orientation.LEFT)){
 					return moveLeft(body, p);
 				} else{
 					return moveRight(body,p);
 				}
-				
-			case "CLIMBFORWARD":
-				
+			}
+			else if(move == PossibleMove.CLIMBFORWARD){
 				return climbingBody(body, p, false);
-				
-			case "CLIMBBACKWARD":
-				
+			}
+			else if(move == PossibleMove.CLIMBBACKWARD){
 				return climbingBody(body, p, true);			
-
-			case "DIG":
+			}
+			else if(move == PossibleMove.DIG){
 				//the case is full Land
 				if ((y < grid.get(x).size()-1) && (grid.get(x).get(y + 1).getType().equals(TypeObject.LAND))) {
 					grid.get(x).get(y + 1).setType(TypeObject.HALF);
@@ -250,11 +246,8 @@ public class EnvironmentModel {
 				} else {
 					return false;
 				}
-
-			default:
-
-				return false;
 			}
+
 		// body climbing
 		
 		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBFORWARD)){ 
@@ -288,6 +281,7 @@ public class EnvironmentModel {
 				return false;
 			}
 		}
+		return false;
 		
 			
 	}

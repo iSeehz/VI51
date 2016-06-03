@@ -68,6 +68,7 @@ agent LemmingAgent {
 		var currentState:int = computeState(0, Orientation.RIGHT,false)
 		println("State :" +currentState)
 		if(previousAction!=null && previousState!=-1){
+//			*********************************************************************** possible problem with few lemming **********************
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
 		}
 		var currentAction:PossibleMove = occurrence.moveProb.randomWeigthChoice(currentState)
