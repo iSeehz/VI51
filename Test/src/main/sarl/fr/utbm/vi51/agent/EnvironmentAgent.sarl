@@ -285,6 +285,16 @@ agent EnvironmentAgent {
 		
 	}
 	
+	def isFinish():boolean{
+		
+		for (body : this.environment.getListOfBody()){
+			if(!body.isWinner()){
+				return false
+			}
+		}
+		return true
+	}
+	
 	on TerminateSimulation{
 		wake(new KillLemmingsAgents)
 		killMe
