@@ -6,6 +6,7 @@ package fr.utbm.vi51.^agent
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
+import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.PerceptionEvent
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.model.Orientation
@@ -20,10 +21,6 @@ import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
 import java.util.List
-import java.util.NavigableMap
-import java.util.Random
-import java.util.TreeMap
-import fr.utbm.vi51.^event.Influence
 
 /**
  * @author tiboty

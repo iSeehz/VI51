@@ -233,12 +233,12 @@ public class EnvironmentModel {
 			}
 			else if(move == PossibleMove.DIG){
 				//the case is full Land
-				if ((y < grid.get(x).size()-1) && (grid.get(x).get(y + 1).getType().equals(TypeObject.LAND))) {
-					grid.get(x).get(y + 1).setType(TypeObject.HALF);
+				if ( (grid.get(x+1).get(y).getType().equals(TypeObject.LAND))) {
+					grid.get(x+1).get(y).setType(TypeObject.HALF);
 					body.setOrientation(Orientation.DOWN);
 				//the case if half land
-				} else if (grid.get(x).get(y + 1).getType().equals(TypeObject.HALF)) {
-					grid.get(x).get(y + 1).setType(TypeObject.EMPTY);
+				} else if (grid.get(x+1).get(y).getType().equals(TypeObject.HALF)) {
+					grid.get(x+1).get(y).setType(TypeObject.EMPTY);
 					// every body on this case fall
 					for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
 						grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
