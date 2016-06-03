@@ -92,7 +92,7 @@ agent EnvironmentAgent {
 		this.mapOfGUID = new HashMap<Address, Integer>()
 		this.moveInfluences = new HashMap<Integer,PossibleMove>()
 		this.listOfGUID = new ArrayList<Address>()
-		this.environment = new EnvironmentModel(this.nextLevel,this.numberOfLemmingsMinds)
+		this.environment = new EnvironmentModel(this.nextLevel,this.numberOfLemmingsMinds,defaultSpace, defaultAddress)
 		if (this.currentLevel != this.nextLevel){
 			wake(new ChangeLevel(this.nextLevel))
 			this.currentLevel = this.nextLevel
@@ -244,6 +244,7 @@ agent EnvironmentAgent {
 			  	this.listOfGUID.remove(this.listOfGUID.indexOf(key))
 			  	}
 			}
+			wake(new ResetGrid)
 		}
 		
 	

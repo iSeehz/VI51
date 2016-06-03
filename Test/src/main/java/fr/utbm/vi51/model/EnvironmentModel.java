@@ -2,8 +2,14 @@ package fr.utbm.vi51.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import fr.utbm.vi51.event.GarbageAgent;
 import fr.utbm.vi51.parser.JSONReadAndConvertingFromLevelFile;
+import io.sarl.lang.core.Address;
+import io.sarl.lang.core.Event;
+import io.sarl.lang.core.EventSpace;
+import io.sarl.util.Scopes;
 
 public class EnvironmentModel {
 
@@ -15,10 +21,25 @@ public class EnvironmentModel {
 	private int deads = 0;
 	private int out = 0;
 
-	public EnvironmentModel(String level, int numberOfBody) {
+	private final EventSpace space;
+	private final UUID uuid;
+	private final Address address;
+	private final Address addressReceiver;
+	
+	public EnvironmentModel(String level, int numberOfBody,EventSpace space, Address adr) {
+		
+		this.space = space;
+		this.uuid = UUID.randomUUID();
+		this.address = new Address(space.getID(), this.uuid);
+		this.addressReceiver = adr;
 
 		this.setGrid(level, numberOfBody);
 
+	}
+	
+	private void emitEvent(Event event) {
+		event.setSource(this.address);
+		this.space.emit(event, Scopes.addresses(this.addressReceiver));
 	}
 	
 	public void addDead(){
@@ -210,7 +231,7 @@ public class EnvironmentModel {
 		
 		//check if the body is dead
 		if (x==this.grid.size()-1){
-				
+				grid.get(x).get(y).getListOfBodyInCell().remove(p);
 				System.out.println("le body est parti dans l'espace!");
 				killLemming(body);
 		}else
@@ -357,6 +378,8 @@ public class EnvironmentModel {
 			body.setOrientation(Orientation.DOWN);
 			 if (body.getFall()==3){
 				body.setOrientation(Orientation.DEAD);
+				
+				grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 				killLemming(body);
 			 }
 		}
@@ -531,6 +554,7 @@ public class EnvironmentModel {
 		addDead();
 		//destruct the body
 		this.listOfBody.remove(this.listOfBody.indexOf(body));
+		this.emitEvent(new GarbageAgent(body.getId()));
 	}
 	
 	public void outLemming(LemmingBody body){
