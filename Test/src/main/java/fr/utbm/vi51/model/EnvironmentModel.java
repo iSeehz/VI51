@@ -207,6 +207,13 @@ public class EnvironmentModel {
 		int y = body.getY();
 		System.out.println(x + " :" + y);
 		System.out.println("position");
+		
+		//check if the body is dead
+		if (x==this.grid.size()-1){
+				
+				System.out.println("le body est parti dans l'espace!");
+				killLemming(body);
+		}else
 		// check if the body is on a land
 		if (isLand(x+1, y)){
 		//all moves allowed			
@@ -333,7 +340,8 @@ public class EnvironmentModel {
 			System.out.println("Winner!!");
 			outLemming(body);
 		// if the body is on a land nothing to do except disable parachute and stop climbing
-		} else if (isLand(x+1,y)){
+		}
+		else if (isLand(x+1,y)){
 			if (body.getOrientation().equals(Orientation.DOWN)){
 				if(body.isClimbing()){
 					body.increaseFatigue();
@@ -521,6 +529,8 @@ public class EnvironmentModel {
 	}
 	public void killLemming(LemmingBody body){
 		addDead();
+		//destruct the body
+		this.listOfBody.remove(this.listOfBody.indexOf(body));
 	}
 	
 	public void outLemming(LemmingBody body){
