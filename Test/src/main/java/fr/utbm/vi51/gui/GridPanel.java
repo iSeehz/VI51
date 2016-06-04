@@ -107,13 +107,20 @@ public class GridPanel extends JPanel{
 	
 	
 	public void smartPaint(List<Point> listOfChange,List<List<Cell>> tab){
+		//converting Point to index for the GridLayout
+		int index;
 		for(Point p : listOfChange){
+			if (p.x == 0){
+				index = p.x + p.y;
+			}else{
+				index = p.x * tab.get(0).size() + p.y;
+			}
 			this.grid[p.x][p.y] = createPanelByType(tab.get(p.x).get(p.y).getType());
 			if(tab.get(p.x).get(p.y).getListOfBodyInCell().size() != 0){
 				this.grid[p.x][p.y].add(drawLemming(tab.get(p.x).get(p.y)));
 			}
-			this.remove(p.x +p.y);
-			this.add(this.grid[p.x][p.y],p.x +p.y);
+			this.remove(index);
+			this.add(this.grid[p.x][p.y],index);
 //			System.out.println(p);
 		}
 		this.updateUI();

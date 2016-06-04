@@ -72,6 +72,7 @@ agent EnvironmentAgent {
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
 		this.qlearning = new MoveProb()
+		this.gui.getOptionPanel().updateTab(this.numberOfLemmingsMinds,0,0)
 	}
 	on CreateLemmingsAgent{
 		
@@ -135,7 +136,6 @@ agent EnvironmentAgent {
 			// all set and ready to go
 			println("Ready to go !")
 
-
 		}
 		
 	}
@@ -181,7 +181,7 @@ agent EnvironmentAgent {
 			wake(new KillLemmingsAgents)
 			//**************** est-ce que l'agent est bien tué avant le reset    *******************
 			this.listOfGUID.clear()
-			this.gui.getOptionPanel().updateTab(0,0,0)
+			this.gui.getOptionPanel().updateTab(this.numberOfLemmingsMinds,0,0)
 			wake(new ResetAgentEnvironment())
 		}else{
 			println("Simulation non lancée")
@@ -227,9 +227,8 @@ agent EnvironmentAgent {
 			  this.environment.moveBody(key, this.moveInfluences.get(key))
 			}
 			this.moveInfluences.clear();
-			wake(new ResetGrid)
 			//** to do check if the list contains distinct points
-			//wake(new MAJGrid(l))
+			wake(new MAJGrid)
 //			Thread.sleep(1000)
 			
 		}
@@ -250,7 +249,7 @@ agent EnvironmentAgent {
 			  	this.listOfGUID.remove(this.listOfGUID.indexOf(key))
 			  	}
 			}
-			wake(new ResetGrid)
+			wake(new MAJGrid)
 		}
 		
 	
@@ -258,7 +257,7 @@ agent EnvironmentAgent {
 	
 	on Manager{
 		//********slow down the process
-		Thread.sleep(1000)
+		//Thread.sleep(1000)
 		if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
 		}else if(this.state == SimulationState.STEP_BY_STEP){
@@ -270,8 +269,9 @@ agent EnvironmentAgent {
 	
 	on MAJGrid{//maj gui
 		
-		this.gui.getMainPanel().getGridPanel().smartPaint(occurrence.list,this.environment.getGrid())
+		this.gui.getMainPanel().getGridPanel().smartPaint(this.environment.getListOfChanges(),this.environment.getGrid())
 		this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
+		
 		wake(new Manager)
 	}
 	
@@ -280,8 +280,8 @@ agent EnvironmentAgent {
 
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
 		//a supprimer quand le smart sera posé
-		this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
-		wake(new Manager)
+		//this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
+		//wake(new Manager)
 	}
 	
 	

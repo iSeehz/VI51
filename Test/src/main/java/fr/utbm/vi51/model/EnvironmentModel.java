@@ -1,5 +1,6 @@
 package fr.utbm.vi51.model;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,8 @@ public class EnvironmentModel {
 	private final Address address;
 	private final Address addressReceiver;
 
+	private List<Point> ListOfChanges;
+	
 	public EnvironmentModel(String level, int numberOfBody, EventSpace space, Address adr) {
 
 		this.space = space;
@@ -67,6 +70,7 @@ public class EnvironmentModel {
 	}
 
 	public void setGrid(String level, int numberOfBody) {
+		this.ListOfChanges = new ArrayList<Point>();
 		this.listOfBody = new ArrayList<LemmingBody>();
 		this.numberOfBody = numberOfBody;
 		JSONReadAndConvertingFromLevelFile js = new JSONReadAndConvertingFromLevelFile(level);
@@ -277,31 +281,25 @@ public class EnvironmentModel {
 			body.increaseFatigue();
 			return climbingBody(body, p, true);
 
-			// body parachute
-		} else if (move.equals(PossibleMove.PARACHUTE)) {
-			if (x + 1 < grid.size()) {
-				System.out.println("parachute");
-				body.activateParachute();
-				fallingBody(body, p);
-				statusBody(body);
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (x + 2 < grid.size()) {
+			// body parachute & falling
+		} else if (x + 2 < grid.size()) {
+				if(move.equals(PossibleMove.PARACHUTE)){
+					body.activateParachute();
+				}
 				System.out.println("tombe");
 				fallingBody(body, p);
 				statusBody(body);
 				return true;
-			} else if (x + 1 < grid.size()) {
-				fallingBody(body, p);
-			} else {
-				grid.get(x).get(y).getListOfBodyInCell().remove(p);
-				System.out.println("le body est parti dans l'espace! fonction Move");
-				killLemming(body);
-				return false;
 			}
+		 else if (x + 1 < grid.size()) {
+			fallingBody(body, p);
+			return true;
+		} else {
+			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			System.out.println("le body est parti dans l'espace! fonction Move");
+			addInListOfChanges(new Point(x,y));
+			killLemming(body);
+			return false;
 		}
 		return false;
 
@@ -316,6 +314,8 @@ public class EnvironmentModel {
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			body.setY(futurY);
 			body.setOrientation(Orientation.LEFT);
+			addInListOfChanges(new Point(x,y));
+			addInListOfChanges(new Point(x,futurY));
 			statusBody(body);
 			return true;
 		} else {
@@ -332,6 +332,8 @@ public class EnvironmentModel {
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			body.setY(futurY);
 			body.setOrientation(Orientation.RIGHT);
+			addInListOfChanges(new Point(x,y));
+			addInListOfChanges(new Point(x,futurY));
 			statusBody(body);
 			return true;
 		} else {
@@ -353,9 +355,9 @@ public class EnvironmentModel {
 		}
 		//check if the lemmming crashes himself.
 		else if (body.getFall() >= 3 && grid.get(x+1).get(y).getType().equals(TypeObject.LAND)) {
-			System.out.println("non mais ");
 			body.setOrientation(Orientation.DEAD);
 			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
+			addInListOfChanges(new Point(x,y));
 			killLemming(body);
 		}
 		// Body on the Exit
@@ -389,9 +391,11 @@ public class EnvironmentModel {
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
 		// ajout pour changer la position du lemming
 		body.setX(x + 1);
+		addInListOfChanges(new Point(x,y));
+		addInListOfChanges(new Point(x+1,y));
 	}
 
-	// ************* pas vérif ***********************
+	// ************* pas vérif *********************** les changements ici n'apparaitront pas 
 	public boolean climbingBody(LemmingBody body, int p, boolean type) {
 		// True = Backward
 		// False = Forward
@@ -569,7 +573,9 @@ public class EnvironmentModel {
 	}
 
 	public void outLemming(LemmingBody body) {
+		//the agent isn't needed anymore when the lemming body is out
 		addOut();
+		this.emitEvent(new GarbageAgent(body.getId()));
 	}
 
 	public List<LemmingBody> getListOfBody() {
@@ -578,6 +584,17 @@ public class EnvironmentModel {
 
 	public int getDeads() {
 		return deads;
+	}
+
+	public List<Point> getListOfChanges() {
+		return ListOfChanges;
+	}
+	
+	protected void addInListOfChanges(Point p){
+		
+		if(this.ListOfChanges.indexOf(p)==-1){
+			this.ListOfChanges.add(p);
+		}
 	}
 
 	
