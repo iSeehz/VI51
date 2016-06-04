@@ -106,7 +106,7 @@ public class GridPanel extends JPanel{
 	}
 	
 	
-	public void smartPaint(List<Point> listOfChange,List<List<Cell>> tab){
+	public synchronized  void smartPaint(List<Point> listOfChange,List<List<Cell>> tab){
 		//converting Point to index for the GridLayout
 		int index;
 		for(Point p : listOfChange){

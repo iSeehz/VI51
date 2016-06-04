@@ -28,6 +28,7 @@ public class EnvironmentModel {
 	private final Address addressReceiver;
 
 	private List<Point> ListOfChanges;
+	private int bodiesModified;
 	
 	public EnvironmentModel(String level, int numberOfBody, EventSpace space, Address adr) {
 
@@ -70,6 +71,7 @@ public class EnvironmentModel {
 	}
 
 	public void setGrid(String level, int numberOfBody) {
+		this.bodiesModified = 0;
 		this.ListOfChanges = new ArrayList<Point>();
 		this.listOfBody = new ArrayList<LemmingBody>();
 		this.numberOfBody = numberOfBody;
@@ -102,7 +104,7 @@ public class EnvironmentModel {
 	}
 
 	// SearchedBody return the position of the body in the list of a Cell
-	public SearchedBody searchBody(int id) {
+	public synchronized SearchedBody searchBody(int id) {
 		int p = 0;
 		int k = 0;
 		while (listOfBody.get(p).getId() != id) {
@@ -113,7 +115,7 @@ public class EnvironmentModel {
 
 	}
 
-	public int searchBodyInCell(LemmingBody body) {
+	public synchronized int searchBodyInCell(LemmingBody body) {
 		int k = 0;
 		while (grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(k).getId() != body.getId()) {
 			k++;
@@ -121,7 +123,7 @@ public class EnvironmentModel {
 		return k;
 	}
 
-	public List<Percept> getPerception(int id) {
+	public synchronized List<Percept> getPerception(int id) {
 		/*
 		 * Disposition of the perception --> 08 02 09 01 00 03 13 04 10 14 05 12
 		 * 15 06 12 07
@@ -222,7 +224,7 @@ public class EnvironmentModel {
 	}
 
 	// with an id and a move, the body is moved
-	public boolean moveBody(int id, PossibleMove move) {
+	public synchronized boolean moveBody(int id, PossibleMove move) {
 
 		LemmingBody body = searchBody(id).getBody();
 		int p = searchBody(id).getPosition();
@@ -301,11 +303,12 @@ public class EnvironmentModel {
 			killLemming(body);
 			return false;
 		}
+		this.bodiesModified++;
 		return false;
 
 	}
 
-	public boolean moveLeft(LemmingBody body, int p) {
+	public synchronized boolean moveLeft(LemmingBody body, int p) {
 		int x = body.getX();
 		int y = body.getY();
 		int futurY = (y - 1 + grid.get(x).size()) % grid.get(x).size();
@@ -323,7 +326,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public boolean moveRight(LemmingBody body, int p) {
+	public  synchronized boolean moveRight(LemmingBody body, int p) {
 		int x = body.getX();
 		int y = body.getY();
 		int futurY = (y + 1) % grid.get(x).size();
@@ -343,7 +346,7 @@ public class EnvironmentModel {
 	}
 
 	// Action after any move
-	public void statusBody(LemmingBody body) {
+	public synchronized void statusBody(LemmingBody body) {
 
 		int x = body.getX();
 		int y = body.getY();
@@ -381,7 +384,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public void fallingBody(LemmingBody body, int p) {
+	public synchronized void fallingBody(LemmingBody body, int p) {
 
 		int x = body.getX();
 		int y = body.getY();
@@ -396,7 +399,7 @@ public class EnvironmentModel {
 	}
 
 	// ************* pas vérif *********************** les changements ici n'apparaitront pas 
-	public boolean climbingBody(LemmingBody body, int p, boolean type) {
+	public synchronized boolean climbingBody(LemmingBody body, int p, boolean type) {
 		// True = Backward
 		// False = Forward
 		int x = body.getX();
@@ -495,7 +498,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public boolean accessibleCase(int x, int y) {
+	public synchronized boolean accessibleCase(int x, int y) {
 		System.out.println("accessible : " + x + "," + y);
 		if (grid.get(x).get(y).getType().equals(TypeObject.EMPTY)
 				|| grid.get(x).get(y).getType().equals(TypeObject.ENTRY)
@@ -519,7 +522,7 @@ public class EnvironmentModel {
 	}
 
 	// Jump is go on diagonal left-up or right-up
-	public boolean canJump(int x, int y, boolean side) {
+	public synchronized boolean canJump(int x, int y, boolean side) {
 		// TRUE = LEFT
 		// FALSE = RIGHT
 		if (side) { // LEFT
@@ -544,7 +547,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public boolean isLand(int x, int y) {
+	public synchronized boolean isLand(int x, int y) {
 		System.out.println("check ou? " + x + " " + y);
 		if (x >= grid.size()) {
 			return false;
@@ -557,7 +560,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public boolean isExit(int x, int y) {
+	public  synchronized boolean isExit(int x, int y) {
 		if (grid.get(x).get(y).getType().equals(TypeObject.EXIT)) {
 			return true;
 		} else {
@@ -565,20 +568,21 @@ public class EnvironmentModel {
 		}
 	}
 
-	public void killLemming(LemmingBody body) {
+	public synchronized void killLemming(LemmingBody body) {
 		addDead();
+		numberOfBody--;
 		// destruct the body
 		this.listOfBody.remove(this.listOfBody.indexOf(body));
 		this.emitEvent(new GarbageAgent(body.getId()));
 	}
 
-	public void outLemming(LemmingBody body) {
+	public synchronized void outLemming(LemmingBody body) {
 		//the agent isn't needed anymore when the lemming body is out
 		addOut();
 		this.emitEvent(new GarbageAgent(body.getId()));
 	}
 
-	public List<LemmingBody> getListOfBody() {
+	public  List<LemmingBody> getListOfBody() {
 		return listOfBody;
 	}
 
@@ -590,11 +594,19 @@ public class EnvironmentModel {
 		return ListOfChanges;
 	}
 	
-	protected void addInListOfChanges(Point p){
+	protected synchronized void addInListOfChanges(Point p){
 		
 		if(this.ListOfChanges.indexOf(p)==-1){
 			this.ListOfChanges.add(p);
 		}
+	}
+
+	public int getBodiesModified() {
+		return bodiesModified;
+	}
+
+	public void restBodiesModified(int bodiesModified) {
+		this.bodiesModified = 0;
 	}
 
 	

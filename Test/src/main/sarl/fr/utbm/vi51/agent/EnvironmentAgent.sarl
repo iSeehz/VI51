@@ -6,6 +6,7 @@ package fr.utbm.vi51.^agent
 import fr.utbm.vi51.controller.Controller
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.ChangeLevel
+import fr.utbm.vi51.^event.ChangeLevelAndRebuildModel
 import fr.utbm.vi51.^event.CreateLemmingsAgent
 import fr.utbm.vi51.^event.GarbageAgent
 import fr.utbm.vi51.^event.GiveBody
@@ -37,12 +38,10 @@ import io.sarl.core.Logging
 import io.sarl.core.Schedules
 import io.sarl.lang.core.Address
 import io.sarl.util.Scopes
-import java.awt.Point
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
-import fr.utbm.vi51.^event.ChangeLevelAndRebuildModel
 
 /**
  * @author tiboty
@@ -67,7 +66,7 @@ agent EnvironmentAgent {
 	on Initialize{
 		this.currentLevel = "lab_parachute.txt"
 		this.nextLevel = "lab_parachute.txt"
-		this.numberOfLemmingsMinds = 1
+		this.numberOfLemmingsMinds = 10
 		wake(new ResetAgentEnvironment())
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
@@ -135,7 +134,8 @@ agent EnvironmentAgent {
 			
 			// all set and ready to go
 			println("Ready to go !")
-
+//			Thread.sleep(1000)
+//			wake(new StartSimulation)
 		}
 		
 	}
@@ -225,6 +225,7 @@ agent EnvironmentAgent {
 			  var key:Integer = keySetIterator.next();
 			  println("key: " + key + " value: " + this.moveInfluences.get(key))
 			  this.environment.moveBody(key, this.moveInfluences.get(key))
+
 			}
 			this.moveInfluences.clear();
 			//** to do check if the list contains distinct points
@@ -258,11 +259,17 @@ agent EnvironmentAgent {
 	on Manager{
 		//********slow down the process
 		//Thread.sleep(1000)
-		if(this.state == SimulationState.START){
+		if(!isFinish()){
+			if(this.state == SimulationState.START){
 			sendPerceptionsToAgents()
 		}else if(this.state == SimulationState.STEP_BY_STEP){
 			this.gui.getMainPanel().getTime().pause()
 		}
+		}else{
+			wake(new StopSimulation)
+		}
+		
+		
 		
 	}
 	
@@ -294,6 +301,10 @@ agent EnvironmentAgent {
 	}
 	
 	def isFinish():boolean{
+		
+		if(this.environment.getNumberOfBody() == 0){
+			return true
+		}
 		
 		for (body : this.environment.getListOfBody()){
 			if(!body.isWinner()){
