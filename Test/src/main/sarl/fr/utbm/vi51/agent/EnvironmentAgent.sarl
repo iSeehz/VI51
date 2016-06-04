@@ -66,7 +66,7 @@ agent EnvironmentAgent {
 	on Initialize{
 		this.currentLevel = "lab_parachute.txt"
 		this.nextLevel = "lab_parachute.txt"
-		this.numberOfLemmingsMinds = 10
+		this.numberOfLemmingsMinds = 1
 		wake(new ResetAgentEnvironment())
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
@@ -175,7 +175,7 @@ agent EnvironmentAgent {
 			this.gui.getMainPanel().getTime().pause()
 			this.gui.getMainPanel().getTime().restart()
 			this.state = SimulationState.STOP
-			println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
+			//println("fin simulation : Terminaison de "  +  this.listOfGUID.size() + " agent(s) !")
 			this.numberOfLemmingsBodyLinked = 0
 			this.mapOfGUID.clear()
 			wake(new KillLemmingsAgents)
@@ -212,7 +212,7 @@ agent EnvironmentAgent {
 		
 	on Influence[this.state != SimulationState.STOP]{
 		
-		println(this.mapOfGUID.get(occurrence.source))
+		//println(this.mapOfGUID.get(occurrence.source))
 		println(occurrence.move)
 		this.moveInfluences.put(this.mapOfGUID.get(occurrence.source),occurrence.move)
 		
@@ -223,11 +223,12 @@ agent EnvironmentAgent {
 			var keySetIterator:Iterator<Integer>  = this.moveInfluences.keySet().iterator()
 			while(keySetIterator.hasNext()){
 			  var key:Integer = keySetIterator.next();
-			  println("key: " + key + " value: " + this.moveInfluences.get(key))
+			  //println("key: " + key + " value: " + this.moveInfluences.get(key))
 			  this.environment.moveBody(key, this.moveInfluences.get(key))
 
 			}
 			this.moveInfluences.clear();
+			this.qlearning.write()
 			//** to do check if the list contains distinct points
 			wake(new MAJGrid)
 //			Thread.sleep(1000)

@@ -231,8 +231,8 @@ public class EnvironmentModel {
 
 		int x = body.getX();
 		int y = body.getY();
-		System.out.println("position :" + (x + 1) + "," + (y + 1));
-		System.out.println("accélération : " + body.getFall());
+		//System.out.println("position :" + (x + 1) + "," + (y + 1));
+		//System.out.println("accélération : " + body.getFall());
 		// check if the body is on a land
 		if (isLand(x + 1, y)) {
 			// all moves allowed
@@ -288,7 +288,7 @@ public class EnvironmentModel {
 				if(move.equals(PossibleMove.PARACHUTE)){
 					body.activateParachute();
 				}
-				System.out.println("tombe");
+				//System.out.println("tombe");
 				fallingBody(body, p);
 				statusBody(body);
 				return true;
@@ -298,7 +298,7 @@ public class EnvironmentModel {
 			return true;
 		} else {
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
-			System.out.println("le body est parti dans l'espace! fonction Move");
+//			System.out.println("le body est parti dans l'espace! fonction Move");
 			addInListOfChanges(new Point(x,y));
 			killLemming(body);
 			return false;
@@ -548,7 +548,7 @@ public class EnvironmentModel {
 	}
 
 	public synchronized boolean isLand(int x, int y) {
-		System.out.println("check ou? " + x + " " + y);
+//		System.out.println("check ou? " + x + " " + y);
 		if (x >= grid.size()) {
 			return false;
 		}
