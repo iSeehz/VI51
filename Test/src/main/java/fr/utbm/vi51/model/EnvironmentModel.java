@@ -25,9 +25,9 @@ public class EnvironmentModel {
 	private final UUID uuid;
 	private final Address address;
 	private final Address addressReceiver;
-	
-	public EnvironmentModel(String level, int numberOfBody,EventSpace space, Address adr) {
-		
+
+	public EnvironmentModel(String level, int numberOfBody, EventSpace space, Address adr) {
+
 		this.space = space;
 		this.uuid = UUID.randomUUID();
 		this.address = new Address(space.getID(), this.uuid);
@@ -36,35 +36,31 @@ public class EnvironmentModel {
 		this.setGrid(level, numberOfBody);
 
 	}
-	
+
 	private void emitEvent(Event event) {
 		event.setSource(this.address);
 		this.space.emit(event, Scopes.addresses(this.addressReceiver));
 	}
-	
-	public void addDead(){
-		this.deads ++;
+
+	public void addDead() {
+		this.deads++;
 	}
-	
-	
-	public void addOut(){
-		this.out ++;
+
+	public void addOut() {
+		this.out++;
 	}
-	
-	public int getDead(){
+
+	public int getDead() {
 		return this.deads;
 	}
-	
-	public int getOut(){
+
+	public int getOut() {
 		return this.out;
 	}
-	
 
 	public int getNumberOfBody() {
 		return numberOfBody;
 	}
-
-
 
 	public List<List<Cell>> getGrid() {
 		return grid;
@@ -84,6 +80,13 @@ public class EnvironmentModel {
 			this.listOfBody.add(new LemmingBody(i, this.entry.getX(), this.entry.getY()));
 			this.entry.getListOfBodyInCell().add(listOfBody.get(i));
 		}
+		// for(int i=0;i<this.grid.size();i++){
+		// for(int j=0;j<this.grid.get(0).size();j++){
+		// System.out.print(this.grid.get(i).get(j).getType() + " ");
+		//
+		// }
+		// System.out.println();
+		// }
 	}
 
 	public Cell getEntry() {
@@ -105,111 +108,107 @@ public class EnvironmentModel {
 		return new SearchedBody(listOfBody.get(p), k);
 
 	}
-	
-	public int searchBodyInCell (LemmingBody body){
+
+	public int searchBodyInCell(LemmingBody body) {
 		int k = 0;
 		while (grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(k).getId() != body.getId()) {
 			k++;
 		}
 		return k;
 	}
-	
+
 	public List<Percept> getPerception(int id) {
 		/*
-		 * Disposition of the perception --> 
-		 * 08 02 09
-		 * 01 00 03
-		 * 13 04 10
-		 * 14 05 12
-		 * 15 06 12
-		 *    07
+		 * Disposition of the perception --> 08 02 09 01 00 03 13 04 10 14 05 12
+		 * 15 06 12 07
 		 */
 		List<Percept> allPerception = new ArrayList<Percept>();
-		
+
 		LemmingBody body = searchBody(id).getBody();
 		int x = body.getX();
 		int y = body.getY();
-//		System.out.println(x + ":" + y);
-//		System.out.println(grid.get(x).get(y+1).getType());
+		// System.out.println(x + ":" + y);
+		// System.out.println(grid.get(x).get(y+1).getType());
 		allPerception.add(new Percept(grid.get(x).get(y)));
-		
-		//left
-		for (int i = 1; i <= body.getFovLeft(); i++){
-//			System.out.println((y - i+grid.get(x).size())%grid.get(x).size());
-			allPerception.add(new Percept(grid.get(x).get((y - i+grid.get(x).size())%grid.get(x).size())));
+
+		// left
+		for (int i = 1; i <= body.getFovLeft(); i++) {
+			// System.out.println((y -
+			// i+grid.get(x).size())%grid.get(x).size());
+			allPerception.add(new Percept(grid.get(x).get((y - i + grid.get(x).size()) % grid.get(x).size())));
 		}
-		
-		//up
+
+		// up
 		for (int j = 1; j <= body.getFovUp(); j++) {
-				if (x - j >= 0) {
-					allPerception.add(new Percept(grid.get(x - j).get(y)));
-				}else{
-					
-					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
-				}
+			if (x - j >= 0) {
+				allPerception.add(new Percept(grid.get(x - j).get(y)));
+			} else {
+
+				allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
+			}
 		}
-		
-		//right
-		for (int i = 1; i <= body.getFovRight(); i++){
-			allPerception.add(new Percept(grid.get(x).get((y + i)%grid.get(x).size())));
+
+		// right
+		for (int i = 1; i <= body.getFovRight(); i++) {
+			allPerception.add(new Percept(grid.get(x).get((y + i) % grid.get(x).size())));
 		}
-		
-		//down
+
+		// down
 		for (int j = 1; j <= body.getFovUnder(); j++) {
 			if (x + j < grid.size()) {
 				allPerception.add(new Percept(grid.get(x + j).get(y)));
-			}else{
-				
+			} else {
+
 				allPerception.add(new Percept(new Cell(-1, -1, TypeObject.EMPTY)));
 			}
-		}			
-				
-				
-				
-		//left up
+		}
+
+		// left up
 		for (int i = 1; i <= body.getFovLeft(); i++) {
 			for (int j = 1; j <= body.getFovUp(); j++) {
 				if (x - j >= 0) {
-					allPerception.add(new Percept(grid.get(x - j).get((y - i+grid.get(x).size())%grid.get(x).size())));
-				}else{
-					
-					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
-				}
-			}
-		}
-		
-		//right up
-		for (int i = 1; i <= body.getFovRight(); i++) {
-			for (int j = 1; j <= body.getFovUp(); j++) {
-				if (x - j >= 0) {
-					System.out.println(x-j + " " + y+i);// a vérif
-					allPerception.add(new Percept(grid.get(x - j).get((y + i)%grid.get(x).size())));
-				}else{
-					
+					allPerception
+							.add(new Percept(grid.get(x - j).get((y - i + grid.get(x).size()) % grid.get(x).size())));
+				} else {
+
 					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
 				}
 			}
 		}
 
-		//right down
+		// right up
 		for (int i = 1; i <= body.getFovRight(); i++) {
-			for (int j = 1; j <= body.getFovUnder()-1; j++) {
-				if ( (x + j) < grid.size() ) {
-					allPerception.add(new Percept(grid.get(x + j).get((y + i)%grid.get(x).size())));
-				}else{
-					
+			for (int j = 1; j <= body.getFovUp(); j++) {
+				if (x - j >= 0) {
+					// System.out.println(x - j + " " + y + i);// a vérif
+					allPerception.add(new Percept(grid.get(x - j).get((y + i) % grid.get(x).size())));
+				} else {
+
+					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.WALL)));
+				}
+			}
+		}
+
+		// right down
+		for (int i = 1; i <= body.getFovRight(); i++) {
+			for (int j = 1; j <= body.getFovUnder() - 1; j++) {
+				if ((x + j) < grid.size()) {
+					allPerception.add(new Percept(grid.get(x + j).get((y + i) % grid.get(x).size())));
+				} else {
+
 					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.EMPTY)));
 				}
 			}
 		}
-		
-		//left down
+
+		// left down
 		for (int i = 1; i <= body.getFovLeft(); i++) {
-			for (int j = 1; j <= body.getFovUnder()-1; j++) {
-				if ( (x + j) < grid.size()) {
-					allPerception.add(new Percept(grid.get(x + j).get((y - i+grid.get(x).size())%grid.get(x).size())));
-				}else{
-					
+			for (int j = 1; j <= body.getFovUnder() - 1; j++) {
+				if ((x + j) < grid.size()) {
+					allPerception
+							.add(new Percept(grid.get(x + j).get((y - i + grid.get(x).size()) % grid.get(x).size())));
+				} else {
+
 					allPerception.add(new Percept(new Cell(-1, -1, TypeObject.EMPTY)));
 				}
 			}
@@ -220,53 +219,42 @@ public class EnvironmentModel {
 
 	// with an id and a move, the body is moved
 	public boolean moveBody(int id, PossibleMove move) {
-		
+
 		LemmingBody body = searchBody(id).getBody();
 		int p = searchBody(id).getPosition();
 
 		int x = body.getX();
 		int y = body.getY();
-		System.out.println(x + " :" + y);
-		System.out.println("position");
-		
-		//check if the body is dead
-		if (x==this.grid.size()-1){
-				grid.get(x).get(y).getListOfBodyInCell().remove(p);
-				System.out.println("le body est parti dans l'espace!");
-				killLemming(body);
-		}else
+		System.out.println("position :" + (x + 1) + "," + (y + 1));
+		System.out.println("accélération : " + body.getFall());
 		// check if the body is on a land
-		if (isLand(x+1, y)){
-		//all moves allowed			
-			if(move == PossibleMove.MOVEBACKWARD){
+		if (isLand(x + 1, y)) {
+			// all moves allowed
+			if (move == PossibleMove.MOVEBACKWARD) {
 				body.increaseFatigue();
-				if (body.getOrientation().equals(Orientation.RIGHT)){
+				if (body.getOrientation().equals(Orientation.RIGHT)) {
 					return moveLeft(body, p);
-				} else{
-					return moveRight(body,p);
+				} else {
+					return moveRight(body, p);
 				}
-			}
-			else if(move == PossibleMove.MOVEFORWARD){
-				if (body.getOrientation().equals(Orientation.LEFT)){
+			} else if (move == PossibleMove.MOVEFORWARD) {
+				if (body.getOrientation().equals(Orientation.LEFT)) {
 					return moveLeft(body, p);
-				} else{
-					return moveRight(body,p);
+				} else {
+					return moveRight(body, p);
 				}
-			}
-			else if(move == PossibleMove.CLIMBFORWARD){
+			} else if (move == PossibleMove.CLIMBFORWARD) {
 				return climbingBody(body, p, false);
-			}
-			else if(move == PossibleMove.CLIMBBACKWARD){
-				return climbingBody(body, p, true);			
-			}
-			else if(move == PossibleMove.DIG){
-				//the case is full Land
-				if ( (grid.get(x+1).get(y).getType().equals(TypeObject.LAND))) {
-					grid.get(x+1).get(y).setType(TypeObject.HALF);
+			} else if (move == PossibleMove.CLIMBBACKWARD) {
+				return climbingBody(body, p, true);
+			} else if (move == PossibleMove.DIG) {
+				// the case is full Land
+				if ((grid.get(x + 1).get(y).getType().equals(TypeObject.LAND))) {
+					grid.get(x + 1).get(y).setType(TypeObject.HALF);
 					body.setOrientation(Orientation.DOWN);
-				//the case if half land
-				} else if (grid.get(x+1).get(y).getType().equals(TypeObject.HALF)) {
-					grid.get(x+1).get(y).setType(TypeObject.EMPTY);
+					// the case if half land
+				} else if (grid.get(x + 1).get(y).getType().equals(TypeObject.HALF)) {
+					grid.get(x + 1).get(y).setType(TypeObject.EMPTY);
 					// every body on this case fall
 					for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
 						grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
@@ -278,48 +266,51 @@ public class EnvironmentModel {
 				}
 			}
 
-		// body climbing
-		
-		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBFORWARD)){ 
-			
+			// body climbing
+
+		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBFORWARD)) {
+
 			return climbingBody(body, p, false);
-			
-		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBBACKWARD)){
-			
+
+		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBBACKWARD)) {
+
 			body.increaseFatigue();
 			return climbingBody(body, p, true);
-			
-		// body parachute
-		} else if (move.equals(PossibleMove.PARACHUTE)){
-			if (x +1 < grid.size()){
+
+			// body parachute
+		} else if (move.equals(PossibleMove.PARACHUTE)) {
+			if (x + 1 < grid.size()) {
 				System.out.println("parachute");
 				body.activateParachute();
-				fallingBody(body, p);
-				statusBody(body);
-				return true;
-			} else{
-				return false;
-			}
-		} else {
-			if (x +1 < grid.size()){
-				if (!body.statusParachute()){
-					body.fall();
-				}
 				fallingBody(body, p);
 				statusBody(body);
 				return true;
 			} else {
 				return false;
 			}
+		} else {
+			if (x + 2 < grid.size()) {
+				System.out.println("tombe");
+				fallingBody(body, p);
+				statusBody(body);
+				return true;
+			} else if (x + 1 < grid.size()) {
+				fallingBody(body, p);
+			} else {
+				grid.get(x).get(y).getListOfBodyInCell().remove(p);
+				System.out.println("le body est parti dans l'espace! fonction Move");
+				killLemming(body);
+				return false;
+			}
 		}
 		return false;
-		
-			
+
 	}
-	public boolean moveLeft(LemmingBody body, int p){
+
+	public boolean moveLeft(LemmingBody body, int p) {
 		int x = body.getX();
 		int y = body.getY();
-		int futurY = (y-1+grid.get(x).size())%grid.get(x).size();
+		int futurY = (y - 1 + grid.get(x).size()) % grid.get(x).size();
 		if ((x > 0) && accessibleCase(x, futurY)) {
 			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
@@ -332,11 +323,11 @@ public class EnvironmentModel {
 		}
 	}
 
-	public boolean moveRight(LemmingBody body, int p){
+	public boolean moveRight(LemmingBody body, int p) {
 		int x = body.getX();
 		int y = body.getY();
-		int futurY = (y+1)%grid.get(x).size();
-		if ( accessibleCase(x, futurY)) {
+		int futurY = (y + 1) % grid.get(x).size();
+		if (accessibleCase(x, futurY)) {
 			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			body.setY(futurY);
@@ -346,223 +337,249 @@ public class EnvironmentModel {
 		} else {
 			return false;
 		}
-		
+
 	}
 
 	// Action after any move
 	public void statusBody(LemmingBody body) {
-		
+
 		int x = body.getX();
 		int y = body.getY();
-		
+
+		// if the body is falling
+		if (accessibleCase(x + 1, y) && !body.isClimbing() && !body.statusParachute()) {
+			body.fall();
+			body.setOrientation(Orientation.DOWN);
+		}
+		//check if the lemmming crashes himself.
+		else if (body.getFall() >= 3 && grid.get(x+1).get(y).getType().equals(TypeObject.LAND)) {
+			System.out.println("non mais ");
+			body.setOrientation(Orientation.DEAD);
+			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
+			killLemming(body);
+		}
 		// Body on the Exit
-		if (isExit(x, y)){
+		else if (isExit(x, y)) {
 			body.winner();
 			System.out.println("Winner!!");
 			outLemming(body);
-		// if the body is on a land nothing to do except disable parachute and stop climbing
-		}
-		else if (isLand(x+1,y)){
-			if (body.getOrientation().equals(Orientation.DOWN)){
-				if(body.isClimbing()){
+			// if the body is on a land nothing to do except disable parachute
+			// and stop climbing
+		} else if (isLand(x + 1, y)) {
+			if (body.getOrientation().equals(Orientation.DOWN)) {
+				if (body.isClimbing()) {
 					body.increaseFatigue();
 					body.getUp();
 				} else {
 					body.getUp();
 					body.resetFatigue();
-				}		
+				}
 			}
-		// if the body is falling
-		} else if (accessibleCase(x+1, y) && !body.isClimbing() && !body.statusParachute()){
-			body.fall();
-			body.setOrientation(Orientation.DOWN);
-			 if (body.getFall()==3){
-				body.setOrientation(Orientation.DEAD);
-				
-				grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
-				killLemming(body);
-			 }
+
 		}
 	}
-	public void fallingBody (LemmingBody body, int p){
-		
+
+	public void fallingBody(LemmingBody body, int p) {
+
 		int x = body.getX();
 		int y = body.getY();
-		
+
 		grid.get(x).get(y).getListOfBodyInCell().get(p).setOrientation(Orientation.DOWN);
-		grid.get(x+1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
+		grid.get(x + 1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).getListOfBodyInCell().get(p));
 		grid.get(x).get(y).getListOfBodyInCell().remove(p);
-		//ajout pour changer la position du lemming
-		body.setX(x+1);
+		// ajout pour changer la position du lemming
+		body.setX(x + 1);
 	}
-	//************* pas vérif ***********************
-	public boolean climbingBody (LemmingBody body, int p, boolean type){
-		// True  = Backward
+
+	// ************* pas vérif ***********************
+	public boolean climbingBody(LemmingBody body, int p, boolean type) {
+		// True = Backward
 		// False = Forward
 		int x = body.getX();
 		int y = body.getY();
-		
-		if (type){ //BACKWARD
-			if(body.getOrientation().equals(Orientation.LEFT)){ //Try Jump Right First
-				if(canJump(x,y, false)){ // Try to jump right
-					grid.get(x+1).get(y-1).getListOfBodyInCell().add(body);
+
+		if (type) { // BACKWARD
+			if (body.getOrientation().equals(Orientation.LEFT)) { // Try Jump
+																	// Right
+																	// First
+				if (canJump(x, y, false)) { // Try to jump right
+					grid.get(x + 1).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x+1);
-					body.setY(y-1);
+					body.setX(x + 1);
+					body.setY(y - 1);
 					body.setOrientation(Orientation.RIGHT);
 					statusBody(body);
 					return true;
-				} else if (canClimb(x,y)){ // Try to climb
-					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+				} else if (canClimb(x, y)) { // Try to climb
+					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setY(y-1);
+					body.setY(y - 1);
 					body.setOrientation(Orientation.RIGHT);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else { //Stay where you are
+				} else { // Stay where you are
 					body.startClimbing();
 					return false;
 				}
 			} else {
-				if(canJump(x,y, true)){ // Try to jump left
-					grid.get(x-1).get(y-1).getListOfBodyInCell().add(body);
+				if (canJump(x, y, true)) { // Try to jump left
+					grid.get(x - 1).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x-1);
-					body.setY(y-1);
+					body.setX(x - 1);
+					body.setY(y - 1);
 					body.setOrientation(Orientation.LEFT);
 					statusBody(body);
 					return true;
-				} else if (canClimb(x,y)){ // Try to climb
-					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+				} else if (canClimb(x, y)) { // Try to climb
+					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setY(y-1);
+					body.setY(y - 1);
 					body.setOrientation(Orientation.LEFT);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else { //Stay where you are
+				} else { // Stay where you are
 					body.startClimbing();
 					return false;
 				}
 			}
-		} else { //FORWARD
-			if(body.getOrientation().equals(Orientation.RIGHT)){ //Try Jump Right First
-				if(canJump(x,y, false)){ // Try to jump right
-					grid.get(x+1).get(y-1).getListOfBodyInCell().add(body);
+		} else { // FORWARD
+			if (body.getOrientation().equals(Orientation.RIGHT)) { // Try Jump
+																	// Right
+																	// First
+				if (canJump(x, y, false)) { // Try to jump right
+					grid.get(x + 1).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x+1);
-					body.setY(y-1);
+					body.setX(x + 1);
+					body.setY(y - 1);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else if (canClimb(x,y)){ // Try to climb
-					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+				} else if (canClimb(x, y)) { // Try to climb
+					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setY(y-1);
+					body.setY(y - 1);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else { //Stay where you are
+				} else { // Stay where you are
 					body.startClimbing();
 					return false;
 				}
 			} else {
-				if(canJump(x,y, true)){ // Try to jump left
-					grid.get(x-1).get(y-1).getListOfBodyInCell().add(body);
+				if (canJump(x, y, true)) { // Try to jump left
+					grid.get(x - 1).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setX(x-1);
-					body.setY(y-1);
+					body.setX(x - 1);
+					body.setY(y - 1);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else if (canClimb(x,y)){ // Try to climb
-					grid.get(x).get(y-1).getListOfBodyInCell().add(body);
+				} else if (canClimb(x, y)) { // Try to climb
+					grid.get(x).get(y - 1).getListOfBodyInCell().add(body);
 					grid.get(x).get(y).getListOfBodyInCell().remove(p);
-					body.setY(y-1);
+					body.setY(y - 1);
 					body.startClimbing();
 					statusBody(body);
 					return true;
-				} else { //Stay where you are
+				} else { // Stay where you are
 					body.startClimbing();
 					return false;
 				}
 			}
 		}
 	}
-	
-	public boolean accessibleCase (int x, int y){
-		System.out.println("accessible : " +x+","+y);
-		if (grid.get(x).get(y).getType().equals(TypeObject.EMPTY) || grid.get(x).get(y).getType().equals(TypeObject.ENTRY) || grid.get(x).get(y).getType().equals(TypeObject.EXIT)){
+
+	public boolean accessibleCase(int x, int y) {
+		System.out.println("accessible : " + x + "," + y);
+		if (grid.get(x).get(y).getType().equals(TypeObject.EMPTY)
+				|| grid.get(x).get(y).getType().equals(TypeObject.ENTRY)
+				|| grid.get(x).get(y).getType().equals(TypeObject.EXIT)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	public boolean canClimb (int x, int y){
-		if (x > 0 && y > 0 && x< grid.size()){
-			if (accessibleCase(x, y-1) && (isLand(x-1,y-1) || isLand(x+1,y-1))){
+
+	public boolean canClimb(int x, int y) {
+		if (x > 0 && y > 0 && x < grid.size()) {
+			if (accessibleCase(x, y - 1) && (isLand(x - 1, y - 1) || isLand(x + 1, y - 1))) {
 				return true;
 			} else {
 				return false;
 			}
-		}else{
+		} else {
 			return false;
-		}
-	}
-	
-	// Jump is go on diagonal left-up or right-up
-	public boolean canJump(int x, int y, boolean side){
-		//TRUE  = LEFT
-		//FALSE = RIGHT
-		if (side){ // LEFT
-			if (x > 0 && y > 0){
-				if (accessibleCase(x, y-1) && isLand(x-1, y) && accessibleCase(x-1, y-1)){
-					return true;
-				} else {
-					return false;
-				}
-			} else return false;
-			
-		} else {   // RIGHT
-			if (x < grid.size() && y > 0){
-				if (accessibleCase(x, y-1) && isLand(x+1, y) && accessibleCase(x-1, y+1)){
-					return true;
-				} else {
-					return false;
-				}
-			} else return false;
 		}
 	}
 
-	public boolean isLand (int x, int y){
-		if (grid.get(x).get(y).getType().equals(TypeObject.HALF) || grid.get(x).get(y).getType().equals(TypeObject.LAND)){
+	// Jump is go on diagonal left-up or right-up
+	public boolean canJump(int x, int y, boolean side) {
+		// TRUE = LEFT
+		// FALSE = RIGHT
+		if (side) { // LEFT
+			if (x > 0 && y > 0) {
+				if (accessibleCase(x, y - 1) && isLand(x - 1, y) && accessibleCase(x - 1, y - 1)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else
+				return false;
+
+		} else { // RIGHT
+			if (x < grid.size() && y > 0) {
+				if (accessibleCase(x, y - 1) && isLand(x + 1, y) && accessibleCase(x - 1, y + 1)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else
+				return false;
+		}
+	}
+
+	public boolean isLand(int x, int y) {
+		System.out.println("check ou? " + x + " " + y);
+		if (x >= grid.size()) {
+			return false;
+		}
+		if (grid.get(x).get(y).getType().equals(TypeObject.HALF)
+				|| grid.get(x).get(y).getType().equals(TypeObject.LAND)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public boolean isExit (int x, int y){
-		if (grid.get(x).get(y).getType().equals(TypeObject.EXIT)){
+
+	public boolean isExit(int x, int y) {
+		if (grid.get(x).get(y).getType().equals(TypeObject.EXIT)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	public void killLemming(LemmingBody body){
+
+	public void killLemming(LemmingBody body) {
 		addDead();
-		//destruct the body
+		// destruct the body
 		this.listOfBody.remove(this.listOfBody.indexOf(body));
 		this.emitEvent(new GarbageAgent(body.getId()));
 	}
-	
-	public void outLemming(LemmingBody body){
+
+	public void outLemming(LemmingBody body) {
 		addOut();
 	}
 
 	public List<LemmingBody> getListOfBody() {
 		return listOfBody;
 	}
+
+	public int getDeads() {
+		return deads;
+	}
+
+	
 	
 }

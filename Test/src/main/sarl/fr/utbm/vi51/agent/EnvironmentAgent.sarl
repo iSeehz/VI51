@@ -42,6 +42,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
+import fr.utbm.vi51.^event.ChangeLevelAndRebuildModel
 
 /**
  * @author tiboty
@@ -192,17 +193,22 @@ agent EnvironmentAgent {
 	
 	
 		
-	on ChangeLevel{
-		this.nextLevel = occurrence.level
-		if (this.state == SimulationState.INIT){
-			if(this.state == SimulationState.STOP || this.state == SimulationState.INIT){
-				this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
-				this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
-			}
-			
-		}
-		
+	on ChangeLevel[this.state == SimulationState.INIT]{
+	
+		this.gui.getEnvironment().setGrid(occurrence.level,this.numberOfLemmingsMinds)
+		this.gui.getMainPanel().getGridPanel().generate(this.gui.getEnvironment().getGrid())
 	}
+	
+	
+	on ChangeLevelAndRebuildModel{
+		this.nextLevel = occurrence.level
+		if(this.state == SimulationState.INIT){
+			this.environment = new EnvironmentModel(this.nextLevel,this.numberOfLemmingsMinds,defaultSpace, defaultAddress)
+			this.currentLevel = this.nextLevel
+			wake(new ChangeLevel(this.nextLevel))
+		}
+	}
+	
 		
 	on Influence[this.state != SimulationState.STOP]{
 		
@@ -265,15 +271,16 @@ agent EnvironmentAgent {
 	on MAJGrid{//maj gui
 		
 		this.gui.getMainPanel().getGridPanel().smartPaint(occurrence.list,this.environment.getGrid())
-		//this.gui.getOptionPanel().updateTab(1,2,3)
+		this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
 		wake(new Manager)
 	}
 	
 	
 	on ResetGrid [this.gui != null]{
-		
+
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
 		//a supprimer quand le smart sera posé
+		this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
 		wake(new Manager)
 	}
 	

@@ -61,7 +61,7 @@ public class OptionPanel extends JPanel{
 	
 	
 	
-	public void updateTab(int lemmingAlive,int lemmingDead,int lemmingSave){
+	public void updateTab(int lemmingAlive,int lemmingSave,int lemmingDead){
             this.print =  "<html>Lemmings lachés: " + this.lemmingFree + " Total : 100%" + "<br>"
    	             + "Lemmings en vie :" + lemmingAlive+ "<br> Total : " + (lemmingAlive/this.lemmingFree)*100 +"%<br>"
    	             + "Lemmings arrivés :" + lemmingSave + "<br> Total : " + (lemmingSave/this.lemmingFree)*100 +"%<br>"

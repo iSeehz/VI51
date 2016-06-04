@@ -3,6 +3,7 @@ package fr.utbm.vi51.controller;
 import java.util.UUID;
 
 import fr.utbm.vi51.event.ChangeLevel;
+import fr.utbm.vi51.event.ChangeLevelAndRebuildModel;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
@@ -47,7 +48,7 @@ public class Controller {
 	}
 	
 	public void changeLevel(String level) {
-		this.emitEvent(new ChangeLevel(level));
+		this.emitEvent(new ChangeLevelAndRebuildModel(level));
 		System.out.println("change level : " + level); 
 	}
 	

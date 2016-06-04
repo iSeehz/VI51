@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event ChangeLevelAndRebuildModel{
+	var level:String
+	new(level:String){
+		this.level = level
+	}
+	
+}
