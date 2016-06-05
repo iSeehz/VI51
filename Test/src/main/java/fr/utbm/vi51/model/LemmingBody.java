@@ -12,7 +12,7 @@ public class LemmingBody extends EnviromnentObject{
 	private boolean parachute;
 	private boolean climbing;
 	private boolean winner;
-	
+	private boolean digging;
 	private int fatigue;
 	
 	private Integer id;
@@ -33,6 +33,7 @@ public class LemmingBody extends EnviromnentObject{
 		this.parachute = false;
 		this.climbing = false;
 		this.winner = false;
+		this.digging = false;
 		this.fatigue = 1; 
 	}
 	
@@ -52,6 +53,16 @@ public class LemmingBody extends EnviromnentObject{
 		this.fatigue = 1;
 	}
 		
+	
+	
+	public boolean isDigging() {
+		return digging;
+	}
+
+	public void setDigging(boolean digging) {
+		this.digging = digging;
+	}
+
 	public int getId() {
 		return id;
 	}

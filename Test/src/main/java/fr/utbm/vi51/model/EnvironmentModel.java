@@ -233,8 +233,22 @@ public class EnvironmentModel {
 		int y = body.getY();
 		//System.out.println("position :" + (x + 1) + "," + (y + 1));
 		//System.out.println("accélération : " + body.getFall());
+		
+				
+		// the case if half land
+		if(body.isDigging()){
+			grid.get(x + 1).get(y).setType(TypeObject.EMPTY);
+			body.setDigging(false);
+			// every body on this case fall
+			for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
+				grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
+				fallingBody(body, p);
+			}
+			return true;
+		}
+		
 		// check if the body is on a land
-		if (isLand(x + 1, y)) {
+		else if (isLand(x + 1, y)) {
 			// all moves allowed
 			if (move == PossibleMove.MOVEBACKWARD) {
 				body.increaseFatigue();
@@ -258,15 +272,9 @@ public class EnvironmentModel {
 				if ((grid.get(x + 1).get(y).getType().equals(TypeObject.LAND))) {
 					grid.get(x + 1).get(y).setType(TypeObject.HALF);
 					body.setOrientation(Orientation.DOWN);
-					// the case if half land
-				} else if (grid.get(x + 1).get(y).getType().equals(TypeObject.HALF)) {
-					grid.get(x + 1).get(y).setType(TypeObject.EMPTY);
-					// every body on this case fall
-					for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
-						grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
-						fallingBody(body, p);
-					}
+					body.setDigging(true);
 					return true;
+					
 				} else {
 					return false;
 				}
@@ -383,7 +391,7 @@ public class EnvironmentModel {
 
 		}
 		
-		if(Orientation.DOWN == body.getOrientation() &&  !isLand(x , y+1) && !isLand(x, y-1)){
+		if(Orientation.DOWN.equals(body.getOrientation())  &&  !isLand(x , y+1) && !isLand(x, y-1)){
 			body.resetFatigue();
 		}
 	}
