@@ -60,22 +60,22 @@ public class MoveProb {
 		json.writeFile();
 	}
 
-	public PossibleMove randomWeigthChoice(int state){
+	public synchronized PossibleMove randomWeigthChoice(int state){
 		
 		double totalWeigth = 0;
 		int randomIndex = -1;
 		int count = 0;
 		double random;
-		
 		Long [] possibleChoice = this.getProba(state);
 		for(int i=0;i<possibleChoice.length;i++){
 			totalWeigth += Math.max(possibleChoice[i],0);
 		}
 		random = Math.random() * totalWeigth;
-
+		System.out.println("random : " + random + "\ttotalWeight" + totalWeigth);
 		while(randomIndex==-1){
 			random -= Math.max(possibleChoice[count], 0);
-			if(random<0.0d){
+			System.out.println(random);
+			if(random<0.0){
 				randomIndex = count;
 			}
 			count++;

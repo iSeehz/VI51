@@ -65,8 +65,8 @@ agent EnvironmentAgent {
 	var qlearning:MoveProb
 	
 	on Initialize{
-		this.currentLevel = "lab_parachute.txt"
-		this.nextLevel = "lab_parachute.txt"
+		this.currentLevel = "Etages.txt"
+		this.nextLevel = "Etages.txt"
 		this.numberOfLemmingsMinds = numberChoice
 		wake(new ResetAgentEnvironment())
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
@@ -159,8 +159,14 @@ agent EnvironmentAgent {
 			  val key:Address = keySetIterator.next();
 //********************************************** check lemming agent to include the perception and ... etc *************************************//
 //			println(this.mapOfGUID.get(key).intValue())
-		    in (1000) [emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))]
-
+			
+		    in (1000) [
+		    	try{emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))
+		    
+			} catch(E:Exception){
+				println("Perception non reçu suite à l'arrêt prématuré du jeu")
+			}
+			]
 		}
 	}
 	
@@ -255,7 +261,7 @@ agent EnvironmentAgent {
 			  	}
 			}
 			this.numberOfLemmingsMinds --
-			wake(new MAJGrid)
+			//wake(new MAJGrid)
 		}
 		
 	
@@ -298,10 +304,10 @@ agent EnvironmentAgent {
 	
 	
 	on KillLemmingsAgents{
-		
-		for(adr: this.listOfGUID){
+		emit(new Destroy)
+		/*for(adr: this.listOfGUID){
 			emit(new Destroy, Scopes::addresses(adr))
-		}
+		*///}
 		
 	}
 	

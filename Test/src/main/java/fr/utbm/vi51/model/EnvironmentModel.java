@@ -239,10 +239,11 @@ public class EnvironmentModel {
 			grid.get(x + 1).get(y).setType(TypeObject.EMPTY);
 			body.setDigging(false);
 			// every body on this case fall
-			for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
+			fallingBodyOne(body);
+			/*for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
 				grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
-				fallingBodyAll(grid.get(x).get(y).getListOfBodyInCell());
-			}
+				fallingBodyOne(body);
+			}*/
 			return true;
 		}
 		
@@ -376,11 +377,6 @@ public class EnvironmentModel {
 			body.winner();
 			System.out.println("Winner!!");
 			outLemming(body);
-			/*addInListOfChanges(new Point(x-1,y));
-			addInListOfChanges(new Point(x,y-1));
-			addInListOfChanges(new Point(x,y+1));
-			addInListOfChanges(new Point(x+1,y-1));
-			addInListOfChanges(new Point(x+1,y+1));*/
 			// if the body is on a land nothing to do except disable parachute
 			// and stop climbing
 		} else if (isLand(x + 1, y)) {
@@ -415,16 +411,27 @@ public class EnvironmentModel {
 		addInListOfChanges(new Point(x+1,y));
 	}
 	
+	public synchronized void fallingBodyOne(LemmingBody body) {
+
+		int x = body.getX();
+		int y = body.getY();
+
+		grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+		body.setX(x+1);
+		grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
+		
+		addInListOfChanges(new Point(x,y));
+		addInListOfChanges(new Point(x+1,y));
+	}
+	
 	public synchronized void fallingBodyAll(List<LemmingBody> bodies) {
 
 		int x = bodies.get(0).getX();
 		int y = bodies.get(0).getY();
 		
 		for (LemmingBody body:bodies){
-
-			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
-			body.setX(x+1);;
-
+				grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+				body.setX(x+1);
 		}
 		bodies.clear();
 		addInListOfChanges(new Point(x,y));
