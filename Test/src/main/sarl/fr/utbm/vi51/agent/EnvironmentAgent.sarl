@@ -155,10 +155,10 @@ agent EnvironmentAgent {
 	def sendPerceptionsToAgents(){
 		var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
 		while(keySetIterator.hasNext()){
-			  var key:Address = keySetIterator.next();
+			  val key:Address = keySetIterator.next();
 //********************************************** check lemming agent to include the perception and ... etc *************************************//
 //			println(this.mapOfGUID.get(key).intValue())
-		    emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))
+		    in (1000) [emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))]
 
 		}
 	}
@@ -267,7 +267,7 @@ agent EnvironmentAgent {
 			this.gui.getMainPanel().getTime().pause()
 		}
 		}else{
-			wake(new StopSimulation)
+			in(5000) [wake(new StopSimulation)]
 		}
 		
 		
