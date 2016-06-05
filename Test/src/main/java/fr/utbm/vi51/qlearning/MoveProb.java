@@ -8,7 +8,7 @@ import fr.utbm.vi51.model.PossibleMove;
 import fr.utbm.vi51.parser.JSONReadAndWriteQLearning;
 
 public class MoveProb {
-	private final float coeff = 0.5f;
+	private final float coeff = 0.1f;
 	private Long ProbaMat[][];
 	private Long EvalMat[][];
 	private JSONReadAndWriteQLearning json;

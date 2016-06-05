@@ -312,7 +312,7 @@ public class EnvironmentModel {
 		int x = body.getX();
 		int y = body.getY();
 		int futurY = (y - 1 + grid.get(x).size()) % grid.get(x).size();
-		if ((x > 0) && accessibleCase(x, futurY)) {
+		if ( accessibleCase(x, futurY)) {
 			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
 			grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			body.setY(futurY);

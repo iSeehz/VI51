@@ -102,7 +102,7 @@ public class JSONReadAndWriteQLearning {
 	        try {  
 	              
 	            // Writing to a file  
-	            File file=new File(System.getProperty("user.dir") + "/src/main/resources/fr/utbm/vi51/qlearning/test.txt");  
+	            File file=new File(this.pathProba);  
 	            file.createNewFile();  
 	            FileWriter fileWriter = new FileWriter(file);  
 	            System.out.println("Writing JSON object to file");  
