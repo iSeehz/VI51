@@ -71,10 +71,8 @@ public class MoveProb {
 			totalWeigth += Math.max(possibleChoice[i],0);
 		}
 		random = Math.random() * totalWeigth;
-		System.out.println("random : " + random + "\ttotalWeight" + totalWeigth);
 		while(randomIndex==-1){
 			random -= Math.max(possibleChoice[count], 0);
-			System.out.println(random);
 			if(random<0.0){
 				randomIndex = count;
 			}

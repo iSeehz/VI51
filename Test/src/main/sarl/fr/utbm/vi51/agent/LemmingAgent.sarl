@@ -63,7 +63,8 @@ agent LemmingAgent {
 //			println(this.percept.indexOf(p) + " :" +p.getType())
 //		}
 		var currentState:int = computeState(0, Orientation.RIGHT,false)
-		//println("State :" +currentState)
+		println("Fatigue : " + occurrence.fatigue)
+		println("State :" +currentState)
 		if(previousAction!=null && previousState!=-1){
 //			*********************************************************************** possible problem with few lemming **********************
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
@@ -82,25 +83,24 @@ agent LemmingAgent {
 		var FF = (fatigue>4)
 		var I = (percept.get(4).getType()==TypeObject.LAND)
 		var A = (percept.get(2).getType()==TypeObject.LAND)
-
 		var E = ((percept.get(7).getType()==TypeObject.LAND) || (percept.get(6).getType()==TypeObject.LAND)|| (percept.get(5).getType()==TypeObject.LAND))
 		if(!I && !climbing || !I && A)
 			{return 0}			
-		else if (percept.get(1).getType()==TypeObject.EXIT ||(percept.get(13).getType()==TypeObject.EXIT||percept.get(14).getType()==TypeObject.EXIT||percept.get(15).getType()==TypeObject.EXIT) && percept.get(1).getType()!==TypeObject.EXIT ){
+		else if (percept.get(1).getType()==TypeObject.EXIT ||(percept.get(13).getType()==TypeObject.EXIT||percept.get(14).getType()==TypeObject.EXIT||percept.get(15).getType()==TypeObject.EXIT) ){
 			if (ori==Orientation.LEFT){return 1}
 			else{return 3}
-		}else if (percept.get(3).getType()==TypeObject.EXIT ||(percept.get(12).getType()==TypeObject.EXIT||percept.get(11).getType()==TypeObject.EXIT||percept.get(10).getType()==TypeObject.EXIT) && percept.get(3).getType()!==TypeObject.LAND ){
+		}else if (percept.get(3).getType()==TypeObject.EXIT ||(percept.get(12).getType()==TypeObject.EXIT||percept.get(11).getType()==TypeObject.EXIT||percept.get(10).getType()==TypeObject.EXIT) ){
 			if (ori==Orientation.LEFT){return 3}
 			else{return 1}
 		}else if (percept.get(5).getType()==TypeObject.EXIT||percept.get(6).getType()==TypeObject.EXIT||percept.get(7).getType()==TypeObject.EXIT){
 			return 5
-		}else if((percept.get(8).getType()=='EXIT'||(percept.get(13).getType()=='EXIT'||percept.get(14).getType()=='EXIT'||percept.get(15).getType()=='EXIT')&& !FF)  && !A ){
+		}else if((percept.get(8).getType()==TypeObject.EXIT||(percept.get(13).getType()==TypeObject.EXIT||percept.get(14).getType()==TypeObject.EXIT||percept.get(15).getType()==TypeObject.EXIT)&& !FF)  && !A ){
 			if (ori==Orientation.LEFT){return 2}
 			else{return 4}
-		}else if((percept.get(9).getType()=='EXIT'||(percept.get(10).getType()=='EXIT'||percept.get(11).getType()=='EXIT'||percept.get(12).getType()=='EXIT')&& !FF)  && !A ){
+		}else if((percept.get(9).getType()==TypeObject.EXIT||(percept.get(10).getType()==TypeObject.EXIT||percept.get(11).getType()==TypeObject.EXIT||percept.get(12).getType()==TypeObject.EXIT)&& !FF)  && !A ){
 			if (ori==Orientation.LEFT){return 4}
 			else{return 2}
-			}
+		}
  /*-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-*/
 		var DvM:boolean
 		var DvI:boolean
@@ -109,22 +109,33 @@ agent LemmingAgent {
 		var DrI:boolean
 		var DrE:boolean
 		if(ori==Orientation.LEFT){
-			DvM = (percept.get(1).getType()=='LAND')
-			DrM = (percept.get(3).getType()=='LAND')
-			DvI	= (percept.get(13).getType()=='LAND')
-			DrI = (percept.get(10).getType()=='LAND')
-			DvE = (percept.get(14)=='LAND'||percept.get(15)=='LAND')
-			DrE = (percept.get(11)=='LAND'||percept.get(12)=='LAND')
+			DvM = (percept.get(1).getType()==TypeObject.LAND)
+			DrM = (percept.get(3).getType()==TypeObject.LAND)
+			DvI	= (percept.get(13).getType()==TypeObject.LAND)
+			DrI = (percept.get(10).getType()==TypeObject.LAND)
+			DvE = (percept.get(14)==TypeObject.LAND||percept.get(15)==TypeObject.LAND)
+			DrE = (percept.get(11)==TypeObject.LAND||percept.get(12)==TypeObject.LAND)
 		}
 		else{
-			DrM = (percept.get(1).getType()=='LAND')
-			DvM = (percept.get(3).getType()=='LAND')
-			DrI	= (percept.get(13).getType()=='LAND')
-			DvI = (percept.get(10).getType()=='LAND')
-			DrE = (percept.get(14)=='LAND'||percept.get(15)=='LAND')
-			DvE = (percept.get(11)=='LAND'||percept.get(12)=='LAND')
+			DrM = (percept.get(1).getType()==TypeObject.LAND)
+			DvM = (percept.get(3).getType()==TypeObject.LAND)
+			DrI	= (percept.get(13).getType()==TypeObject.LAND)
+			DvI = (percept.get(10).getType()==TypeObject.LAND)
+			DrE = (percept.get(14)==TypeObject.LAND||percept.get(15)==TypeObject.LAND)
+			DvE = (percept.get(11)==TypeObject.LAND||percept.get(12)==TypeObject.LAND)
 		}
-		
+			println("10 : "+percept.get(10).getType())
+			println("13 : "+percept.get(13).getType())
+			if (DrM) {println("1a")}
+			if (!DrM) {println("1b")}
+			if (NF) {println("2a")}
+			if (!DvI) {println("2b")}
+			if (!DvM) {println("2c")}
+			if (DrI) {println("2dr")}
+			if (!DrI) {println("2dr2")}
+			if (DrI) {println("2dv")}
+			if (!DrI) {println("2dv2")}
+			
 		if(!DvM && (NF && DvI
 				|| F && (DvI||DvE) && !DrM && !E && !DrE
 				|| F && (DvI||DvE) && A && DrM && !E))
@@ -182,6 +193,17 @@ agent LemmingAgent {
 		else if(F && !A && DvM && DrM && E){
 			return 17
 		}else{
+			println("10 : "+percept.get(10).getType())
+			println("13 : "+percept.get(13).getType())
+			if (DrM) {println("1a")}
+			if (!DrM) {println("1b")}
+			if (NF) {println("2a")}
+			if (!DvI) {println("2b")}
+			if (!DvM) {println("2c")}
+			if (DrI) {println("2dr")}
+			if (!DrI) {println("2dr2")}
+			if (DrI) {println("2dv")}
+			if (!DrI) {println("2dv2")}
 			return 1
 		}
 }

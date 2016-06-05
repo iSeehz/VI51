@@ -42,7 +42,7 @@ public class OptionPanel extends JPanel{
 		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
 		
 		//set the level
-		String level[] = {"Etages.txt","Colonnes.txt","Escalier.txt","GrandSaut.txt","GrandSautv2.txt"};
+		String level[] = {"Etages.txt","Colonnes.txt","Escalier.txt","GrandSaut.txt","GrandSaut2.txt"};
 		changeLevel = new JComboBox<String>(level);
 		
 		this.add(data);

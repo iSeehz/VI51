@@ -50,7 +50,7 @@ import java.util.List
  */
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
-	val numberChoice = 5
+	val numberChoice = 2
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
 	var mapOfGUID : HashMap<Address,Integer >
@@ -236,7 +236,7 @@ agent EnvironmentAgent {
 
 			}
 			this.moveInfluences.clear();
-			//this.qlearning.write()
+			this.qlearning.write()
 			//** to do check if the list contains distinct points
 			wake(new MAJGrid)
 //			Thread.sleep(1000)
