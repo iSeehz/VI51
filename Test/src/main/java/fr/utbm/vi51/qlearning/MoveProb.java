@@ -69,13 +69,13 @@ public class MoveProb {
 		
 		Long [] possibleChoice = this.getProba(state);
 		for(int i=0;i<possibleChoice.length;i++){
-			totalWeigth += possibleChoice[i];
+			totalWeigth += Math.max(possibleChoice[i],0);
 		}
 		random = Math.random() * totalWeigth;
 
 		while(randomIndex==-1){
 			random -= Math.max(possibleChoice[count], 0);
-			if(random<=0.0d){
+			if(random<0.0d){
 				randomIndex = count;
 			}
 			count++;

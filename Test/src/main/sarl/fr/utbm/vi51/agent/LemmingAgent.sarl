@@ -57,19 +57,18 @@ agent LemmingAgent {
 		//println("bien reçu capitaine !")
 		this.percept = occurrence.perceptions
 		//chose how to do !!
-		println(this.percept.size())
+		//println(this.percept.size())
 //		for(p  : this.percept){
 //			
 //			println(this.percept.indexOf(p) + " :" +p.getType())
 //		}
 		var currentState:int = computeState(0, Orientation.RIGHT,false)
-		println("State :" +currentState)
+		//println("State :" +currentState)
 		if(previousAction!=null && previousState!=-1){
 //			*********************************************************************** possible problem with few lemming **********************
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
 		}
 		var currentAction:PossibleMove = occurrence.moveProb.randomWeigthChoice(currentState)
-		println("choix : " + currentAction)
 		this.previousState = currentState
 		this.previousAction = currentAction
 		

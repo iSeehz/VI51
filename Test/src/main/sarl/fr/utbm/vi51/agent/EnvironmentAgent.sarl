@@ -43,13 +43,14 @@ import java.util.HashMap
 import java.util.Iterator
 import java.util.List
 
+
 /**
  * @author tiboty
  *
  */
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
-	
+	val numberChoice = 5
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
 	var mapOfGUID : HashMap<Address,Integer >
@@ -66,7 +67,7 @@ agent EnvironmentAgent {
 	on Initialize{
 		this.currentLevel = "lab_parachute.txt"
 		this.nextLevel = "lab_parachute.txt"
-		this.numberOfLemmingsMinds = 1
+		this.numberOfLemmingsMinds = numberChoice
 		wake(new ResetAgentEnvironment())
 		var controller:Controller = new Controller(defaultSpace, defaultAddress);
 		this.gui = new FrameProject(this.environment, controller)
@@ -181,6 +182,7 @@ agent EnvironmentAgent {
 			wake(new KillLemmingsAgents)
 			//**************** est-ce que l'agent est bien tué avant le reset    *******************
 			this.listOfGUID.clear()
+			numberOfLemmingsMinds=numberChoice
 			this.gui.getOptionPanel().updateTab(this.numberOfLemmingsMinds,0,0)
 			wake(new ResetAgentEnvironment())
 		}else{
@@ -228,7 +230,7 @@ agent EnvironmentAgent {
 
 			}
 			this.moveInfluences.clear();
-			this.qlearning.write()
+			//this.qlearning.write()
 			//** to do check if the list contains distinct points
 			wake(new MAJGrid)
 //			Thread.sleep(1000)
@@ -249,8 +251,10 @@ agent EnvironmentAgent {
 			  	find = true
 			  	this.mapOfGUID.remove(key)
 			  	this.listOfGUID.remove(this.listOfGUID.indexOf(key))
+			  	this.moveInfluences.remove(key)
 			  	}
 			}
+			this.numberOfLemmingsMinds --
 			wake(new MAJGrid)
 		}
 		

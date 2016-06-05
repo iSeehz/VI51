@@ -228,10 +228,9 @@ public class EnvironmentModel {
 
 		LemmingBody body = searchBody(id).getBody();
 		int p = searchBody(id).getPosition();
-
 		int x = body.getX();
 		int y = body.getY();
-		//System.out.println("position :" + (x + 1) + "," + (y + 1));
+		System.out.println("position :" + (x + 1) + "," + (y + 1));
 		//System.out.println("accélération : " + body.getFall());
 		
 				
@@ -242,13 +241,13 @@ public class EnvironmentModel {
 			// every body on this case fall
 			for (int i = 0; i < grid.get(x).get(y).getListOfBodyInCell().size(); i++) {
 				grid.get(x).get(y).getListOfBodyInCell().get(p).fall();
-				fallingBody(body, p);
+				fallingBodyAll(grid.get(x).get(y).getListOfBodyInCell());
 			}
 			return true;
 		}
 		
 		// check if the body is on a land
-		else if (isLand(x + 1, y)) {
+		else if (isLand(x + 1, y) || isHalf(x + 1, y)) {
 			// all moves allowed
 			if (move == PossibleMove.MOVEBACKWARD) {
 				body.increaseFatigue();
@@ -263,17 +262,18 @@ public class EnvironmentModel {
 				} else {
 					return moveRight(body, p);
 				}
-			} else if (move == PossibleMove.CLIMBFORWARD) {
+		/*	} else if (move == PossibleMove.CLIMBFORWARD) {
 				return climbingBody(body, p, false);
 			} else if (move == PossibleMove.CLIMBBACKWARD) {
-				return climbingBody(body, p, true);
+				return climbingBody(body, p, true);*/
 			} else if (move == PossibleMove.DIG) {
 				// the case is full Land
 				if ((grid.get(x + 1).get(y).getType().equals(TypeObject.LAND))) {
 					grid.get(x + 1).get(y).setType(TypeObject.HALF);
 					body.setOrientation(Orientation.DOWN);
 					body.setDigging(true);
-					return true;
+					addInListOfChanges(new Point(x+1,y));
+					return false;
 					
 				} else {
 					return false;
@@ -376,6 +376,11 @@ public class EnvironmentModel {
 			body.winner();
 			System.out.println("Winner!!");
 			outLemming(body);
+			/*addInListOfChanges(new Point(x-1,y));
+			addInListOfChanges(new Point(x,y-1));
+			addInListOfChanges(new Point(x,y+1));
+			addInListOfChanges(new Point(x+1,y-1));
+			addInListOfChanges(new Point(x+1,y+1));*/
 			// if the body is on a land nothing to do except disable parachute
 			// and stop climbing
 		} else if (isLand(x + 1, y)) {
@@ -408,6 +413,23 @@ public class EnvironmentModel {
 		body.setX(x + 1);
 		addInListOfChanges(new Point(x,y));
 		addInListOfChanges(new Point(x+1,y));
+	}
+	
+	public synchronized void fallingBodyAll(List<LemmingBody> bodies) {
+
+		int x = bodies.get(0).getX();
+		int y = bodies.get(0).getY();
+		
+		for (LemmingBody body:bodies){
+
+			grid.get(x + 1).get(y).getListOfBodyInCell().add(body);
+			body.setX(x+1);;
+
+		}
+		bodies.clear();
+		addInListOfChanges(new Point(x,y));
+		addInListOfChanges(new Point(x+1,y));
+
 	}
 
 	// ************* pas vérif *********************** les changements ici n'apparaitront pas 
@@ -565,6 +587,17 @@ public class EnvironmentModel {
 			return false;
 		}
 		if ( grid.get(x).get(y).getType().equals(TypeObject.LAND)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public synchronized boolean isHalf(int x, int y) {
+		if (x >= grid.size()) {
+			return false;
+		}
+		if ( grid.get(x).get(y).getType().equals(TypeObject.HALF)) {
 			return true;
 		} else {
 			return false;
