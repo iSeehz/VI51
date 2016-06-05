@@ -382,6 +382,10 @@ public class EnvironmentModel {
 			}
 
 		}
+		
+		if(Orientation.DOWN == body.getOrientation() &&  !isLand(x , y+1) && !isLand(x, y-1)){
+			body.resetFatigue();
+		}
 	}
 
 	public synchronized void fallingBody(LemmingBody body, int p) {
@@ -552,8 +556,7 @@ public class EnvironmentModel {
 		if (x >= grid.size()) {
 			return false;
 		}
-		if (grid.get(x).get(y).getType().equals(TypeObject.HALF)
-				|| grid.get(x).get(y).getType().equals(TypeObject.LAND)) {
+		if ( grid.get(x).get(y).getType().equals(TypeObject.LAND)) {
 			return true;
 		} else {
 			return false;
