@@ -84,8 +84,8 @@ public class JSONReadAndWriteQLearning {
 		
 		
 		 JSONObject data = new JSONObject();  
-	        data.put("Height", this.probabilities.length);  
-	        data.put("Width", this.probabilities[0].length);  
+	        data.put("Height", Integer.toString(this.probabilities.length));  
+	        data.put("Width", Integer.toString(this.probabilities[0].length));  
 	  
 	        
 	        List<JSONArray> line = new JSONArray();  

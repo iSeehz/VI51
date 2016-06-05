@@ -391,7 +391,7 @@ public class EnvironmentModel {
 
 		}
 		
-		if(Orientation.DOWN.equals(body.getOrientation())  &&  !isLand(x , y+1) && !isLand(x, y-1)){
+		if(Orientation.DOWN.equals(body.getOrientation())  &&  !isLand(x , (y+1)%grid.get(0).size()) && !isLand(x, (y-1 + grid.get(0).size())%grid.get(0).size())){
 			body.resetFatigue();
 		}
 	}
