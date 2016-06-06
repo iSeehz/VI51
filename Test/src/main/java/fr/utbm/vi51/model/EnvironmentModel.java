@@ -230,9 +230,13 @@ public class EnvironmentModel {
 	// with an id and a move, the body is moved
 	public synchronized boolean moveBody(int id, PossibleMove move) {
 
+	
 		LemmingBody body = searchBody(id);
 		int x = body.getX();
 		int y = body.getY();
+		System.out.println(body.getOrientation());
+		if (body.getOrientation().equals(Orientation.DOWN) && !isLand(x, (y+1)%grid.get(0).size()) && !isLand(x, (y-1 + grid.get(0).size())%grid.get(0).size())) {
+			body.resetFatigue();}
 		System.out.println("position :" + (x + 1) + "," + (y + 1));
 		//System.out.println("accélération : " + body.getFall());
 		
@@ -383,22 +387,8 @@ public class EnvironmentModel {
 			outLemming(body);
 			// if the body is on a land nothing to do except disable parachute
 			// and stop climbing
-		} else if (isLand(x + 1, y)) {
-			if (body.getOrientation().equals(Orientation.DOWN)) {
-				if (body.isClimbing()) {
-					body.increaseFatigue();
-					body.getUp();
-				} else {
-					body.getUp();
-					body.resetFatigue();
-				}
-			}
+		}
 
-		}
-		
-		if(Orientation.DOWN.equals(body.getOrientation())  &&  !isLand(x , (y+1)%grid.get(0).size()) && !isLand(x, (y-1 + grid.get(0).size())%grid.get(0).size())){
-			body.resetFatigue();
-		}
 	}
 
 	/*public synchronized void fallingBody(LemmingBody body, int p) {
