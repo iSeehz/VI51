@@ -25,7 +25,7 @@ import fr.utbm.vi51.^event.TerminateSimulation
 import fr.utbm.vi51.^event.WantPerception
 import fr.utbm.vi51.gui.FrameProject
 import fr.utbm.vi51.model.EnvironmentModel
-import fr.utbm.vi51.model.Orientation
+import fr.utbm.vi51.model.LemmingBody
 import fr.utbm.vi51.model.PossibleMove
 import fr.utbm.vi51.qlearning.MoveProb
 import io.sarl.core.AgentTask
@@ -42,7 +42,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
-
 
 /**
  * @author tiboty
@@ -161,7 +160,17 @@ agent EnvironmentAgent {
 //			println(this.mapOfGUID.get(key).intValue())
 			
 		    in (1000) [
-		    	try{emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),0,Orientation.LEFT,false,this.qlearning), Scopes::addresses(key))
+		    	var body:LemmingBody = null
+		    	var i:int=0
+		    	while(i<this.environment.getListOfBody().size() && body == null){
+		    		
+		    		if(this.mapOfGUID.get(key).intValue() ==this.environment.getListOfBody().get(i).getId() ){
+		    			
+		    			body = this.environment.getListOfBody().get(i)
+		    		}
+		    		i++
+		    	}
+		    	try{emit(new PerceptionEvent(this.environment.getPerception(this.mapOfGUID.get(key).intValue()),body.getFatigue(),body.getOrientation(),body.isClimbing(),this.qlearning), Scopes::addresses(key))
 		    
 			} catch(E:Exception){
 				println("Perception non reçu suite à l'arrêt prématuré du jeu")

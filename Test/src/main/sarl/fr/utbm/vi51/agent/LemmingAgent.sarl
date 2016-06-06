@@ -62,7 +62,7 @@ agent LemmingAgent {
 //			
 //			println(this.percept.indexOf(p) + " :" +p.getType())
 //		}
-		var currentState:int = computeState(0, Orientation.RIGHT,false)
+		var currentState:int = computeState(occurrence.fatigue,occurrence.orientation,occurrence.climbing)
 		println("Fatigue : " + occurrence.fatigue)
 		println("State :" +currentState)
 		if(previousAction!=null && previousState!=-1){
@@ -78,6 +78,7 @@ agent LemmingAgent {
 	}
 		
 	def computeState(fatigue:int,ori:Orientation,climbing:boolean):int{
+					println(ori)
 		var NF = (fatigue<3)
 		var F = (fatigue<5 && fatigue>2)
 		var FF = (fatigue>4)

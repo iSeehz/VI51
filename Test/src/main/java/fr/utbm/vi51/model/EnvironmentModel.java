@@ -367,7 +367,6 @@ public class EnvironmentModel {
 		}
 		//check if the lemmming crashes himself.
 		else if (body.getFall() >= 3 && grid.get(x+1).get(y).getType().equals(TypeObject.LAND)) {
-			body.setOrientation(Orientation.DEAD);
 			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 			addInListOfChanges(new Point(x,y));
 			killLemming(body);
