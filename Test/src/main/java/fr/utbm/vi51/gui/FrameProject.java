@@ -37,7 +37,6 @@ public class FrameProject extends JFrame {
 		this.setLocation(10,200);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setVisible(true);
-		
 		//set the OptionPanel
 		split.setResizeWeight(1.0);
 		
@@ -46,6 +45,7 @@ public class FrameProject extends JFrame {
 		addWindowListener(new WindowAdapter() {
 		  	public void windowClosing(WindowEvent e) {
 		  		controller.preparationToQuit();
+		  		dispose();
 		  		System.exit(0);
 		  	}	
 		} );
