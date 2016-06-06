@@ -127,10 +127,10 @@ agent LemmingAgent {
 		}
 			println("10 : "+percept.get(10).getType())
 			println("13 : "+percept.get(13).getType())
-			if (DrM) {println("1a")}
-			if (!DrM) {println("1b")}
+			if (!DrM) {println("1a")}
+/*/			if (!DrM) {println("1b")}
 			if (NF) {println("2a")}
-			if (!DvI) {println("2b")}
+			if (!DvI) {println("2b")}*/
 			if (!DvM) {println("2c")}
 			if (DrI) {println("2dr")}
 			if (!DrI) {println("2dr2")}
@@ -157,7 +157,7 @@ agent LemmingAgent {
 			return 5
 		}
 /*-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-*/
-		else if(!DvM && !DrM && E && (FF || F && (DvE || DvI) && (DrE || DrI))){
+		else if(!DvM && !DrM && (FF || (F && (DvE || DvI) && (DrE || DrI) && E))){
 			return 6
 		}
 		else if(FF && DvM && !DrM || F && (DrE || DrI) && E && !DrM && DvM && A || (DrE || DrI) && E && !DvM && !DvE && !DvI){
