@@ -330,7 +330,7 @@ agent EnvironmentAgent {
 	}
 	
 	on TerminateSimulation{
-		wake(new KillLemmingsAgents)
+		emit(new Destroy)
 		killMe
 	}
 }
