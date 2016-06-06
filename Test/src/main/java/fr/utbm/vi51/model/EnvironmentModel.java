@@ -104,24 +104,28 @@ public class EnvironmentModel {
 	}
 
 	// SearchedBody return the position of the body in the list of a Cell
-	public synchronized SearchedBody searchBody(int id) {
-		int p = 0;
-		int k = 0;
-		while (listOfBody.get(p).getId() != id) {
-			p++;
+	public synchronized LemmingBody searchBody(int id) {
+		LemmingBody body = null;
+		int i = 0;
+		while(i<this.getListOfBody().size() && body == null){
+		    		
+		   if(id ==this.getListOfBody().get(i).getId() ){
+		    			
+			   body = this.getListOfBody().get(i);
+		   }
+		    		i++;
 		}
-		k = searchBodyInCell(listOfBody.get(p));
-		return new SearchedBody(listOfBody.get(p), k);
+		return body;
 
 	}
 
-	public synchronized int searchBodyInCell(LemmingBody body) {
+	/*public synchronized int searchBodyInCell(LemmingBody body) {
 		int k = 0;
 		while (grid.get(body.getX()).get(body.getY()).getListOfBodyInCell().get(k).getId() != body.getId()) {
 			k++;
 		}
 		return k;
-	}
+	}*/
 
 	public synchronized List<Percept> getPerception(int id) {
 		/*
@@ -130,7 +134,7 @@ public class EnvironmentModel {
 		 */
 		List<Percept> allPerception = new ArrayList<Percept>();
 
-		LemmingBody body = searchBody(id).getBody();
+		LemmingBody body = searchBody(id);
 		int x = body.getX();
 		int y = body.getY();
 		// System.out.println(x + ":" + y);
@@ -226,8 +230,7 @@ public class EnvironmentModel {
 	// with an id and a move, the body is moved
 	public synchronized boolean moveBody(int id, PossibleMove move) {
 
-		LemmingBody body = searchBody(id).getBody();
-		int p = searchBody(id).getPosition();
+		LemmingBody body = searchBody(id);
 		int x = body.getX();
 		int y = body.getY();
 		System.out.println("position :" + (x + 1) + "," + (y + 1));
@@ -253,15 +256,15 @@ public class EnvironmentModel {
 			if (move == PossibleMove.MOVEBACKWARD) {
 				body.increaseFatigue();
 				if (body.getOrientation().equals(Orientation.RIGHT)) {
-					return moveLeft(body, p);
+					return moveLeft(body);
 				} else {
-					return moveRight(body, p);
+					return moveRight(body);
 				}
 			} else if (move == PossibleMove.MOVEFORWARD) {
 				if (body.getOrientation().equals(Orientation.LEFT)) {
-					return moveLeft(body, p);
+					return moveLeft(body);
 				} else {
-					return moveRight(body, p);
+					return moveRight(body);
 				}
 		/*	} else if (move == PossibleMove.CLIMBFORWARD) {
 				return climbingBody(body, p, false);
@@ -285,12 +288,12 @@ public class EnvironmentModel {
 
 		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBFORWARD)) {
 
-			return climbingBody(body, p, false);
+			//return climbingBody(body, p, false);
 
 		} else if (body.isClimbing() && move.equals(PossibleMove.CLIMBBACKWARD)) {
 
 			body.increaseFatigue();
-			return climbingBody(body, p, true);
+			//return climbingBody(body, p, true);
 
 			// body parachute & falling
 		} else if (x + 2 < grid.size()) {
@@ -298,15 +301,16 @@ public class EnvironmentModel {
 					body.activateParachute();
 				}
 				//System.out.println("tombe");
-				fallingBody(body, p);
+				fallingBodyOne(body);
 				statusBody(body);
 				return true;
 			}
 		 else if (x + 1 < grid.size()) {
-			fallingBody(body, p);
+			 fallingBodyOne(body);
 			return true;
 		} else {
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			//grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 //			System.out.println("le body est parti dans l'espace! fonction Move");
 			addInListOfChanges(new Point(x,y));
 			killLemming(body);
@@ -317,13 +321,13 @@ public class EnvironmentModel {
 
 	}
 
-	public synchronized boolean moveLeft(LemmingBody body, int p) {
+	public synchronized boolean moveLeft(LemmingBody body) {
 		int x = body.getX();
 		int y = body.getY();
 		int futurY = (y - 1 + grid.get(x).size()) % grid.get(x).size();
 		if ( accessibleCase(x, futurY)) {
 			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 			body.setY(futurY);
 			body.setOrientation(Orientation.LEFT);
 			addInListOfChanges(new Point(x,y));
@@ -335,13 +339,14 @@ public class EnvironmentModel {
 		}
 	}
 
-	public  synchronized boolean moveRight(LemmingBody body, int p) {
+	public  synchronized boolean moveRight(LemmingBody body) {
 		int x = body.getX();
 		int y = body.getY();
 		int futurY = (y + 1) % grid.get(x).size();
 		if (accessibleCase(x, futurY)) {
 			grid.get(x).get(futurY).getListOfBodyInCell().add(body);
-			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+//			grid.get(x).get(y).getListOfBodyInCell().remove(p);
+			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 			body.setY(futurY);
 			body.setOrientation(Orientation.RIGHT);
 			addInListOfChanges(new Point(x,y));
@@ -396,7 +401,7 @@ public class EnvironmentModel {
 		}
 	}
 
-	public synchronized void fallingBody(LemmingBody body, int p) {
+	/*public synchronized void fallingBody(LemmingBody body, int p) {
 
 		int x = body.getX();
 		int y = body.getY();
@@ -408,7 +413,7 @@ public class EnvironmentModel {
 		body.setX(x + 1);
 		addInListOfChanges(new Point(x,y));
 		addInListOfChanges(new Point(x+1,y));
-	}
+	}*/
 	
 	public synchronized void fallingBodyOne(LemmingBody body) {
 
