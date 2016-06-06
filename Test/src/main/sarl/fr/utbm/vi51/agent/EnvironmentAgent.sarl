@@ -49,7 +49,7 @@ import java.util.List
  */
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
-	val numberChoice = 2
+	val numberChoice = 200
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
 	var mapOfGUID : HashMap<Address,Integer >
@@ -306,17 +306,12 @@ agent EnvironmentAgent {
 	on ResetGrid [this.gui != null]{
 
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
-		//a supprimer quand le smart sera posé
-		//this.gui.getOptionPanel().updateTab(this.environment.getListOfBody().size(),this.environment.getOut(),this.environment.getDead())
-		//wake(new Manager)
+
 	}
 	
 	
 	on KillLemmingsAgents{
 		emit(new Destroy)
-		/*for(adr: this.listOfGUID){
-			emit(new Destroy, Scopes::addresses(adr))
-		*///}
 		
 	}
 	
