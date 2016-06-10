@@ -85,6 +85,31 @@ public class FrameProject extends JFrame {
 		    }
 		});
 		
+		this.optionPanel.getHalfTurnAllButton().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        controller.OrderAllLemmingHalfTurn();
+		    }
+		});
+		
+		this.optionPanel.getDigAllButton().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        controller.OrderAllLemmingDig();
+		    }
+		});
+		
+		this.optionPanel.getKillRandomLemming().addActionListener( new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        controller.OrderKillRandomLemming();
+		    }
+		});
+		
+		
 	}
 	public EnvironmentModel getEnvironment() {
 		return environment;

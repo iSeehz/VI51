@@ -4,6 +4,8 @@
 package fr.utbm.vi51.^agent
 
 import fr.utbm.vi51.controller.Controller
+import fr.utbm.vi51.^event.AllLemmingDig
+import fr.utbm.vi51.^event.AllLemmingHalfTurn
 import fr.utbm.vi51.^event.AreYouAwoken
 import fr.utbm.vi51.^event.ChangeLevel
 import fr.utbm.vi51.^event.ChangeLevelAndRebuildModel
@@ -13,6 +15,7 @@ import fr.utbm.vi51.^event.GiveBody
 import fr.utbm.vi51.^event.IamAwoken
 import fr.utbm.vi51.^event.Influence
 import fr.utbm.vi51.^event.KillLemmingsAgents
+import fr.utbm.vi51.^event.KillOneLemming
 import fr.utbm.vi51.^event.MAJGrid
 import fr.utbm.vi51.^event.Manager
 import fr.utbm.vi51.^event.PerceptionEvent
@@ -42,6 +45,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.Iterator
 import java.util.List
+import java.util.Random
 
 /**
  * @author tiboty
@@ -62,6 +66,13 @@ agent EnvironmentAgent {
 	var currentLevel:String
 	var nextLevel:String
 	var qlearning:MoveProb
+	/* Variable for the user's order
+	 * 0 : default
+	 * 1 : all lemming have to dig
+	 * 2 : all lemming have to move halfturn
+	 * 3 : kill one lemming randomly
+	*/
+	var userOrder:int
 	
 	on Initialize{
 		this.currentLevel = "Etages.txt"
@@ -88,7 +99,7 @@ agent EnvironmentAgent {
 	}
 	
 	on ResetAgentEnvironment{
-		
+		this.userOrder = 0
 		this.state = SimulationState.INIT
 		this.mapOfGUID = new HashMap<Address, Integer>()
 		this.moveInfluences = new HashMap<Integer,PossibleMove>()
@@ -156,8 +167,7 @@ agent EnvironmentAgent {
 		var keySetIterator:Iterator<Address>  = this.mapOfGUID.keySet().iterator()
 		while(keySetIterator.hasNext()){
 			  val key:Address = keySetIterator.next();
-//********************************************** check lemming agent to include the perception and ... etc *************************************//
-//			println(this.mapOfGUID.get(key).intValue())
+
 			
 		    in (1000) [
 		    	var body:LemmingBody = null
@@ -226,6 +236,21 @@ agent EnvironmentAgent {
 		}
 	}
 	
+
+	on AllLemmingDig[userOrder==0]{
+		userOrder=1
+		
+	}
+	
+	on AllLemmingHalfTurn[userOrder==0]{
+		userOrder=2
+		
+	}
+	
+	on KillOneLemming[userOrder==0]{
+		userOrder=3
+		
+	}
 		
 	on Influence[this.state != SimulationState.STOP]{
 		
@@ -235,6 +260,39 @@ agent EnvironmentAgent {
 		
 		// if all the agents have given their influences
 		if(this.moveInfluences.size() == this.numberOfLemmingsMinds){
+			
+			//check the userOrder to modify the simulator
+			
+			if(userOrder==1){
+				
+				var keySetIterator:Iterator<Integer>  = this.moveInfluences.keySet().iterator()
+				while(keySetIterator.hasNext()){
+			  		val key:Integer = keySetIterator.next();
+				
+					this.moveInfluences.put(key, PossibleMove.DIG)
+				}
+				userOrder=0
+				
+			}else if (userOrder==2){
+				
+				var keySetIterator:Iterator<Integer>  = this.moveInfluences.keySet().iterator()
+				while(keySetIterator.hasNext()){
+			  		val key:Integer = keySetIterator.next();
+				
+					this.moveInfluences.put(key, PossibleMove.MOVEBACKWARD)
+				}
+					
+				userOrder=0
+			}else if(userOrder==3){
+				
+				var index:int
+				var rand:Random
+				
+				index = this.environment.generateRandomIndexBody()
+				this.moveInfluences.put(index, PossibleMove.SUICIDE)
+				
+				userOrder=0
+			}
 			
 			//move bodies
 			var keySetIterator:Iterator<Integer>  = this.moveInfluences.keySet().iterator()

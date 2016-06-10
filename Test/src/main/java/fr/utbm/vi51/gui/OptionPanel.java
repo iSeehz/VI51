@@ -15,7 +15,7 @@ public class OptionPanel extends JPanel{
 	private static final long serialVersionUID = 5787082889364243791L;
 	private JButton halfTurnAllButton;
 	private JButton digAllButton;
-	private JButton spawnAnotherLemmingButton;
+	private JButton killRandomLemming;
 
 	private JComboBox<String> changeLevel;
 	private int lemmingFree;
@@ -39,7 +39,7 @@ public class OptionPanel extends JPanel{
 		//set Action Button
 		halfTurnAllButton = new JButton("Tout le monde, demi tour! ");
 		digAllButton = new JButton("Tout le monde, creusez !");
-		spawnAnotherLemmingButton = new JButton("Ajouter un Lemming ?");
+		killRandomLemming = new JButton("Tuez un Lemming ?");
 		
 		//set the level
 		String level[] = {"Etages.txt","Colonnes.txt","Escalier.txt","GrandSaut.txt","GrandSaut2.txt","Enfermement.txt","Enfermement2.txt"};
@@ -51,7 +51,7 @@ public class OptionPanel extends JPanel{
 		this.add(Box.createVerticalStrut(50));
 		this.add(digAllButton);
 		this.add(Box.createVerticalStrut(50));
-		this.add(spawnAnotherLemmingButton);
+		this.add(killRandomLemming);
 		this.add(Box.createVerticalStrut(50));
 		this.add(changeLevel);
 		this.add(Box.createVerticalStrut(500));
@@ -72,6 +72,29 @@ public class OptionPanel extends JPanel{
 	public JComboBox<String> getChangeLevel() {
 		return changeLevel;
 	}
+
+
+
+
+	public JButton getHalfTurnAllButton() {
+		return halfTurnAllButton;
+	}
+
+
+
+
+	public JButton getDigAllButton() {
+		return digAllButton;
+	}
+
+
+
+
+	public JButton getKillRandomLemming() {
+		return killRandomLemming;
+	}
+	
+	
 
 
 }

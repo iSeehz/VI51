@@ -2,8 +2,11 @@ package fr.utbm.vi51.controller;
 
 import java.util.UUID;
 
+import fr.utbm.vi51.event.AllLemmingDig;
+import fr.utbm.vi51.event.AllLemmingHalfTurn;
 import fr.utbm.vi51.event.ChangeLevel;
 import fr.utbm.vi51.event.ChangeLevelAndRebuildModel;
+import fr.utbm.vi51.event.KillOneLemming;
 import fr.utbm.vi51.event.StartSimulation;
 import fr.utbm.vi51.event.StepByStepSimulation;
 import fr.utbm.vi51.event.StopSimulation;
@@ -66,5 +69,20 @@ public class Controller {
 		event.setSource(this.address);
 		this.space.emit(event, Scopes.addresses(this.addressReceiver));
 	}
+	
+	public void OrderAllLemmingDig() {
+		this.emitEvent(new AllLemmingDig());
+	}
+	
+	public void OrderAllLemmingHalfTurn() {
+		this.emitEvent(new AllLemmingHalfTurn());
 
+	}
+	
+	public void OrderKillRandomLemming() {
+		this.emitEvent(new KillOneLemming());
+
+	}
+
+	
 }

@@ -3,6 +3,7 @@ package fr.utbm.vi51.model;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import fr.utbm.vi51.event.GarbageAgent;
@@ -230,7 +231,7 @@ public class EnvironmentModel {
 	// with an id and a move, the body is moved
 	public synchronized boolean moveBody(int id, PossibleMove move) {
 
-	
+		System.out.println("ID::" + id);
 		LemmingBody body = searchBody(id);
 		int x = body.getX();
 		int y = body.getY();
@@ -253,7 +254,12 @@ public class EnvironmentModel {
 			}*/
 			return true;
 		}
-		
+		//check if the lemming want to kill himself
+		if(move.equals(PossibleMove.SUICIDE)){
+			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
+			addInListOfChanges(new Point(x,y));
+			killLemming(body);
+		}
 		// check if the body is on a land
 		else if (isLand(x + 1, y) || isHalf(x + 1, y)) {
 			// all moves allowed
@@ -300,7 +306,8 @@ public class EnvironmentModel {
 			//return climbingBody(body, p, true);
 
 			// body parachute & falling
-		} else if (x + 2 < grid.size()) {
+		} 
+		else if (x + 2 < grid.size()) {
 				if(move.equals(PossibleMove.PARACHUTE)){
 					body.activateParachute();
 				}
@@ -320,6 +327,7 @@ public class EnvironmentModel {
 			killLemming(body);
 			return false;
 		}
+		
 		this.bodiesModified++;
 		return false;
 
@@ -620,6 +628,15 @@ public class EnvironmentModel {
 		this.listOfBody.remove(this.listOfBody.indexOf(body));
 		this.emitEvent(new GarbageAgent(body.getId()));
 	}
+	
+	public synchronized void killLemmingBody(LemmingBody body) {
+		addDead();
+		numberOfBody--;
+		// destruct the body
+		this.listOfBody.remove(this.listOfBody.indexOf(body));
+	}
+	
+	
 
 	public synchronized void outLemming(LemmingBody body) {
 		//the agent isn't needed anymore when the lemming body is out
@@ -654,6 +671,10 @@ public class EnvironmentModel {
 		this.bodiesModified = 0;
 	}
 
-	
+	public int generateRandomIndexBody(){
+		
+		Random rand = new Random();
+		return rand.nextInt(this.numberOfBody + 1)-1 ;
+	}
 	
 }

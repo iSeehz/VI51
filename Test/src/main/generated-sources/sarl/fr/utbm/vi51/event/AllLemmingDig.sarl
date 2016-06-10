@@ -1,0 +1,10 @@
+/**
+ * 
+ */
+package fr.utbm.vi51.^event
+
+/**
+ * @author Tiboty
+ *
+ */
+event AllLemmingDig

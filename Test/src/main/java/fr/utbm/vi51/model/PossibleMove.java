@@ -7,4 +7,5 @@ public enum PossibleMove {
 	CLIMBBACKWARD,
 	CLIMBFORWARD,
 	PARACHUTE,
+	SUICIDE
 }
