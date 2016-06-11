@@ -15,18 +15,21 @@ public class MoveProb {
 	private PossibleMove [] convertingIntToPossibleMove = {PossibleMove.PARACHUTE,PossibleMove.MOVEFORWARD,PossibleMove.MOVEBACKWARD,
 			PossibleMove.CLIMBFORWARD,PossibleMove.CLIMBBACKWARD,PossibleMove.DIG};
 	
+	// Initialise the QLearning Matrices
 	public MoveProb() {
 		this.json = new JSONReadAndWriteQLearning();
 		this.ProbaMat = json.getProbabilities();
 		this.EvalMat = json.getEvaluation();
 		
 	}
-
+	
+	// Return the probabilities for a given state
 	public Long[] getProba(int state) {
 		
 		return ProbaMat[state];
 	}
 
+	// Reevaluate the probability matrix
 	public synchronized  void reevaluate(int prevstate, PossibleMove prevaction, int currstate) {
 		long max_Val = 0;
 		int action_Val;
@@ -56,10 +59,12 @@ public class MoveProb {
 		ProbaMat[prevstate][action_Val] = (long) Math.round(EvalMat[prevstate][action_Val] + coeff * max_Val);
 	}
 
+	//write the proba matrix in file
 	public void write() {
 		json.writeFile();
 	}
 
+	//return a random move for a given state
 	public synchronized PossibleMove randomWeigthChoice(int state){
 		
 		double totalWeigth = 0;

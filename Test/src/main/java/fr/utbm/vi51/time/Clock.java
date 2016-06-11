@@ -23,24 +23,24 @@ paused=true;
 timer.start();
 }
 
-/*lance le comptage*/
+//Launch
 public void start() {
 	paused=false;
 }
 
 
-/*met le comptage sur pause*/
+//Lock the timer
 public void pause(){
    paused=true;
 }
 
-/*remet le temps à 0 sans lancer le comptage*/
+//Reset Time
 public void restart(){
 begin.setSeconds(0);
 this.setText(this.toString());
 }
 
-
+//Increments time on timer event
 @Override
 public void actionPerformed(ActionEvent Ae) {
 	if (!paused){
@@ -49,6 +49,7 @@ public void actionPerformed(ActionEvent Ae) {
 	}
 }
 
+//Convert time into printable
 public String toString(){
 String curt = (begin.getHours()>9?""+begin.getHours():"0"+begin.getHours());
 curt = curt + ":" + (begin.getMinutes()>9?""+begin.getMinutes():"0"+begin.getMinutes());

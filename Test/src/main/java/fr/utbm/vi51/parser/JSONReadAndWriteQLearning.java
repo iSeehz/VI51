@@ -104,11 +104,7 @@ public class JSONReadAndWriteQLearning {
 	            // Writing to a file  
 	            File file=new File(this.pathProba);  
 	            file.createNewFile();  
-	            FileWriter fileWriter = new FileWriter(file);  
-	            System.out.println("Writing JSON object to file");  
-	            System.out.println("-----------------------");  
-	            System.out.print(data);  
-	  
+	            FileWriter fileWriter = new FileWriter(file);   
 	            fileWriter.write(data.toJSONString());  
 	            fileWriter.flush();  
 	            fileWriter.close();  

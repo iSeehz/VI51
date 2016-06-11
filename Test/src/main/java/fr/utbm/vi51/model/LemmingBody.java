@@ -18,7 +18,6 @@ public class LemmingBody extends EnviromnentObject{
 	private Integer id;
 	
 	public LemmingBody(int id ,int x, int y) {
-		// TODO Auto-generated constructor stub
 		super(x,y);
 		
 		this.id = id;
@@ -149,6 +148,7 @@ public class LemmingBody extends EnviromnentObject{
 		return this.fatigue;
 	}
 	
+	//change orientation when getting up
 	public void getUp(){
 		if (this.fatigue % 2 == 1){
 			this.orientation = Orientation.RIGHT;

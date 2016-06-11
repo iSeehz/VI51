@@ -42,17 +42,14 @@ public class Controller {
 	 */
 	public void newSimulation() {
 		this.emitEvent(new StartSimulation());
-//		System.out.println("lancement simulation"); 
 	}
 	
 	public void stopSimulation() {
 		this.emitEvent(new StopSimulation());
-//		System.out.println("fin simulation"); 
 	}
 	
 	public void changeLevel(String level) {
 		this.emitEvent(new ChangeLevelAndRebuildModel(level));
-		System.out.println("change level : " + level); 
 	}
 	
 	public void preparationToQuit(){

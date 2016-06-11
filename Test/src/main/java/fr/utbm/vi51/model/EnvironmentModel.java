@@ -87,13 +87,7 @@ public class EnvironmentModel {
 			this.listOfBody.add(new LemmingBody(i, this.entry.getX(), this.entry.getY()));
 			this.entry.getListOfBodyInCell().add(listOfBody.get(i));
 		}
-		// for(int i=0;i<this.grid.size();i++){
-		// for(int j=0;j<this.grid.get(0).size();j++){
-		// System.out.print(this.grid.get(i).get(j).getType() + " ");
-		//
-		// }
-		// System.out.println();
-		// }
+
 	}
 
 	public Cell getEntry() {
@@ -130,14 +124,10 @@ public class EnvironmentModel {
 		LemmingBody body = searchBody(id);
 		int x = body.getX();
 		int y = body.getY();
-		// System.out.println(x + ":" + y);
-		// System.out.println(grid.get(x).get(y+1).getType());
 		allPerception.add(new Percept(grid.get(x).get(y)));
 
 		// left
 		for (int i = 1; i <= body.getFovLeft(); i++) {
-			// System.out.println((y -
-			// i+grid.get(x).size())%grid.get(x).size());
 			allPerception.add(new Percept(grid.get(x).get((y - i + grid.get(x).size()) % grid.get(x).size())));
 		}
 
@@ -183,7 +173,6 @@ public class EnvironmentModel {
 		for (int i = 1; i <= body.getFovRight(); i++) {
 			for (int j = 1; j <= body.getFovUp(); j++) {
 				if (x - j >= 0) {
-					// System.out.println(x - j + " " + y + i);// a vérif
 					allPerception.add(new Percept(grid.get(x - j).get((y + i) % grid.get(x).size())));
 				} else {
 
@@ -224,7 +213,6 @@ public class EnvironmentModel {
 	public synchronized boolean moveBody(int id, PossibleMove move) {
 
 		
-		System.out.println("ID::" + id);
 		LemmingBody body = searchBody(id);
 		if(body==null){return false;}
 		int x = body.getX();
@@ -235,13 +223,10 @@ public class EnvironmentModel {
 
 		
 
-		System.out.println(body.getOrientation());
 		if (body.getOrientation().equals(Orientation.DOWN) && !isLand(x, (y + 1) % grid.get(0).size())
 				&& !isLand(x, (y - 1 + grid.get(0).size()) % grid.get(0).size())) {
 			body.resetFatigue();
 		}
-		System.out.println("position :" + (x + 1) + "," + (y + 1));
-		// System.out.println("accélération : " + body.getFall());
 
 		if (!(move == PossibleMove.CLIMBBACKWARD || move == PossibleMove.CLIMBFORWARD)) {
 			body.stopClimbing();
@@ -317,7 +302,6 @@ public class EnvironmentModel {
 			if (move.equals(PossibleMove.PARACHUTE)) {
 				body.activateParachute();
 			}
-			// System.out.println("tombe");
 			fallingBodyOne(body);
 			statusBody(body);
 			return true;
@@ -325,10 +309,7 @@ public class EnvironmentModel {
 			fallingBodyOne(body);
 			return true;
 		} else {
-			// grid.get(x).get(y).getListOfBodyInCell().remove(p);
 			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
-			// System.out.println("le body est parti dans l'espace! fonction
-			// Move");
 			addInListOfChanges(new Point(x, y));
 			killLemming(body);
 			return false;
@@ -403,28 +384,13 @@ public class EnvironmentModel {
 		// Body on the Exit
 		else if (isExit(x, y)) {
 			body.winner();
-			System.out.println("Winner!!");
 			outLemming(body);
-			// if the body is on a land nothing to do except disable parachute
-			// and stop climbing
+
 		}
 
 	}
 
-	/*
-	 * public synchronized void fallingBody(LemmingBody body, int p) {
-	 * 
-	 * int x = body.getX(); int y = body.getY();
-	 * 
-	 * grid.get(x).get(y).getListOfBodyInCell().get(p).setOrientation(
-	 * Orientation.DOWN); grid.get(x +
-	 * 1).get(y).getListOfBodyInCell().add(grid.get(x).get(y).
-	 * getListOfBodyInCell().get(p));
-	 * grid.get(x).get(y).getListOfBodyInCell().remove(p); // ajout pour changer
-	 * la position du lemming body.setX(x + 1); addInListOfChanges(new
-	 * Point(x,y)); addInListOfChanges(new Point(x+1,y)); }
-	 */
-
+	// make one body fall
 	public synchronized void fallingBodyOne(LemmingBody body) {
 
 		int x = body.getX();
@@ -438,6 +404,7 @@ public class EnvironmentModel {
 		addInListOfChanges(new Point(x + 1, y));
 	}
 
+	//make all bodies on cell fall
 	public synchronized void fallingBodyAll(List<LemmingBody> bodies) {
 
 		int x = bodies.get(0).getX();
@@ -453,6 +420,8 @@ public class EnvironmentModel {
 
 	}
 
+	//computes the climbing if possible, look game rules to get more explanations
+	// test if can climb then if on top or not then move
 	public synchronized boolean climbingBody(LemmingBody body) {
 		int x = body.getX();
 		int y = body.getY();
@@ -520,7 +489,6 @@ public class EnvironmentModel {
 	}
 
 	public synchronized boolean accessibleCase(int x, int y) {
-		System.out.println("accessible : " + x + "," + y);
 		if (grid.get(x).get(y).getType().equals(TypeObject.EMPTY)
 				|| grid.get(x).get(y).getType().equals(TypeObject.ENTRY)
 				|| grid.get(x).get(y).getType().equals(TypeObject.EXIT)) {
@@ -531,7 +499,6 @@ public class EnvironmentModel {
 	}
 
 	public synchronized boolean isLand(int x, int y) {
-		// System.out.println("check ou? " + x + " " + y);
 		if (x >= grid.size()) {
 			return false;
 		}
@@ -610,8 +577,6 @@ public class EnvironmentModel {
 
 		Random rand = new Random();
 		int random = rand.nextInt(this.numberOfBody);
-		System.out.println("random" + random);
-		
 		return this.listOfBody.get(random).getId();
 
 	}
