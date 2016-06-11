@@ -75,7 +75,7 @@ public class GridPanel extends JPanel{
 	
 	public JPanel drawLemming(Cell c){
 		
-		JLabel picLabel = new JLabel(new ImageIcon(this.lemmingLogo.getScaledInstance(50, 50, 50)));
+		JLabel picLabel = new JLabel(new ImageIcon(this.lemmingLogo.getScaledInstance(20, 20, 20)));
 		JPanel panel = new JPanel();
 		panel.add(picLabel);
 		panel.add(new JLabel(""+c.getListOfBodyInCell().size()));

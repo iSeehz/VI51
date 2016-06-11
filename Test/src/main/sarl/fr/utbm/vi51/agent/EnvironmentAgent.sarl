@@ -53,7 +53,7 @@ import java.util.Random
  */
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
-	val numberChoice = 50
+	val numberChoice = 5
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
 	var mapOfGUID : HashMap<Address,Integer >
@@ -248,8 +248,13 @@ agent EnvironmentAgent {
 	}
 	
 	on KillOneLemming[userOrder==0]{
-		userOrder=3
 		
+		if(this.environment.getNumberOfBody()==1){
+			this.gui.getOptionPanel().getKillRandomLemming().setText("Erradication Interdite !");
+			this.gui.getOptionPanel().getKillRandomLemming().setEnabled(false);
+		}else{
+			userOrder=3;
+		}
 	}
 		
 	on Influence[this.state != SimulationState.STOP]{
@@ -286,7 +291,6 @@ agent EnvironmentAgent {
 			}else if(userOrder==3){
 				
 				var index:int
-				var rand:Random
 				
 				index = this.environment.generateRandomIndexBody()
 				this.moveInfluences.put(index, PossibleMove.SUICIDE)

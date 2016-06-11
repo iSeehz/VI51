@@ -80,6 +80,7 @@ public class Controller {
 	}
 	
 	public void OrderKillRandomLemming() {
+		
 		this.emitEvent(new KillOneLemming());
 
 	}
