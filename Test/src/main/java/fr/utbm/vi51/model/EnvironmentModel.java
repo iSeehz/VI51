@@ -342,6 +342,9 @@ public class EnvironmentModel {
 			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 			body.setY(futurY);
 			body.setOrientation(Orientation.LEFT);
+			if((y-1)<0){
+				body.increaseFatigueWhenChangesSide();
+			}
 			addInListOfChanges(new Point(x,y));
 			addInListOfChanges(new Point(x,futurY));
 			statusBody(body);
@@ -361,6 +364,9 @@ public class EnvironmentModel {
 			grid.get(x).get(y).getListOfBodyInCell().remove(grid.get(x).get(y).getListOfBodyInCell().indexOf(body));
 			body.setY(futurY);
 			body.setOrientation(Orientation.RIGHT);
+			if((y + 1)>=grid.get(x).size()){
+				body.increaseFatigueWhenChangesSide();
+			}
 			addInListOfChanges(new Point(x,y));
 			addInListOfChanges(new Point(x,futurY));
 			statusBody(body);

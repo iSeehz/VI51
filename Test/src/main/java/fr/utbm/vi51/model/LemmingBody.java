@@ -13,7 +13,7 @@ public class LemmingBody extends EnviromnentObject{
 	private boolean climbing;
 	private boolean winner;
 	private boolean digging;
-	private int fatigue;
+	private float fatigue;
 	
 	private Integer id;
 	
@@ -140,7 +140,12 @@ public class LemmingBody extends EnviromnentObject{
 	public void increaseFatigue(){
 		this.fatigue ++;
 	}
-	public int getFatigue(){
+	
+	public void increaseFatigueWhenChangesSide(){
+		this.fatigue += 0.8;
+	}
+	
+	public float getFatigue(){
 		return this.fatigue;
 	}
 	

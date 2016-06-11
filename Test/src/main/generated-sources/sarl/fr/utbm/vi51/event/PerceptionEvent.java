@@ -17,7 +17,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 public class PerceptionEvent extends Event {
   public List<Percept> perceptions;
   
-  public int fatigue;
+  public float fatigue;
   
   public Orientation orientation;
   
@@ -25,7 +25,7 @@ public class PerceptionEvent extends Event {
   
   public MoveProb moveProb;
   
-  public PerceptionEvent(final List<Percept> perceptions, final int fatigue, final Orientation orientation, final boolean climbing, final MoveProb moveProb) {
+  public PerceptionEvent(final List<Percept> perceptions, final float fatigue, final Orientation orientation, final boolean climbing, final MoveProb moveProb) {
     this.perceptions = perceptions;
     this.fatigue = fatigue;
     this.orientation = orientation;
@@ -49,7 +49,7 @@ public class PerceptionEvent extends Event {
         return false;
     } else if (!this.perceptions.equals(other.perceptions))
       return false;
-    if (other.fatigue != this.fatigue)
+    if (Float.floatToIntBits(other.fatigue) != Float.floatToIntBits(this.fatigue))
       return false;
     if (this.orientation == null) {
       if (other.orientation != null)
@@ -73,7 +73,7 @@ public class PerceptionEvent extends Event {
     final int prime = 31;
     int result = super.hashCode();
     result = prime * result + ((this.perceptions== null) ? 0 : this.perceptions.hashCode());
-    result = prime * result + this.fatigue;
+    result = prime * result + Float.floatToIntBits(this.fatigue);
     result = prime * result + ((this.orientation== null) ? 0 : this.orientation.hashCode());
     result = prime * result + (this.climbing ? 1231 : 1237);
     result = prime * result + ((this.moveProb== null) ? 0 : this.moveProb.hashCode());
@@ -96,5 +96,5 @@ public class PerceptionEvent extends Event {
   }
   
   @Generated("io.sarl.lang.jvmmodel.SARLJvmModelInferrer")
-  private final static long serialVersionUID = 374416011L;
+  private final static long serialVersionUID = 697907429L;
 }

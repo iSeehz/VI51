@@ -15,12 +15,12 @@ import java.util.List
 event PerceptionEvent{
 	
 	var perceptions: List<Percept>
-	var fatigue:int
+	var fatigue:float
 	var orientation:Orientation
 	var climbing:boolean
 	var moveProb:MoveProb
 	
-	new (perceptions : List<Percept>, fatigue:int,orientation:Orientation,climbing:boolean, moveProb:MoveProb ){
+	new (perceptions : List<Percept>, fatigue:float,orientation:Orientation,climbing:boolean, moveProb:MoveProb ){
 		
 		this.perceptions = perceptions
 		this.fatigue = fatigue

@@ -77,7 +77,7 @@ agent LemmingAgent {
 		emit(new Influence(currentAction),Scopes::addresses(occurrence.source))
 	}
 		
-	def computeState(fatigue:int,ori:Orientation,climbing:boolean):int{
+	def computeState(fatigue:float,ori:Orientation,climbing:boolean):int{
 					println(ori)
 		var NF = (fatigue<3)
 		var F = (fatigue<5 && fatigue>2)
