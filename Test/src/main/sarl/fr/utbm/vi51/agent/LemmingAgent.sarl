@@ -45,12 +45,13 @@ agent LemmingAgent {
 	}
 
 	on PerceptionEvent {
-
+		
 		this.percept = occurrence.perceptions
 		var currentState : int = computeState(occurrence.fatigue, occurrence.orientation, occurrence.climbing)
 		if(previousAction != null && previousState != -1) {
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
-		}
+		}println(currentState)
+		println("fatigue" + occurrence.fatigue)
 		var currentAction : PossibleMove = occurrence.moveProb.randomWeigthChoice(currentState)
 		this.previousState = currentState this.previousAction = currentAction emit(new Influence ( currentAction ), Scopes::addresses(occurrence.source))
 	}
@@ -114,25 +115,33 @@ agent LemmingAgent {
 		var DrM : boolean
 		var DrI : boolean
 		var DrE : boolean
+		var Dv : boolean
+		
 		if(ori == Orientation.LEFT) {
 			DvM = (percept.get(1).getType() == TypeObject.LAND)
 			DrM = (percept.get(3).getType() == TypeObject.LAND)
 			DvI = (percept.get(13).getType() == TypeObject.LAND)
 			DrI = (percept.get(10).getType() == TypeObject.LAND)
-			DvE = (percept.get(14) == TypeObject.LAND || percept.get(15) == TypeObject.LAND)
-			DrE = (percept.get(11) == TypeObject.LAND || percept.get(12) == TypeObject.LAND)
+			DvE = (percept.get(14).getType() == TypeObject.LAND || percept.get(15).getType() == TypeObject.LAND)
+			DrE = (percept.get(11).getType() == TypeObject.LAND || percept.get(12).getType() == TypeObject.LAND)
+			Dv = (percept.get(14).getType() == TypeObject.LAND )
 		}
 		else {
 			DrM = (percept.get(1).getType() == TypeObject.LAND)
 			DvM = (percept.get(3).getType() == TypeObject.LAND)
 			DrI = (percept.get(13).getType() == TypeObject.LAND)
 			DvI = (percept.get(10).getType() == TypeObject.LAND)
-			DrE = (percept.get(14) == TypeObject.LAND || percept.get(15) == TypeObject.LAND)
-			DvE = (percept.get(11) == TypeObject.LAND || percept.get(12) == TypeObject.LAND)
+			DrE = (percept.get(14).getType() == TypeObject.LAND || percept.get(15).getType() == TypeObject.LAND)
+			DvE = (percept.get(11).getType() == TypeObject.LAND || percept.get(12).getType() == TypeObject.LAND)
+			Dv = (percept.get(11).getType() == TypeObject.LAND )
 		}
+
+
 		if(!DvM && (NF && DvI
 		|| F && (DvI || DvE) && !DrM && !E && !DrE
-		|| F && (DvI || DvE) && A && DrM && !E))
+		|| F && (DvI || DvE) && A && DrM && !E
+		|| DvE && !E && !DrE
+		|| (NF && Dv) ))
 		{
 			return 1
 		}
@@ -142,11 +151,12 @@ agent LemmingAgent {
 		}
 		else
 		if(!DrM && (NF && !DvI && !DvM && DrI || NF && A && DvM && DrI
-		|| F && (DrI || DrE) && !E && (!DvE && !DvM && !DvI || DvM && A))) {
+		|| F && (DrI || DrE) && !E && (!DvE && !DvM && !DvI || DvM && A)
+		|| DrE && !E && !DvE)) {
 			return 3
 		}
 		else
-		if(!A && DrM && (!F && !DvI && !DrM || F && !DvM && DvI && DvE && !E)) {
+		if(!A && DrM && !DvI && !DvE  && !DvM && (!E || (NF || F) && E)){
 			return 4
 		}
 		else
@@ -155,7 +165,7 @@ agent LemmingAgent {
 		}
 		/*-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-__-*/
 		else
-		if(!DvM && !DrM && (FF || (F && (DvE || DvI) && (DrE || DrI) && E))) {
+		if(!DvM && !DrM && (FF || (F && (DvE || DvI) && (DrE || DrI) && E)||!DvI&& !DrI && DvE && DrE && E)) {
 			return 6
 		}
 		else
@@ -172,7 +182,8 @@ agent LemmingAgent {
 			return 9
 		}
 		else
-		if(F && DvM && !A && !DrM && !E && (DrI || DrE)) {
+		if(F && DvM && !A && !DrM && !E && (DrI || DrE) 
+			|| !DrI && !DrM && !DvI && !DvM && !E && DrE && DvE){
 			return 10
 		}
 		else
@@ -204,7 +215,7 @@ agent LemmingAgent {
 			return 17
 		}
 		else {
-			return 1
+			return 6
 		}
 	}
 }

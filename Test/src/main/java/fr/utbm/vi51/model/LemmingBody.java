@@ -144,6 +144,9 @@ public class LemmingBody extends EnviromnentObject{
 		this.fatigue += 0.8;
 	}
 	
+	public void decreaseFatigueWhenFallOnWall(){
+		this.fatigue=Math.max(0,this.fatigue -= 0.3);
+	}
 	public float getFatigue(){
 		return this.fatigue;
 	}

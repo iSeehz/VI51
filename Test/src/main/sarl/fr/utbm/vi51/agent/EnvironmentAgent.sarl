@@ -48,7 +48,7 @@ import java.util.Random
 
 agent EnvironmentAgent {
 	uses DefaultContextInteractions, Logging, Lifecycle, Schedules, Behaviors
-	val numberChoice = 5
+	val numberChoice = 1
 	var initAgent : AgentTask
 	var listOfGUID : List<Address>
 	var mapOfGUID : HashMap<Address,Integer >

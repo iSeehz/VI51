@@ -212,25 +212,27 @@ public class EnvironmentModel {
 	// with an id and a move, the body is moved
 	public synchronized boolean moveBody(int id, PossibleMove move) {
 
-		
 		LemmingBody body = searchBody(id);
 		if(body==null){return false;}
 		int x = body.getX();
 		int y = body.getY();
-		
+
+		System.out.println(move);
 		
 		
 
 		
 
-		if (body.getOrientation().equals(Orientation.DOWN) && !isLand(x, (y + 1) % grid.get(0).size())
-				&& !isLand(x, (y - 1 + grid.get(0).size()) % grid.get(0).size())) {
-			body.resetFatigue();
+		if (body.getOrientation().equals(Orientation.DOWN)){
+			if(!isLand(x, (y + 1) % grid.get(0).size())	&& !isLand(x, (y - 1 + grid.get(0).size()) % grid.get(0).size())) {
+				body.resetFatigue();
+		
+			}
 		}
-
 		if (!(move == PossibleMove.CLIMBBACKWARD || move == PossibleMove.CLIMBFORWARD)) {
 			body.stopClimbing();
 		}
+		
 
 		// the case if half land
 		if (body.isDigging()) {
@@ -272,14 +274,15 @@ public class EnvironmentModel {
 			} else if (move == PossibleMove.CLIMBFORWARD) {
 				return climbingBody(body);
 			} else if (move == PossibleMove.CLIMBBACKWARD) {
+				body.increaseFatigue();
 				if (body.getOrientation().equals(Orientation.RIGHT)) {
 					body.setOrientation(Orientation.LEFT);
 				} else if (body.getOrientation().equals(Orientation.LEFT)) {
-					body.setOrientation(Orientation.LEFT);
+					body.setOrientation(Orientation.RIGHT);
 				}
 				return climbingBody(body);
 			} else if (move == PossibleMove.DIG) {
-				// the case is full Land
+				body.resetFatigue();
 				if ((grid.get(x + 1).get(y).getType().equals(TypeObject.LAND))) {
 					grid.get(x + 1).get(y).setType(TypeObject.HALF);
 					body.setOrientation(Orientation.DOWN);
@@ -448,6 +451,8 @@ public class EnvironmentModel {
 					this.getGrid().get(x).get(y).getListOfBodyInCell()
 							.remove(this.getGrid().get(x).get(y).getListOfBodyInCell().indexOf(body));
 					this.getGrid().get(x - 1).get(y).getListOfBodyInCell().add(body);
+					if(((x-1)==0 || grid.get(x-2).get(y).getType()==TypeObject.LAND))
+					{body.increaseFatigue();}
 					this.addInListOfChanges(new Point(x, y));
 					this.addInListOfChanges(new Point(x - 1, y));
 				} else {
@@ -470,6 +475,8 @@ public class EnvironmentModel {
 					this.getGrid().get(x - 1).get(y).getListOfBodyInCell().add(body);
 					this.addInListOfChanges(new Point(x, y));
 					this.addInListOfChanges(new Point(x - 1, y));
+					if((x-1)==0 || grid.get(x-2).get(y).getType()==TypeObject.LAND)
+					{body.increaseFatigue();}
 				} else {
 					body.setX(x - 1);
 					body.setY((y + 1) % ysize);
