@@ -345,6 +345,8 @@ agent EnvironmentAgent {
 	on ResetGrid [this.gui != null]{
 
 		this.gui.getMainPanel().getGridPanel().paint(this.environment.getGrid())
+		this.gui.getOptionPanel().getKillRandomLemming().setText("Tuez un Lemming ?");
+		this.gui.getOptionPanel().getKillRandomLemming().setEnabled(true);
 
 	}
 	
