@@ -50,8 +50,7 @@ agent LemmingAgent {
 		var currentState : int = computeState(occurrence.fatigue, occurrence.orientation, occurrence.climbing)
 		if(previousAction != null && previousState != -1) {
 			occurrence.moveProb.reevaluate(previousState, previousAction, currentState)
-		}println(currentState)
-		println("fatigue" + occurrence.fatigue)
+		}
 		var currentAction : PossibleMove = occurrence.moveProb.randomWeigthChoice(currentState)
 		this.previousState = currentState this.previousAction = currentAction emit(new Influence ( currentAction ), Scopes::addresses(occurrence.source))
 	}
@@ -116,6 +115,7 @@ agent LemmingAgent {
 		var DrI : boolean
 		var DrE : boolean
 		var Dv : boolean
+		var Dr : boolean
 		
 		if(ori == Orientation.LEFT) {
 			DvM = (percept.get(1).getType() == TypeObject.LAND)
@@ -125,6 +125,7 @@ agent LemmingAgent {
 			DvE = (percept.get(14).getType() == TypeObject.LAND || percept.get(15).getType() == TypeObject.LAND)
 			DrE = (percept.get(11).getType() == TypeObject.LAND || percept.get(12).getType() == TypeObject.LAND)
 			Dv = (percept.get(14).getType() == TypeObject.LAND )
+			Dr = (percept.get(11).getType() == TypeObject.LAND )
 		}
 		else {
 			DrM = (percept.get(1).getType() == TypeObject.LAND)
@@ -134,6 +135,7 @@ agent LemmingAgent {
 			DrE = (percept.get(14).getType() == TypeObject.LAND || percept.get(15).getType() == TypeObject.LAND)
 			DvE = (percept.get(11).getType() == TypeObject.LAND || percept.get(12).getType() == TypeObject.LAND)
 			Dv = (percept.get(11).getType() == TypeObject.LAND )
+			Dv = (percept.get(14).getType() == TypeObject.LAND )
 		}
 
 
@@ -141,7 +143,8 @@ agent LemmingAgent {
 		|| F && (DvI || DvE) && !DrM && !E && !DrE
 		|| F && (DvI || DvE) && A && DrM && !E
 		|| DvE && !E && !DrE
-		|| (NF && Dv) ))
+		|| (NF && Dv) 
+		|| F && (DvI||Dv) && !Dr ))
 		{
 			return 1
 		}
